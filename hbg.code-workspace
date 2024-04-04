@@ -1,0 +1,115 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"name": "Root"
+		},
+		{
+			"path": "src/Common",
+			"name": "API.Common"
+		},
+		{
+			"path": "src/Services/API/Identity",
+			"name": "API.Identity"
+		},
+		{
+			"path": "src/Services/API/Files",
+			"name": "API.Files"
+		},
+		{
+			"path": "src/Services/API/Projects",
+			"name": "API.Projects"
+		},
+		{
+			"path": "src/Web/Web.SPA"
+		},
+	],
+	"settings": {
+		"workbench.sideBar.location": "left",
+		"editor.formatOnType": true,
+		"dotnet-test-explorer.testProjectPath": "**/*.Tests*",
+		"sqltools.connections": [
+			{
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 32345,
+				"driver": "PostgreSQL",
+				"name": "hbg-db (k8s)",
+				"database": "houbirgdb",
+				"username": "hbg-dbuser",
+				"password": "hbg-password-database"
+			}
+		],
+		"yaml.schemas": {
+			"kubernetes://schema/v1%40service": "file:///Users/vl/Documents/PROG/Hbg/k8s/hbg-db.yaml"
+		},
+		"powershell.cwd": "/Users/vl/Documents/PROG/Hbg",
+		"material-icon-theme.files.associations": {
+			"*.data-source.ts": "database",
+			"*.interceptor.ts": "vite",
+			"error.handler.ts": "haml",
+			"*.temp.ts": "mxml",
+			"*.state.ts": "angular-resolver",
+		},
+		"material-icon-theme.folders.associations": {
+			"shell": "layout"
+		},
+		"dotnet.defaultSolution": "/Users/vl/Documents/PROG/HBG/Hbg.sln"
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"path": "./src/",
+				"label": "DOCKER hbg-files",
+				"command": "docker",
+				"args": [
+					"build",
+					"-t",
+					"exdrums/hbg-files",
+					"-f",
+					"src/Services/API/Files/Dockerfile",
+					"."
+				],
+				"group": "build",
+				"presentation": {
+					"group": "docker"
+				}
+			},
+			{
+				"path": "./src/",
+				"label": "DOCKER hbg-projects",
+				"command": "docker",
+				"args": [
+					"build",
+					"-t",
+					"exdrums/hbg-projects",
+					"-f",
+					"src/Services/API/Projects/Dockerfile",
+					"."
+				],
+				"group": "build",
+				"presentation": {
+					"group": "docker"
+				}
+			},
+			{
+				"path": "./src/",
+				"label": "DOCKER hbg-spa",
+				"command": "docker",
+				"args": [
+					"build",
+					"-t",
+					"exdrums/hbg-spa",
+					"-f",
+					"src/Web/Web.SPA/Dockerfile",
+					"."
+				],
+				"group": "build",
+				"presentation": {
+					"group": "docker"
+				}
+			}
+		]
+	}
+}

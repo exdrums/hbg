@@ -1,0 +1,14 @@
+  <dx-resizable 
+    [ngClass]="{'resizable resizable1': true, 'resizable-horizontal': !verticalMode, 'resizable-vertical': verticalMode }"
+    [handles]="verticalMode ? 'bottom' : 'right'"
+    (onResize)="onResize($event)">
+    <div class="resizable-content">
+      <ng-content select="[first]"></ng-content>
+    </div>
+  </dx-resizable>
+
+  <div [ngClass]="{'resizable resizable1': true, 'resizable-horizontal': !verticalMode, 'resizable-vertical': verticalMode }">
+    <div class="resizable-content">
+      <ng-content select="[second]"></ng-content>
+    </div>
+  </div>

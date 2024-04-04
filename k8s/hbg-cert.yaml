@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hbg-cert
+  namespace: default
+spec:
+  secretName: hbg-tls-secret
+  issuerRef:
+    name: hbg-clusterissuer
+    kind: ClusterIssuer
+  dnsNames:
+    - sts.houbirg.local
+    - admin.houbirg.local
+    - spa.houbirg.local

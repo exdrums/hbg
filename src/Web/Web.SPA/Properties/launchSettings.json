@@ -1,0 +1,28 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:58465",
+      "sslPort": 0
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Web.SPA": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "launchUrl": "configuration",
+      "environmentVariables": {
+        "ASPNETCORE_URLS": "https://+:5799",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/api/values",
+      "publishAllPorts": true
+    }
+  }
+}

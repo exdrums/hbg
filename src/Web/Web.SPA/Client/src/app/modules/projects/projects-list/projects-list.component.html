@@ -1,0 +1,14 @@
+<dx-data-grid
+  [dataSource]="ds"
+  (onInitNewRow)="onInitNewRow($event)">
+  <dxo-editing [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" mode="popup">
+    <dxo-form>
+      <dxi-item dataField="name"></dxi-item>
+      <dxi-item dataField="description"></dxi-item>
+    </dxo-form>
+  </dxo-editing>
+
+  <dxi-column dataField="projectID"></dxi-column>
+  <dxi-column dataField="name"></dxi-column>
+  <dxi-column dataField="description"></dxi-column>
+</dx-data-grid>

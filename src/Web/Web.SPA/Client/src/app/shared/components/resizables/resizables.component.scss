@@ -1,0 +1,51 @@
+:host {
+    height: 100%;
+    width: 100%;
+    float: left;
+    overflow: hidden;
+}
+
+.resizable-horizontal {
+    width: 50%;
+    height: 100%;
+}
+
+.resizable-vertical {
+    width: 100%;
+    height: 50%;
+}
+
+.resizable {
+    padding: 0;
+    display: block;
+    float: left;
+    color: #000;
+    position: relative; 
+}
+
+.resizable1 {
+    float:left;
+}
+
+.resizable2 {
+    float:right;
+}
+
+// .resizable-content {
+//   padding:30px;
+//   overflow:hidden;
+//   overflow-y:auto;
+//   position:absolute; 
+//   height:100%;
+//   top:0;
+//   left:0;
+//   -webkit-box-sizing: border-box;
+//     -moz-box-sizing: border-box;
+//     box-sizing: border-box;
+// }
+// .resizable1 .inner {
+//   margin-right:7px;
+// }
+// .resizable2 .inner {
+//   margin-left:7px;
+// }

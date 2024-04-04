@@ -1,0 +1,39 @@
+
+<dx-popup *ngFor="let context of stack$ | async"
+	class="hbg-popup" position="center"
+	[width]="context.width"
+	[maxWidth]="context.maxWidth"
+	[minWidth]="context.minWidth"
+
+	[height]="context.height"
+	[maxHeight]="context.maxHeight"
+	[minHeight]="context.minHeight"
+
+	[dragEnabled]="context.dragEnabled"
+	[resizeEnabled]="context.resizeEnabled"
+	[fullScreen]="context.fullScreen"
+	[showTitle]="context.showTitle"
+	[title]="context.title"
+	[shading]="true"
+	[showCloseButton]="false"
+	[visible]="true"
+	(onInitialized)="context.popupInitialised($event.component)">
+
+	<div [class.flex-height]="context.height">
+		<div [class.flex-height-content]="context.height">
+			<hbg-popup-content [context]="context"></hbg-popup-content>
+		</div>
+	</div>
+
+	<div *ngIf="true" class="h-line"></div>
+
+	<dxi-toolbar-item *ngFor="let i of context.toolbar"
+		[widget]="i.widget"
+		[disabled]="i.disabled$ ? (i.disabled$ | async) : false"
+		[location]="i.location"
+		[options]="i.options"
+		[template]="i.template"
+		[toolbar]="i.toolbar || 'bottom'"
+		[visible]="i.visible$ ? (i.visible$ | async) : true">
+	</dxi-toolbar-item>
+</dx-popup>

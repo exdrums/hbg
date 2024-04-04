@@ -1,0 +1,26 @@
+<dx-multi-view
+	width="100%"
+	height="100%"
+	[animationEnabled]="true"
+	[deferRendering]="true"
+	[swipeEnabled]="true"
+	[focusStateEnabled]="false"
+  [items]="items"
+	(onInitialized)="onInitialized($event.component)">
+  
+  <div *dxTemplate="let key of 'item'">
+      <ng-container [ngSwitch]="key">
+        <!-- Works only so, add additional ng-contents for further tabs  -->
+        <ng-content *ngSwitchCase="'v1'" select="[v1]"></ng-content>
+        <ng-content *ngSwitchCase="'v2'" select="[v2]"></ng-content>
+        <ng-content *ngSwitchCase="'v3'" select="[v3]"></ng-content>
+
+        <!-- some similar solution? -->
+        <!-- <ng-container *ngFor="let item of items">
+          <ng-content *ngSwitchCase="item.id" select="{{item.id}}"></ng-content>
+        </ng-container> -->
+      </ng-container>
+    
+  </div>
+
+</dx-multi-view>

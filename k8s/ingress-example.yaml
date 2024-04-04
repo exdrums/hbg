@@ -1,0 +1,76 @@
+# before creating this ingress rule, you need to install ingress controller in your cluster
+# this can work...
+# !! set current version of ingress here, update later is complicated
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-clenginx/controller-v0.44.0/deploy/static/provider/cloud/deploy.yaml
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hbg-ingress          # must be a valid DNS subdomain name
+  annotations:  # each ingress controller supports differrent annotaions, 
+    # here is an example of an annotation for nginx controller
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # Other annotations
+    # nginx.ingress.kubernetes.io/ssl-redirect: true          -> Indicates if the location section is accessible SSL only (defaults to True when Ingress contains a Certificate)
+    # nginx.ingress.kubernetes.io/force-ssl-redirect: true    -> Forces the redirection to HTTPS even if the Ingress is not TLS Enabled
+    # nginx.ingress.kubernetes.io/app-root: /someroot         -> Defines the Application Root that the Controller must redirect if it's in '/' context
+    # nginx.ingress.kubernetes.io/use-regex:                  -> Indicates if the paths defined on an Ingress use regular expressions
+
+spec:                     # 'spec' contains all information needed to configure a load balancer or proxy server
+  rules:                  # a list of rules matched against all incoming requests
+# first rule:
+  # - host: "houbirg.com"   # the rules apply to that host
+  #   http:
+  #     paths:              # list of paths, each of which has an associated backend (internal service)
+  #     - path: /           # path. Host + Path must match the content of an incoming request
+  #       pathType: Prefix  # 1.ImplementationSpecific or 2.Prefix or 3.Exact
+  #       backend:          # a combination of Service and port names (service or resource)
+  #         service:        # describe referenced service
+  #           name: test    # name is necessary
+  #           port:         # set 'number' or 'name'
+  #             number: 8080
+  - host: "sts.hbg.local"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hbg-sts-service
+            port:
+              number: 80
+  - host: "admin.hbg.local"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hbg-admin-service
+            port:
+              number: 80
+          # resource: is an ObjectRef to another Kubernetes resource within the same namespace as the Ingress object
+          #       apiGroup: k8s.example.com
+          #       kind: StorageBucket
+          #       name: icon-assets
+  
+  # A 'defaultBackend' is often configured in an Ingress controller to service any requests that do not match a path in the spec. Configured derectly in controller (see docu of nginx-ingress-controller)
+  # defaultBackend:
+  #   resource:
+  #     apiGroup: k8s.example.com
+  #     kind: StorageBucket
+  #     name: static-assets
+
+
+
+# simple exposing of one service
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: test-ingress
+# spec:
+#   defaultBackend:
+#     service:
+#       name: test
+#       port:
+#         number: 80

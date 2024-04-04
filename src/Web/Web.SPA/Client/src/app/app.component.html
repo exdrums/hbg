@@ -1,0 +1,10 @@
+<router-outlet></router-outlet>
+<hbg-popup-stack></hbg-popup-stack>
+<dx-load-panel
+    shadingColor="rgba(255,255,255,0.4)"
+    [visible]="lock.locked$ | async"
+    [showIndicator]="true"
+    [showPane]="true"
+    [shading]="true"
+    [closeOnOutsideClick]="false">
+</dx-load-panel>

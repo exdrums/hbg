@@ -1,0 +1,6 @@
+SQL Migrations
+All migrations are in "Migrations" folder of each project using HBGDB.
+After domain model is changed, (existed Models are edited, or new models added) you have to add new Migrations for related DbContext.
+To create new Migration for current DbContext state, use:
+-- dotnet ef migrations add {{InitialContacts}} --context {{AppDbContext}} --output-dir Migrations
+All Migrations describe changing history of database and will be applied to the database (if not yet) when starting up the API. 

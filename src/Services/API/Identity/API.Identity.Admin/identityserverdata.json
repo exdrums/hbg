@@ -1,0 +1,241 @@
+﻿{
+    "IdentityServerData": {
+        "IdentityResources": [
+            {
+                "Name": "roles",
+                "Enabled": true,
+                "DisplayName": "Roles",
+                "UserClaims": [
+                    "role"
+                ]
+            },
+            {
+                "Name": "openid",
+                "Enabled": true,
+                "Required": true,
+                "DisplayName": "Your user identifier",
+                "UserClaims": [
+                    "sub"
+                ]
+            },
+            {
+                "Name": "profile",
+                "Enabled": true,
+                "DisplayName": "User profile",
+                "Description": "Your user profile information (first name, last name, etc.)",
+                "Emphasize": true,
+                "UserClaims": [
+                    "name",
+                    "family_name",
+                    "given_name",
+                    "middle_name",
+                    "nickname",
+                    "preferred_username",
+                    "profile",
+                    "picture",
+                    "website",
+                    "gender",
+                    "birthdate",
+                    "zoneinfo",
+                    "locale",
+                    "updated_at"
+                ]
+            },
+            {
+                "Name": "email",
+                "Enabled": true,
+                "DisplayName": "Your email address",
+                "Emphasize": true,
+                "UserClaims": [
+                    "email",
+                    "email_verified"
+                ]
+            },
+            {
+                "Name": "address",
+                "Enabled": true,
+                "DisplayName": "Your address",
+                "Emphasize": true,
+                "UserClaims": [
+                    "address"
+                ]
+            }
+        ],
+        "ApiScopes": [
+            {
+                "Name": "api_admin",
+                "DisplayName": "api_admin",
+                "Required": true,
+                "UserClaims": [
+                    "role",
+                    "name"
+                ]
+            },
+            {
+                "Name": "api_files",
+                "DisplayName": "api_files",
+                "Required": true,
+                "UserClaims": [
+                    "role",
+                    "name"
+                ]
+            },
+            {
+                "Name": "api_projects",
+                "DisplayName": "api_projects",
+                "Required": true,
+                "UserClaims": [
+                    "role",
+                    "name"
+                ]
+            }
+        ],
+        "ApiResources": [
+            {
+                "Name": "api_admin",
+                "Scopes": [
+                    "api_admin"
+                ]
+            },
+            {
+                "Name": "api_files",
+                "Scopes": [
+                    "api_files"
+                ]
+            },
+            {
+                "Name": "api_projects",
+                "Scopes": [
+                    "api_projects"
+                ]
+            }
+        ],
+        "Clients": [
+            {
+                "ClientId": "client_admin",
+                "ClientName": "client_admin",
+                "ClientUri": "https://admin.houbirg.local",
+                "AllowedGrantTypes": [
+                    "authorization_code"
+                ],
+                "RequirePkce": true,
+                "ClientSecrets": [
+                    {
+                        "Value": "AdminClientSecret"
+                    }
+                ],
+                "RedirectUris": [
+                    "http://localhost:5798/signin-oidc",
+                    "https://localhost:5798/signin-oidc",
+                    "https://admin.houbirg.local/signin-oidc"
+                ],
+                "FrontChannelLogoutUri": "https://admin.houbirg.local/signout-oidc",
+                "PostLogoutRedirectUris": [
+                    "http://localhost:5798/signout-callback-oidc",
+                    "https://localhost:5798/signout-callback-oidc",
+                    "https://admin.houbirg.local/signout-callback-oidc"
+                ],
+                "AllowedCorsOrigins": [
+                    "http://localhost:5798",
+                    "https://localhost:5798",
+                    "https://admin.houbirg.local"
+                ],
+                "AllowedScopes": [
+                    "openid",
+                    "email",
+                    "profile",
+                    "roles"
+                ]
+            },
+            {
+                "ClientId": "client_admin_swaggerui",
+                "ClientName": "client_admin_swaggerui",
+                "AllowedGrantTypes": [
+                    "authorization_code"
+                ],
+                "RequireClientSecret": false,
+                "RequirePkce": true,
+                "RedirectUris": [
+                    "http://localhost:5797/swagger/oauth2-redirect.html"
+                ],
+                "AllowedScopes": [
+                    "api_admin"
+                ],
+                "AllowedCorsOrigins": [
+                    "http://localhost:5797"
+                ]
+            },
+            {
+                "ClientId": "js",
+                "ClientName": "Houbirg SPA OpenId Client",
+                "ClientUri": "https://spa.houbirg.local",
+                "AllowOfflineAccess": true,
+                "RequirePkce": true,
+                "RequireConsent": false,
+                "AllowedGrantTypes": [
+                    "password",
+                    "client_credentials"
+                ],
+                "ClientSecrets": [
+                    {
+                        "Value": "js_secret"
+                    }
+                ],
+                "RedirectUris": [
+                    "http://localhost:4200/",
+                    "http://localhost:5799/",
+                    "https://localhost:5799/",
+                    "https://spa.houbirg.local/"
+                ],
+                "FrontChannelLogoutUri": "http//localhost:5799/",
+                "PostLogoutRedirectUris": [
+                    "http://localhost:4200/", 
+                    "http://localhost:5799/",
+                    "https://localhost:5799/",
+                    "https://spa.houbirg.local/"
+                ],
+                "AllowedCorsOrigins": [
+                    "http://localhost:4200", 
+                    "http://localhost:5799", 
+                    "https://localhost:5799",
+                    "https://spa.houbirg.local"
+                ],
+                "AllowedScopes": [
+                    "openid",
+                    "profile",
+                    "email",
+                    "roles",
+
+                    "api_files",
+                    "api_projects",
+                    "api_contacts",
+                    "svcs"
+                ]
+            },
+            {
+                "ClientId": "client_files_swaggerui",
+                "ClientName": "Fils Swagger UI",
+                "AllowedGrantTypes": [ "authorization_code" ],
+                "AllowAccessTokensViaBrowser": true,
+                "RequireClientSecret": false,
+                "RequirePkce": true,
+                "RedirectUris": [ "http://localhost:5701/swagger/oauth2-redirect.html" ],
+                "AllowedScopes": [ "api_files" ],
+                "AllowedCorsOrigins": [ "http://localhost:5701"],
+                "PostLogoutRedirectUris":[ "http://localhost:5701/swagger/" ]
+            }, 
+            {
+                "ClientId": "client_projects_swaggerui",
+                "ClientName": "Projects Swagger UI",
+                "AllowedGrantTypes": [ "authorization_code" ],
+                "AllowAccessTokensViaBrowser": true,
+                "RequireClientSecret": false,
+                "RequirePkce": true,
+                "RedirectUris": [ "http://localhost:5702/swagger/oauth2-redirect.html" ],
+                "AllowedScopes": [ "api_projects" ],
+                "AllowedCorsOrigins": [ "http://localhost:5702"],
+                "PostLogoutRedirectUris":[ "http://localhost:5702/swagger/" ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,34 @@
+<hbg-header
+  class="layout-header"
+  [menuToggleEnabled]="true"
+  (menuToggle)="menuOpened = !menuOpened"
+  [title]="'Title_here'">
+</hbg-header>
+
+<dx-drawer
+  class="layout-body"
+  position="before"
+  [closeOnOutsideClick]="shaderEnabled"
+  [openedStateMode]="menuMode"
+  [revealMode]="menuRevealMode"
+  [minSize]="minMenuSize"
+  [shading]="shaderEnabled"
+  [(opened)]="menuOpened">
+  <hbg-side-navigation-menu
+    [compactMode]="!menuOpened"
+    [selectedItem]="selectedRoute"
+    class="dx-swatch-additional"
+    *dxTemplate="let dataMenu of 'panel'"
+    (selectedItemChanged)="navigationChanged($event)"
+    (openMenu)="navigationClick()">
+    <hbg-footer>
+      Copyright © {{ currentYear }} 
+      <br />
+      VL Inc.
+    </hbg-footer>
+  </hbg-side-navigation-menu>
+
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</dx-drawer>

@@ -1,0 +1,37 @@
+{
+  "IdentityData": {
+    "Roles": [
+      {
+        "Name": "SysAdmin"
+      },
+      {
+        "Name": "ProjAdmin"
+      },
+      {
+        "Name": "ProjMgr"
+      },
+      {
+        "Name": "ProjEmpl"
+      }
+    ],
+    "Users": [
+      {
+        "Username": "admin@houbirg.com",
+        "Password": "Password123!",
+        "Email": "admin@houbirg.com",
+        "Roles": [
+          "SysAdmin",
+          "ProjAdmin",
+          "ProjMgr",
+          "ProjEmpl"
+        ],
+        "Claims": [
+          {
+            "Type": "name",
+            "Value": "admin"
+          }
+        ]
+      }
+    ]
+  }
+}

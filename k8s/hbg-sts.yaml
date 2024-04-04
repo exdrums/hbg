@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hbg-sts
+  labels:
+    app: hbg-sts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hbg-sts
+  template:
+    metadata:
+      labels:
+        app: hbg-sts
+    spec:
+      containers:
+        - name: hbg-sts
+          imagePullPolicy: Never
+          image: exdrums/hbg-sts
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+          - name: VIRTUAL_HOST
+            value: sts.houbirg.local
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: DockerConfiguration__UpdateCaCertificate
+            value: "true"
+          - name: ConnectionStrings__ConfigurationDbConnection
+            valueFrom:
+              secretKeyRef:
+                name: hbg-secret
+                key: houbirgdb_string
+          - name: ConnectionStrings__PersistedGrantDbConnection
+            valueFrom:
+              secretKeyRef:
+                name: hbg-secret
+                key: houbirgdb_string
+          - name: ConnectionStrings__IdentityDbConnection
+            valueFrom:
+              secretKeyRef:
+                name: hbg-secret
+                key: houbirgdb_string
+          - name: ConnectionStrings__DataProtectionDbConnection
+            valueFrom:
+              secretKeyRef:
+                name: hbg-secret
+                key: houbirgdb_string
+          - name: AdminConfiguration__IdentityAdminBaseUrl
+            valueFrom:
+              configMapKeyRef:
+                name: hbg-configmap
+                key: hbg-admin-url
+          - name: AdvancedConfiguration__PublicOrigin
+            valueFrom:
+              configMapKeyRef:
+                name: hbg-configmap
+                key: hbg-sts-url
+          - name: AdvancedConfiguration__IssuerUri
+            valueFrom:
+              configMapKeyRef:
+                name: hbg-configmap
+                key: hbg-sts-url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hbg-sts-service
+  labels:
+    app: hbg-sts
+spec:
+  # type: NodePort    # shows that this service is externally
+  selector:
+    app: hbg-sts
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      # nodePort: 30700 # do not open NodePort for hosting
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: hbg-sts-service-forspa
+#   labels:
+#     app: hbg-sts
+# spec:
+#   selector:
+#     app: hbg-sts
+#   ports:
+#     - protocol: TCP
+#       port: 443
+#       targetPort: 80
+
+# this service must be accessible under the original domain name within cluster
+# add "rewrite name sts.houbirg.local hbg-sts-service.default.svc.cluster.local"
+# to "kube-system" namespace => "coredns" ConfigMap => .:53  { ...}

@@ -1,0 +1,33 @@
+{
+    "Serilog": {
+        "MinimumLevel": {
+            "Default": "Debug",
+            "Override": {
+                "Skoruba": "Information"
+            }
+        },
+        "WriteTo": [
+            {
+                "Name": "Console"
+            },
+            {
+                "Name": "File",
+                "Args": {
+                    "path": "Log/admin.txt",
+                    "rollingInterval": "Day"
+                }
+            },
+            {
+                "Name": "MSSqlServer",
+                "Args": {
+                    "connectionString": "Server=localhost;port=5432; Database=hbgidentitydb; Uid=hbg-dbuser; Pwd=hbg-password-database",
+                    "tableName": "Log",
+                    "columnOptionsSection": {
+                        "addStandardColumns": [ "LogEvent" ],
+                        "removeStandardColumns": [ "Properties" ]
+                    }
+                }
+            }
+        ]
+    }
+}

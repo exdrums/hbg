@@ -1,0 +1,15 @@
+<dx-tab-panel *ngIf="items"
+  height="100%"
+  width="100%"
+  [focusStateEnabled]="false"
+  [swipeEnabled]="false"
+  [animationEnabled]="true"
+  (onSelectionChanged)="tabChanged.emit($event.addedItems[0].title)">
+  <dxi-item *ngFor="let item of items" [title]="item.title">
+    <div *dxTemplate class="tab">
+      <ng-template
+        [ngTemplateOutlet]="item.template">
+      </ng-template>
+    </div>
+  </dxi-item>
+</dx-tab-panel>

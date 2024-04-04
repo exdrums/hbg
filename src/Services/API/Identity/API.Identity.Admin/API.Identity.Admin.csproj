@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <UserSecretsId>76d98a45-e114-4482-a4bb-365714c98c89</UserSecretsId>
+        <!-- <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..</DockerfileContext> -->
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.2" />
+        <PackageReference Include="AutoMapper" Version="10.1.1" />
+        <PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" />
+        <PackageReference Include="Serilog" Version="2.10.0" />
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
+        <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.6.1" />
+        <PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
+        <PackageReference Include="Skoruba.IdentityServer4.Admin.BusinessLogic" Version="2.1.0" />
+        <PackageReference Include="Skoruba.IdentityServer4.Admin.BusinessLogic.Identity" Version="2.1.0" />
+        <PackageReference Include="Skoruba.IdentityServer4.Admin.UI" Version="2.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\API.Identity.Admin.EntityFramework.MySql\API.Identity.Admin.EntityFramework.MySql.csproj" />
+        <ProjectReference Include="..\API.Identity.Admin.EntityFramework.PostgreSQL\API.Identity.Admin.EntityFramework.PostgreSQL.csproj" />
+        <!-- <ProjectReference Include="..\API.Identity.Admin.EntityFramework.Shared\API.Identity.Admin.EntityFramework.Shared.csproj" /> -->
+        <ProjectReference Include="..\API.Identity.Admin.EntityFramework.SqlServer\API.Identity.Admin.EntityFramework.SqlServer.csproj" />
+        <ProjectReference Include="..\API.Identity.Shared\API.Identity.Shared.csproj" />
+
+        <!-- <ProjectReference Include="..\..\..\..\..\..\IdentityServer4.Admin\src\Skoruba.IdentityServer4.Admin.UI\Skoruba.IdentityServer4.Admin.UI.csproj"/> -->
+        <!-- <ProjectReference Include="..\..\..\..\..\..\IdentityServer4.Admin\src\Skoruba.IdentityServer4.Admin.BusinessLogic\Skoruba.IdentityServer4.Admin.BusinessLogic.csproj"/> -->
+        <!-- <ProjectReference Include="..\..\..\..\..\..\IdentityServer4.Admin\src\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity^\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.csproj"/> -->
+
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="log\" />
+        <Folder Include="Helpers\" />
+    </ItemGroup>
+
+</Project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+﻿{
+  "IdentityData": {
+    "Roles": [
+      {
+        "Name": "SysAdmin"
+      }
+    ],
+    "Users": [
+      {
+        "Username": "admin",
+        "Password": "Password123!",
+        "Email": "admin@houbirg.com",
+        "Roles": [
+          "SysAdmin"
+        ],
+        "Claims": [
+          {
+            "Type": "name",
+            "Value": "admin"
+          }
+        ]
+      }
+    ]
+  }
+}

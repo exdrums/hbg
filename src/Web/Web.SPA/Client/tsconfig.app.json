@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "incremental": true,
+    "outDir": "./out-tsc/app",
+    "types": [ "node" ],
+    "resolveJsonModule": true
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+      "./**/*.d.ts"
+  ],
+  "exclude": [
+    "**/test.ts",
+    "**/*.spec.ts",
+    "e2e/src/*.e2e-spec.ts",
+    "mocks/**"
+  ],
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  }
+}

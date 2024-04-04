@@ -1,0 +1,5 @@
+Add these strings to "coredns" ConfigMap in "kube-system" namespace
+
+rewrite name sts.houbirg.local hbg-sts-service.default.svc.cluster.local
+rewrite name admin.houbirg.local hbg-admin-service.default.svc.cluster.local
+rewrite name spa.houbirg.local hbg-spa-service.default.svc.cluster.local

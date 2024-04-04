@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hbg-configmap
+data:
+  hbg-spa-url: https://spa.houbirg.local
+  asp_hosting_urls: http://+:80 # hosting url for asp.net application  REMOVED: https://+:443;
+  database_name: hbgidentitydb
+
+  hbg-admin-url: https://admin.houbirg.local
+  hbg-admin-url-login: https://admin.houbirg.local/signin-oidc
+  hbg-admin-url-logout: https://admin.houbirg.local/signout-callback-oidc
+
+  hbg-sts-url: http://sts.houbirg.local
+
+  hbg-adminapi-url-swagger: https://adminapi.houbirg.local/swagger/oauth2-redirect.html
+
+
+  # database_url: hbg-db-service                                 # url of database service
+  # identity_origin: http://kubernetes.docker.internal:30700    # exernal url for identity.api service
+  # identity_url: hbg-identityapi               # internal url for identity.api service
+  # spa_origin: http://kubernetes.docker.internal:30799                  # external
+  # spa_url: hbg-spa   
+  # all origin strings must be added to "host" file

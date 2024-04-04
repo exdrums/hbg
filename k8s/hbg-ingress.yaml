@@ -1,0 +1,54 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hbg-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # cert-manager.io/cluster-issuer: hbg-clusterissuer
+    # kubernetes.io/ingress.class: traefik
+    # traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
+    # traefik.ingress.kubernetes.io/router.middlewares: nginx1-redirecttohttps@kubernetescrd
+spec:
+  tls:
+    - hosts:
+      - sts.houbirg.local
+      - admin.houbirg.local
+      - spa.houbirg.local
+      secretName: hbg-tls-secret
+  ingressClassName: nginx
+  rules:
+  - host: "sts.houbirg.local"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hbg-sts-service
+            port:
+              number: 80
+  - host: "admin.houbirg.local"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hbg-admin-service
+            port:
+              number: 80
+  - host: "spa.houbirg.local"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hbg-spa-service
+            port:
+              number: 80
+              
+# if running local, add each domain name to the "hosts"
+
+# if ingress has no localhost in ADDRESS call
+# sudo kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 80:80

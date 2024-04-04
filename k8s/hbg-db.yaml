@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hbg-db
+  labels:
+    app: hbg-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hbg-db
+  template:
+    metadata:
+      labels:
+        app: hbg-db
+    spec:
+      containers:
+      - name: hbg-db
+        image: postgres
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: database_name
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: houbirgdb_username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: houbirgdb_password
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: hbg-db-data
+      volumes:
+      - name: hbg-db-data
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hbg-db
+  labels:
+    app: hbg-db
+spec:
+  type: NodePort # shows that this service is externally (do not use load balancer locally)
+  selector:
+    app: hbg-db
+  ports:
+  - port: 5432
+    targetPort: 5432
+    nodePort: 32345
+    protocol: TCP
+
+# NEXT TODO::
+# start the server in k8 
+# 1. connect to the DB through NodePort
+# 2. add new config to ingress controller for this service 
+# and connect to the DB through Ingress "db.hbg.local"
+# 3. try to setup PosgtreSQL server on SSL
+# 4. start hbg-sts and esteblish the connection to the DB (try through ssl too)
+# 5. ... 

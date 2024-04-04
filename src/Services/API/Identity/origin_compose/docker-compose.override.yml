@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  api.identity.admin:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+  
+  api.identity.admin.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+
+  api.identity.sts.identity:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro

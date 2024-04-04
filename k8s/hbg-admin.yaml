@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hbg-admin
+  labels:
+    app: hbg-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hbg-admin
+  template:
+    metadata:
+      labels:
+        app: hbg-admin
+    spec:
+      containers:
+      - name: hbg-admin
+        imagePullPolicy: Never
+        image: exdrums/hbg-admin
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: VIRTUAL_HOST
+          value: admin.houbirg.local
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: DockerConfiguration__UpdateCaCertificate
+          value: "true"
+        - name: ConnectionStrings__ConfigurationDbConnection
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: houbirgdb_string
+        - name: ConnectionStrings__PersistedGrantDbConnection
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: houbirgdb_string
+        - name: ConnectionStrings__IdentityDbConnection
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: houbirgdb_string
+        - name: ConnectionStrings__AdminLogDbConnection
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: houbirgdb_string
+        - name: ConnectionStrings__AdminAuditLogDbConnection
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: houbirgdb_string
+        - name: ConnectionStrings__DataProtectionDbConnection
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: houbirgdb_string
+        - name: AdminConfiguration__RequireHttpsMetadata
+          value: "false"
+        - name: AdminConfiguration__IdentityAdminBaseUrl
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-admin-url
+        - name: AdminConfiguration__IdentityAdminRedirectUri
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-admin-url-login
+        - name: AdminConfiguration__IdentityServerBaseUrl
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-sts-url
+        - name: IdentityServerData__Clients__0__ClientUri
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-admin-url
+        - name: IdentityServerData__Clients__0__RedirectUris__0
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-admin-url-login
+        - name: IdentityServerData__Clients__0__FrontChannelLogoutUri
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-admin-url-login
+        - name: IdentityServerData__Clients__0__PostLogoutRedirectUris__0
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-admin-url-logout
+        - name: IdentityServerData__Clients__0__AllowedCorsOrigins__0
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-admin-url
+        - name: IdentityServerData__Clients__1__RedirectUris__0
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-adminapi-url-swagger
+        - name: Serilog__WriteTo__1__Args__connectionString
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: houbirgdb_string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hbg-admin-service
+  labels:
+    app: hbg-admin
+spec:
+  # type: NodePort    # shows that this service is externally
+  selector:
+    app: hbg-admin
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    # nodePort: 30798
