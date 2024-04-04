@@ -25,22 +25,21 @@ export class AuthService {
       issuer: this.configs.hbgidentity,
 
       // URL of the SPA to redirect the user to after login
-      // redirectUri: window.location.origin + '/index.html',
       redirectUri: window.location.origin + "/",
-      // responseType: ,
 
       // The SPA's id. The SPA is registerd with this id at the auth-server
       clientId: "js",
+
       // Just needed if your auth server demands a secret. In general, this
       // is a sign that the auth server is not configured with SPAs in mind
       // and it might not enforce further best practices vital for security
       // such applications.
-      
       dummyClientSecret: "js_secret",
     
-      scope: "openid profile email roles api_files api_projects",
+      scope: "openid profile email roles offline_access api_files api_projects",
       showDebugInformation: true,
       oidc: false,
+      useSilentRefresh: true
     };
 
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgidentity);
@@ -52,6 +51,7 @@ export class AuthService {
     this.auth.configure(conf);
 
     const x = await this.auth.loadDiscoveryDocument(); // .then(x => {
+    this.auth.setupAutomaticSilentRefresh();
     if (this.auth.hasValidAccessToken()) {
       const y = await this.auth.loadUserProfile(); //then(y => {
       if (y) {
