@@ -7,6 +7,7 @@ import { ProjectsWebSocketConntection } from './projects-ws-connection.service';
 @Injectable()
 export class ProjectsWsDataSource extends CustomDataSource<Project> {
   constructor(private connection: ProjectsWebSocketConntection) {
-    super(new SignalRDataStore(connection, "projectID"));
+    super(new SignalRDataStore<Project>(connection, "projectID", "Project"));
   }
+  public readonly refresh = () => void this.reload();
 }

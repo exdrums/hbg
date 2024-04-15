@@ -1,0 +1,1 @@
+export const dxTimeout = async () => new Promise(resolve => setTimeout(resolve, 10));

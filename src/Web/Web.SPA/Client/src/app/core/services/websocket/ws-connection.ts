@@ -21,11 +21,14 @@ export abstract class WsConnection {
 	protected abstract hubUrl: string;
 	protected abstract canConnect: () => boolean;
 	protected abstract actions: SignalRAction[];
-	protected connection: HubConnection;
+	public connection: HubConnection;
 	public isConnected$ = new BehaviorSubject<boolean>(false);
 	public isConnectedPromise = () => firstValueFrom(this.isConnected$.pipe(filter(o => o)));
 	public isConnected = () => this.connection != null && this.connection.state === HubConnectionState.Connected;
 
+	/** Add new handler function to the connection */
+	public readonly addHandler = (action: SignalRAction) => this.connection.on(action.name, action.handler);
+	public readonly invoke = (name: string, ...args: any[]) => this.connection.invoke(name, ...args);
 	/**
 	 * Activate: true => connect WebSocket
 	 * Activate: false => disconnect WebSocket

@@ -2,8 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Common.Projects;
 using Common.Utils;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.SignalR;
 using Projects.Dtos;
 using Projects.Services;
@@ -11,17 +12,21 @@ using Projects.Services;
 namespace Projects.WebSocket;
 
 [Authorize]
-public class ProjectsHub : Hub<IProjectsDataStoreClientActions>, IProjectsDataStoreServerActions
+public partial class ProjectsHub : Hub<IProjectsDataStoreClientActions>, IProjectsDataStoreServerActions
 {
     private readonly ProjectsDbContext dbContext;
     private readonly ProjectsService service;
     private readonly IAuthorizationService authorizationService;
+    private readonly IAuthenticationService authenticationService;
+
     public ProjectsHub(
         ProjectsDbContext dbContext,
         ProjectsService service,
-        IAuthorizationService authorizationService
+        IAuthorizationService authorizationService,
+        IAuthenticationService authenticationService
     ) {
         this.authorizationService = authorizationService;
+        this.authenticationService = authenticationService;
         this.dbContext = dbContext;
         this.service = service;
     }
@@ -39,7 +44,7 @@ public class ProjectsHub : Hub<IProjectsDataStoreClientActions>, IProjectsDataSt
 		await base.OnDisconnectedAsync(exception);
 	}
 
-    public async Task<ProjectInfoDto> ByKey(int projectID) 
+    public async Task<ProjectDto> ByKey(int projectID) 
     {
         var authResult = await authorizationService.AuthorizeAsync(this.Context.User, projectID, ProjectOperations.Read);
         if (!authResult.Succeeded) throw new Exception("AuthorizationException");
@@ -47,24 +52,36 @@ public class ProjectsHub : Hub<IProjectsDataStoreClientActions>, IProjectsDataSt
         return null;
     }
 
-    public async Task Load(DevExtremeLoadOptions loadOptions)
+    public async Task LoadProject(DevExtremeLoadOptions? loadOptions, long? permissionId)
     {
-        await service.GetProjects(Context.UserIdentifier, loadOptions);
+        var projects = await service.GetProjects(Context.UserIdentifier, loadOptions);
+        await Clients.Group(Context.UserIdentifier).LoadedProject(projects);
     }
 
-    public async Task Insert(ProjectDto value)
+    public async Task InsertProject(ProjectDto value, long? permissionId)
     {
-        await service.CreateNewProject(value, Context.UserIdentifier);
+        var created = await service.CreateNewProject(value, Context.UserIdentifier);
+
+        await Clients.Group(Context.UserIdentifier).AddedProject(created);
     }
 
-    public Task Update(object key, object values)
+    public async Task UpdateProject(int projectId, ProjectDto values, long? permissionId)
     {
-        throw new NotImplementedException();
+        await AuthorizeProject(projectId, ProjectOperations.Update);
+        await service.UpdateProject(projectId, values);
     }
 
-    public Task Remove(object key)
+    public async Task RemoveProject(int projectId, long? permissionId)
     {
-        throw new NotImplementedException();
+        await AuthorizeProject(projectId, ProjectOperations.Delete);
+        await service.RemoveProject(projectId);
+    }
+
+    protected async Task AuthorizeProject(int projectId, OperationAuthorizationRequirement op) 
+    {
+        await authenticationService.AuthenticateAsync(Context.GetHttpContext(), null);
+        var authResult = await authorizationService.AuthorizeAsync(Context.User, projectId, op);
+        if (!authResult.Succeeded) throw new UnauthorizedAccessException("Unauthorized access to the project");
     }
 
     // Share

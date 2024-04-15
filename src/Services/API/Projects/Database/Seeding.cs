@@ -1,5 +1,6 @@
 using System.Linq;
 using API.Common;
+using Projects.Models;
 
 public static class ProjectsDbSetSeeding 
 {

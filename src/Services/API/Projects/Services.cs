@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.SignalR;
 using Common.WebSocket;
+using Projects.Models;
 
 namespace API.Projects;
 

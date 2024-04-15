@@ -1,36 +1,77 @@
 import CustomStore from "devextreme/data/custom_store";
 import DevExpress from "devextreme";
-import { DataStoreWsConnection } from "../services/websocket/data-store-ws-connection";
-import { delay, tap } from "rxjs";
 import { DeepPartial } from "devextreme/core";
+import { WsConnection } from "../services/websocket/ws-connection";
+import { dxTimeout } from "../utils/dx-utils";
 
 
 export class SignalRDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomStore<TGET, TKEY>  {
-    constructor(private connection: DataStoreWsConnection<TGET>, key: string) {
+    constructor(
+        private connection: WsConnection,
+        private keyProp: "projectID" | "planID" | "articleID",
+        private entity: "Project" | "Plan" | "Article"
+    ) {
         super({
-            key: key,
+            key: keyProp,
             loadMode: "raw",
             cacheRawData: true,
-            load: (loadOptions: DevExpress.data.LoadOptions) => connection.load(loadOptions),
-            insert: (value: TGET) => connection.insert(value),
-            update: (key, values) => connection.update(key, values),
-            remove: (key) => connection.remove(key),
+            load: (loadOptions: DevExpress.data.LoadOptions) => this.loadAction(loadOptions),
+            insert: (value: TGET) => this.insertAction(value),
+            update: (key, values) => this.updateAction(key, values),
+            remove: (key) => this.removeAction(key),
             onPush: (changes) => console.log('onPush_changes', changes)
         });
-        this.bindLoaded();
-        this.bindAdded();
+
+        void this.addHandlers();
     }
 
-    private bindLoaded = () => this.connection.loaded$.pipe(
-        delay(0),
-        tap(i => console.log('loaded$', i, this)),
-        tap(items => this.push(items.map(i => ({ type: "insert", data: i as DeepPartial<TGET>, index: 0 })))),
-    ).subscribe();
+    public permissionId = null;
 
-    private bindAdded = () => this.connection.added$.pipe(
-        delay(0),
-        tap(i => console.log('added$', i, this)),
-        tap(added => this.push([{ type: "insert", data: added as DeepPartial<TGET> }]))
-    ).subscribe();
+    //#region Handlers
+
+    private async addHandlers() {
+        await this.connection.isConnectedPromise();
+        this.connection.addHandler({ name: "loaded" + this.entity, handler: this.loaded });
+        this.connection.addHandler({ name: "added" + this.entity, handler: this.added });
+    }
+
+    private readonly loaded = async (items: any[]) => {
+        await dxTimeout();
+        this.push(items.map(i => ({ type: "insert", data: i as DeepPartial<TGET>, index: 0 })));
+    }
+
+    private readonly added = async (item: TGET) => {
+        await dxTimeout();
+        console.log('Added', item);
+        this.push([{ type: "insert", data: item as DeepPartial<TGET> }]);
+    }
+
+    //#endregion
+
+    //#region Actions
+
+    public async loadAction(loadOptions: DevExpress.data.LoadOptions): Promise<TGET[]> {
+        await this.connection.isConnectedPromise();
+        await this.connection.connection.invoke("loadProject", loadOptions, this.permissionId);
+        return [];
+        // return await firstValueFrom(this.loaded$);
+    }
+
+    public async insertAction(value: TGET) {
+        await this.connection.isConnectedPromise();
+        await this.connection.connection.invoke("insert" + this.entity, value, this.permissionId);
+        return value;
+    }
+
+    public async updateAction(key, values) {
+        await this.connection.isConnectedPromise();
+        await this.connection.connection.invoke("update" + this.entity, key, values, this.permissionId);
+    }
+
+    public async removeAction(key) {
+        await this.connection.isConnectedPromise();
+        await this.connection.connection.invoke("remove" + this.entity, key, this.permissionId);
+    }
+    //#endregion
     
 }

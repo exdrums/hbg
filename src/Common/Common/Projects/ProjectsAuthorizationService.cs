@@ -35,7 +35,8 @@ public class ProjectOperationsClaims<TContext, TPermission> : IClaimsTransformat
         // Get userID from Principal
 
         // Get all ProjectPermissions anf create claim for each permission object
-        var permissions = new List<IProjectPermission>();
+        // var permissions = new List<TPermission>();
+        var permissions = await dbContext.GetForUserAsync(principal.FindFirst("sub")!.Value);
 
         // Add claims:
         // project-read: 45

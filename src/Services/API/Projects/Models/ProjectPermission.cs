@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Common.Projects;
 
+namespace Projects.Models;
+
 [Table("ProjectPermission")]
 public class ProjectPermission : IProjectPermission
 {
