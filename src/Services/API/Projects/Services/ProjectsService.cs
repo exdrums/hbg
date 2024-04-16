@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Common.Exceptions;
 using Common.Projects;
 using Common.Utils;
 using Microsoft.AspNetCore.SignalR;
@@ -28,21 +30,47 @@ public class ProjectsService
         this.mapper = mapper;
     }
 
-    public async Task<List<ProjectDto>> GetProjects(string userId, DevExtremeLoadOptions loadOptions)
-    {
-        var projects = await context.Projects
-            .Include(p => p.ProjectPermissions)
-            // .Where(p => p.ProjectPermissions.Any(perm => perm.UserID == userId /* && perm.Type == PermissionType.Read*/))
-            .ProjectTo<ProjectDto>(mapper.ConfigurationProvider)
-            .ToListAsync();
+    /// <summary>
+    /// Get Project by id to work with
+    /// Includes Articles, Plans
+    /// </summary>
+    /// <param name="projectId"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
+    public async Task<Project> GetProject(int projectId) => await context.Projects
+        .Include(p => p.Articles)
+        .Include(p => p.Plans)
+        .FirstOrDefaultAsync(p => p.ProjectID == projectId)
+        ?? throw new NotFoundException($"Projects not found {projectId}");
 
-        return projects;
-    }
 
+    /// <summary>
+    /// Get all projects visible for loggedin user
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    public IQueryable<ProjectDto> GetProjects(string userId) => context.Projects
+        .Include(p => p.ProjectPermissions)
+        .Where(p => p.ProjectPermissions.Any(perm => perm.UserID == userId /* && perm.Type == PermissionType.Read*/))
+        .ProjectTo<ProjectDto>(mapper.ConfigurationProvider);
+
+
+    /// <summary>
+    /// Create new project and add default creator permissions
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     public async Task<ProjectDto> CreateNewProject(ProjectDto dto, string userId)
     {
         var toCreate = mapper.Map<Project>(dto);
 
+        var read = new ProjectPermission
+        {
+            Project = toCreate,
+            UserID = userId,
+            Type = PermissionType.Read
+        };
         var update = new ProjectPermission
         {
             Project = toCreate,
@@ -68,6 +96,7 @@ public class ProjectsService
             Type = PermissionType.SeePrices
         };
 
+        toCreate.ProjectPermissions.Add(read);
         toCreate.ProjectPermissions.Add(update);
         toCreate.ProjectPermissions.Add(delete);
         toCreate.ProjectPermissions.Add(share);

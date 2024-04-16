@@ -1,14 +1,14 @@
 using System.Threading.Tasks;
 using Common.Utils;
-using Common.WebSocket;
+using DevExtreme.AspNet.Data.ResponseModel;
 using Projects.Dtos;
 
 namespace Projects.WebSocket.Interfaces;
 
 public interface IPlansDataStoreServerActions
 {
-    Task LoadPlan(DevExtremeLoadOptions loadOptions, long? projectId);
-    Task InsertPlan(PlanDto value, long? projectId);
-    Task UpdatePlan(object key, object values, long? projectId);
-    Task RemovePlan(object key, long? projectId);
+    Task<LoadResult> LoadPlan(DevExtremeLoadOptions loadOptions, int projectId);
+    Task<PlanDto> InsertPlan(PlanDto value, int projectId);
+    Task UpdatePlan(int key, PlanDto values, int projectId);
+    Task RemovePlan(int key, int projectId);
 }

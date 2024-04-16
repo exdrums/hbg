@@ -1,11 +1,11 @@
-import CustomStore from "devextreme/data/custom_store";
 import DevExpress from "devextreme";
 import { DeepPartial } from "devextreme/core";
 import { WsConnection } from "../services/websocket/ws-connection";
 import { dxTimeout } from "../utils/dx-utils";
+import { CustomDataStore } from "./custom-data-store";
 
 
-export class SignalRDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomStore<TGET, TKEY>  {
+export class SignalRDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomDataStore<TGET, TKEY>  {
     constructor(
         private connection: WsConnection,
         private keyProp: "projectID" | "planID" | "articleID",
@@ -21,11 +21,9 @@ export class SignalRDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomS
             remove: (key) => this.removeAction(key),
             onPush: (changes) => console.log('onPush_changes', changes)
         });
-
         void this.addHandlers();
     }
 
-    public permissionId = null;
 
     //#region Handlers
 
@@ -52,25 +50,24 @@ export class SignalRDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomS
 
     public async loadAction(loadOptions: DevExpress.data.LoadOptions): Promise<TGET[]> {
         await this.connection.isConnectedPromise();
-        await this.connection.connection.invoke("loadProject", loadOptions, this.permissionId);
-        return [];
-        // return await firstValueFrom(this.loaded$);
+        var result = await this.connection.connection.invoke("load" + this.entity, loadOptions, this.subjectId);
+        return result.data;
     }
 
-    public async insertAction(value: TGET) {
+    public async insertAction(value: TGET): Promise<TGET> {
         await this.connection.isConnectedPromise();
-        await this.connection.connection.invoke("insert" + this.entity, value, this.permissionId);
-        return value;
+        const result: TGET = await this.connection.connection.invoke("insert" + this.entity, value, this.subjectId);
+        return result;
     }
 
     public async updateAction(key, values) {
         await this.connection.isConnectedPromise();
-        await this.connection.connection.invoke("update" + this.entity, key, values, this.permissionId);
+        await this.connection.connection.invoke("update" + this.entity, key, values, this.subjectId);
     }
 
     public async removeAction(key) {
         await this.connection.isConnectedPromise();
-        await this.connection.connection.invoke("remove" + this.entity, key, this.permissionId);
+        await this.connection.connection.invoke("remove" + this.entity, key, this.subjectId);
     }
     //#endregion
     

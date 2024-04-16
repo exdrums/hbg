@@ -1,14 +1,14 @@
 using System.Threading.Tasks;
 using Common.Utils;
+using DevExtreme.AspNet.Data.ResponseModel;
 using Projects.Dtos;
 
 namespace Projects.WebSocket.Interfaces;
 
 public interface IArticlesDataStoreServerActions
 {
-    Task LoadArticle(DevExtremeLoadOptions loadOptions, long? projectId);
-    Task InsertArticle(ArticleDto value, long? projectId);
-    Task UpdateArticle(object key, object values, long? projectId);
-    Task RemoveArticle(object key, long? projectId);
-    
+    Task<LoadResult> LoadArticle(DevExtremeLoadOptions loadOptions, int projectId);
+    Task<ArticleDto> InsertArticle(ArticleDto value, int projectId);
+    Task UpdateArticle(long key, ArticleDto values, int projectId);
+    Task RemoveArticle(long key, int projectId);
 }

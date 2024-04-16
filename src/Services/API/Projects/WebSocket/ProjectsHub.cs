@@ -1,7 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Common.Projects;
 using Common.Utils;
+using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.ResponseModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -18,15 +21,18 @@ public partial class ProjectsHub : Hub<IProjectsDataStoreClientActions>, IProjec
     private readonly ProjectsService service;
     private readonly IAuthorizationService authorizationService;
     private readonly IAuthenticationService authenticationService;
+    private readonly IMapper mapper;
 
     public ProjectsHub(
         ProjectsDbContext dbContext,
         ProjectsService service,
         IAuthorizationService authorizationService,
-        IAuthenticationService authenticationService
+        IAuthenticationService authenticationService,
+        IMapper mapper
     ) {
         this.authorizationService = authorizationService;
         this.authenticationService = authenticationService;
+        this.mapper = mapper;
         this.dbContext = dbContext;
         this.service = service;
     }
@@ -52,17 +58,18 @@ public partial class ProjectsHub : Hub<IProjectsDataStoreClientActions>, IProjec
         return null;
     }
 
-    public async Task LoadProject(DevExtremeLoadOptions? loadOptions, long? permissionId)
+    public async Task<LoadResult> LoadProject(DevExtremeLoadOptions? loadOptions, long? permissionId)
     {
-        var projects = await service.GetProjects(Context.UserIdentifier, loadOptions);
-        await Clients.Group(Context.UserIdentifier).LoadedProject(projects);
+        var qprojects = service.GetProjects(Context.UserIdentifier);
+        return await DataSourceLoader.LoadAsync(qprojects, loadOptions);
     }
 
-    public async Task InsertProject(ProjectDto value, long? permissionId)
+    public async Task<ProjectDto> InsertProject(ProjectDto value, long? permissionId)
     {
         var created = await service.CreateNewProject(value, Context.UserIdentifier);
+        // await Clients.Group(Context.UserIdentifier).AddedProject(created);
 
-        await Clients.Group(Context.UserIdentifier).AddedProject(created);
+        return created;
     }
 
     public async Task UpdateProject(int projectId, ProjectDto values, long? permissionId)

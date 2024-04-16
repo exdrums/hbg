@@ -1,35 +1,26 @@
 <dx-data-grid
   [dataSource]="ds"
   [remoteOperations]="true"
-  (onInitialized)="grid = $event.component"
-  (onRowExpanding)="onRowExpanding($event)"
-  (onInitNewRow)="onInitNewRow($event)">
+  (onInitialized)="grid = $event.component">
   <dxo-selection mode="single"></dxo-selection>
   <dxo-editing [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" mode="popup">
     <dxo-form>
       <dxi-item dataField="name"></dxi-item>
-      <dxi-item dataField="description"></dxi-item>
     </dxo-form>
   </dxo-editing>
-
   <dxo-toolbar>
     <dxi-item location="after" name="addRowButton"></dxi-item>
     <dxi-item location="after" name="columnChooserButton"></dxi-item>
 
     <dxi-item location="after">
       <div *dxTemplate>
-        <dx-button icon="refresh" (onClick)="ds.refresh()"> </dx-button>
+        <dx-button icon="refresh" (onClick)="ds.refresh()"></dx-button>
       </div>
     </dxi-item>
 
   </dxo-toolbar>
 
-  <dxo-master-detail [enabled]="true" template="proj-detail"></dxo-master-detail>
-  <div *dxTemplate="let row of 'proj-detail'">
-    <hbg-projects-master-detail [projectId]="row.data.projectID"></hbg-projects-master-detail>
-  </div>
-
-  <dxi-column dataField="projectID"></dxi-column>
+  <dxi-column dataField="articleID"></dxi-column>
   <dxi-column dataField="name"></dxi-column>
-  <dxi-column dataField="description"></dxi-column>
+
 </dx-data-grid>
