@@ -23,4 +23,12 @@
   <dxi-column dataField="planID"></dxi-column>
   <dxi-column dataField="name"></dxi-column>
 
+  <dxi-column type="buttons">
+    <dxi-button name="edit"></dxi-button>
+    <dxi-button name="delete"></dxi-button>
+
+    <dxi-button icon="image" [onClick]="openPlan"></dxi-button>
+    <!-- Declare and configure custom buttons here -->
+  </dxi-column>
+
 </dx-data-grid>

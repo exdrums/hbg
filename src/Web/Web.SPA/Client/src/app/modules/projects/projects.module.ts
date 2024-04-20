@@ -10,6 +10,8 @@ import { PlansListComponent } from './projects-master-detail/plans-list/plans-li
 import { ArticlesListComponent } from './projects-master-detail/articles-list/articles-list.component';
 import { PlansWsDataSource } from './data/plans-ws.data-source';
 import { ArticlesWsDataSource } from './data/articles-ws.data-source';
+import { PlanPopupComponent } from './popups/plan-popup/plan-popup.component';
+import { PlannerComponent } from './planner/planner.component';
 
 @NgModule({
   imports: [
@@ -20,6 +22,8 @@ import { ArticlesWsDataSource } from './data/articles-ws.data-source';
     ProjectsListComponent,
     ProjectsMasterDetailComponent,
     PlansListComponent,
+    PlanPopupComponent,
+    PlannerComponent,
     ArticlesListComponent
   ],
   providers: [

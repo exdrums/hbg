@@ -4,6 +4,7 @@ import {
   DxChartModule,
   DxColorBoxModule,
   DxDataGridModule,
+  DxFileUploaderModule,
   DxFormModule,
   DxFunnelModule,
   DxMultiViewModule,
@@ -41,7 +42,9 @@ import {
     DxSpeedDialActionModule,
     DxScrollViewModule,
     DxTextAreaModule,
-    DxRangeSliderModule
+    DxRangeSliderModule,
+
+    DxFileUploaderModule
   ],
   exports: [
     DxButtonModule,
@@ -63,7 +66,9 @@ import {
     DxSpeedDialActionModule,
     DxScrollViewModule,
     DxTextAreaModule,
-    DxRangeSliderModule
+    DxRangeSliderModule,
+
+    DxFileUploaderModule
   ],
 })
 export class HbgDxModule {}
