@@ -1,0 +1,6 @@
+<hbg-image-cutter
+  style="height: 100%"
+  #cutter *ngIf="data$ | async as context" 
+  [cropperOptions]="config"
+  [imageUrl]="context.data.url">
+</hbg-image-cutter>

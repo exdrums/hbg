@@ -21,6 +21,9 @@ import { ThemeService } from './services/theme.service';
 import { NotificationService } from './services/notification.service';
 import { PopupService } from './services/popup.service';
 import { ScreenLockerService } from './services/screen-locker.service';
+import { CutImageService } from './services/cut-image.service';
+import { ImageCutterComponent } from './components/image-cutter/image-cutter.component';
+import { CutImagePopupComponent } from './components/image-cutter/cut-image-popup/cut-image-popup.component';
 
 @NgModule({
   imports: [
@@ -59,6 +62,7 @@ import { ScreenLockerService } from './services/screen-locker.service';
     ScreenService,
     StorageService,
     ThemeService,
+    CutImageService,
 
     AuthGuard,
     NoAuthGuard,
@@ -69,13 +73,17 @@ import { ScreenLockerService } from './services/screen-locker.service';
   exports: [
     CommonModule, 
     PopupStackComponent,
-    DxLoadPanelModule
+    DxLoadPanelModule,
+    ImageCutterComponent,
+    CutImagePopupComponent
   ],
   declarations: [
     ExamplePopupComponent,
     PopupStackComponent,
     PopupContentComponent,
     PopupErrorComponent,
+    ImageCutterComponent,
+    CutImagePopupComponent
   ]
 })
 export class CoreModule { }

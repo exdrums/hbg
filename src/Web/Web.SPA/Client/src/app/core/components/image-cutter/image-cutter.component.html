@@ -1,0 +1,10 @@
+<div class="wrapper">
+  <!-- loading -->
+  <div class="loading-block" *ngIf="isLoading"><div class="spinner"></div></div>
+  <!-- error -->
+  <div class="alert alert-warning" *ngIf="loadError">{{ loadImageErrorText }}</div>
+  <!-- cutter -->
+  <div class="cutter">
+      <img #image alt="image" [src]="imageUrl" (load)="onImageLoaded($event)" (error)="onImageLoadError($event)"/>
+  </div>
+</div>

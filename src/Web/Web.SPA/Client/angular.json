@@ -62,6 +62,7 @@
             "styles": [
               "src/styles/dx-styles.scss",
               "src/styles/styles.scss",
+              "src/styles/cropper-js.scss",
               "node_modules/devexpress-gantt/dist/dx-gantt.css",
               {
                 "input": "node_modules/devextreme/scss/bundles/dx.material.blue.light.compact.scss",
