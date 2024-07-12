@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Projects", "Services\AP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.SPA", "Web\Web.SPA\Web.SPA.csproj", "{F91D1033-8D27-493E-BB11-FB6A4BA26BD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Emailer", "Services\API\Emailer\API.Emailer.csproj", "{3C44B9DC-D6A0-4E4A-B004-31F77CFEA47A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,5 +86,9 @@ Global
 		{F91D1033-8D27-493E-BB11-FB6A4BA26BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F91D1033-8D27-493E-BB11-FB6A4BA26BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F91D1033-8D27-493E-BB11-FB6A4BA26BD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C44B9DC-D6A0-4E4A-B004-31F77CFEA47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C44B9DC-D6A0-4E4A-B004-31F77CFEA47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C44B9DC-D6A0-4E4A-B004-31F77CFEA47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C44B9DC-D6A0-4E4A-B004-31F77CFEA47A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

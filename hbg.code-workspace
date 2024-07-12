@@ -21,6 +21,10 @@
 			"name": "API.Projects"
 		},
 		{
+			"path": "src/Services/API/Emailer",
+			"name": "API.Emailer"
+		},
+		{
 			"path": "src/Web/Web.SPA"
 		},
 	],

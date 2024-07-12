@@ -88,6 +88,15 @@
                     "role",
                     "name"
                 ]
+            },
+            {
+                "Name": "api_emailer",
+                "DisplayName": "api_emailer",
+                "Required": true,
+                "UserClaims": [
+                    "role",
+                    "name"
+                ]
             }
         ],
         "ApiResources": [
@@ -107,6 +116,12 @@
                 "Name": "api_projects",
                 "Scopes": [
                     "api_projects"
+                ]
+            },
+            {
+                "Name": "api_emailer",
+                "Scopes": [
+                    "api_emailer"
                 ]
             }
         ],
@@ -235,6 +250,18 @@
                 "AllowedScopes": [ "api_projects" ],
                 "AllowedCorsOrigins": [ "http://localhost:5702"],
                 "PostLogoutRedirectUris":[ "http://localhost:5702/swagger/" ]
+            },
+            {
+                "ClientId": "client_emailer_swaggerui",
+                "ClientName": "Emailer Swagger UI",
+                "AllowedGrantTypes": [ "authorization_code" ],
+                "AllowAccessTokensViaBrowser": true,
+                "RequireClientSecret": false,
+                "RequirePkce": true,
+                "RedirectUris": [ "http://localhost:5703/swagger/oauth2-redirect.html" ],
+                "AllowedScopes": [ "api_emailer" ],
+                "AllowedCorsOrigins": [ "http://localhost:5703"],
+                "PostLogoutRedirectUris":[ "http://localhost:5703/swagger/" ]
             }
         ]
     }

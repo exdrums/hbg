@@ -1,0 +1,16 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "API.Emailer": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5703",
+      "environmentVariables": {
+        "ASPNETCORE_URLS": "http://+:5703",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
