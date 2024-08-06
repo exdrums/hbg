@@ -286,3 +286,5 @@ obj
 
 .DS_Store
 .angular
+
+*.Development.json
