@@ -36,7 +36,7 @@ export class AuthService {
       // such applications.
       dummyClientSecret: "js_secret",
     
-      scope: "openid profile email roles offline_access api_files api_projects",
+      scope: "openid profile email roles offline_access api_files api_projects api_emailer",
       showDebugInformation: true,
       oidc: false,
       useSilentRefresh: true
@@ -45,6 +45,8 @@ export class AuthService {
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgidentity);
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgfiles);
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgprojects);
+    this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgemailer);
+
 
     this.auth.setStorage(sessionStorage);
 

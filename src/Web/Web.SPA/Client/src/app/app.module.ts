@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { ProjectsModule } from './modules/projects/projects.module';
+import { EmailerModule } from './modules/emailer/emailer.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,8 @@ import { ProjectsModule } from './modules/projects/projects.module';
     AuthModule,
     HomeModule,
     ProjectsModule,
+    EmailerModule,
+
     ShellModule,
   ],
 

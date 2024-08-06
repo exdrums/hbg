@@ -54,9 +54,11 @@
 			"error.handler.ts": "haml",
 			"*.temp.ts": "mxml",
 			"*.state.ts": "angular-resolver",
+			"*.model.ts": "3d",
 		},
 		"material-icon-theme.folders.associations": {
-			"shell": "layout"
+			"shell": "layout",
+			"emailer": "decorators"
 		},
 		"dotnet.defaultSolution": "/Users/vl/Documents/PROG/HBG/Hbg.sln"
 	},

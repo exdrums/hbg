@@ -7,6 +7,8 @@ export interface RestDataStoreUrls {
     updateUrl?: string;
     removeUrl?: string;
     parentID?: number;
+    // use PUT method for insert action for the datasource
+    usePutForInsert?: boolean;
 }
 
 export type LoadedData<TItem = any> = {

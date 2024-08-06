@@ -1,0 +1,36 @@
+<dx-data-grid
+  [dataSource]="ds"
+  [remoteOperations]="true"
+  [errorRowEnabled]="false"
+  (onInitialized)="grid = $event.component"
+  (onSelectionChanged)="selectedRowKey$.next($event.selectedRowKeys[0])"
+  (onRowDblClick)="onOpenEditor($event)">
+
+  <dxo-selection mode="single"></dxo-selection>
+  <dxo-editing [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" mode="popup">
+    <dxo-popup height="140" width="300"></dxo-popup>
+    <dxo-form colCount="1">
+      <!-- <dxi-item dataField="templateID"></dxi-item> -->
+      <dxi-item dataField="name"></dxi-item>
+    </dxo-form>
+  </dxo-editing>
+
+  <dxo-toolbar>
+    <dxi-item name="addRowButton"></dxi-item>
+    <dxi-item name="distributions" location="after">
+      <div *dxTemplate>
+        <dx-button icon="upload" (onClick)="onOpenDistributions()" [disabled]="(selectedRowKey$ | async) == null"></dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item name="senders" location="after">
+      <div *dxTemplate>
+        <dx-button icon="card" (onClick)="onOpenSenders()" hint="Open list of all senders"></dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item name="columnChooserButton"></dxi-item>
+  </dxo-toolbar>
+
+  <dxi-column dataField="templateID" [visible]="false"></dxi-column>
+  <dxi-column dataField="name"></dxi-column>
+
+</dx-data-grid>

@@ -1,0 +1,46 @@
+<dx-data-grid
+  width="99%"
+  height="100%"
+  [dataSource]="ds"
+  [remoteOperations]="true"
+  [errorRowEnabled]="false"
+  (onInitialized)="grid = $event.component"
+  (onInitNewRow)="onInitNewRow($event)">
+
+  <dxo-selection mode="single"></dxo-selection>
+  <dxo-editing [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" mode="popup">
+    <dxo-popup [fullScreen]="true"></dxo-popup>
+    <!-- <dxo-popup height="250" width="600"></dxo-popup> -->
+    <dxo-form colCount="2">
+      <!-- <dxi-item dataField="templateID"></dxi-item> -->
+      <dxi-item dataField="name"></dxi-item>
+      <dxi-item dataField="subject"></dxi-item>
+      <dxi-item
+        dataField="senderID"
+        editorType="dxSelectBox"
+        [label]="{ text: 'Sender' }"
+        [editorOptions]="senderEditorOptions">
+      </dxi-item>
+    </dxo-form>
+  </dxo-editing>
+
+  <dxo-toolbar>
+    <dxi-item name="addRowButton"></dxi-item>
+    <!-- <dxi-item name="distributions" location="after">
+      <div *dxTemplate>
+        <dx-button icon="upload" (onClick)="onOpenDistributions()"> </dx-button>
+      </div>
+    </dxi-item> -->
+    <dxi-item name="columnChooserButton"></dxi-item>
+  </dxo-toolbar>
+
+  <dxi-column dataField="distributionID"  [visible]="false"></dxi-column>
+  <dxi-column dataField="senderID"        [visible]="false"></dxi-column>
+  <dxi-column dataField="templateID"      [visible]="false"></dxi-column>
+  <dxi-column dataField="name"            [visible]="true"></dxi-column>
+  <dxi-column dataField="subject"         [visible]="true"></dxi-column>
+  <dxi-column dataField="senderName"      [visible]="true"></dxi-column>
+  <dxi-column dataField="templateName"    [visible]="true"></dxi-column>
+  <dxi-column dataField="status"          [visible]="true"></dxi-column>
+  <dxi-column dataField="emailsCount"     [visible]="true"></dxi-column>
+</dx-data-grid>

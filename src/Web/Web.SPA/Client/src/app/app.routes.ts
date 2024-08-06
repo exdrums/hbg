@@ -9,6 +9,7 @@ import { CreateAccountFormComponent } from './modules/auth/create-account-form/c
 import { ChangePasswordFormComponent } from './modules/auth/change-password-form/change-password-form.component';
 import { ShellComponent } from './modules/shell/shell.component';
 import { ProjectsComponent } from './modules/projects/projects.component';
+import { EmailerComponent } from './modules/emailer/emailer.component';
 
 export const routes: Routes = [
   {
@@ -59,6 +60,10 @@ export const routes: Routes = [
       {
         path: "projects",
         component: ProjectsComponent
+      },
+      {
+        path: "emailer",
+        component: EmailerComponent
       }
       // {
       //   path: 'scheduler',

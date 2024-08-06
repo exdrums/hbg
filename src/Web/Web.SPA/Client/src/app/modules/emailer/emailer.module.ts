@@ -1,0 +1,33 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { EmailerComponent } from './emailer.component';
+import { TemplateListComponent } from './template-list/template-list.component';
+import { TemplateEditorComponent } from './template-editor/template-editor.component';
+import { SharedModule } from '@app/shared/shared.module';
+import { TemplatesDataSource } from './data/templates.data-source';
+import { DxHtmlEditorModule } from 'devextreme-angular';
+import { DistributionListComponent } from './distribution-list/distribution-list.component';
+import { DistributionsDataSource } from './data/distributions.data-source';
+import { SendersDataSource } from './data/sender.data-source';
+import { SenderListComponent } from './sender-list/sender-list.component';
+
+@NgModule({
+  imports: [
+    SharedModule,
+    DxHtmlEditorModule
+  ],
+  declarations: [
+    EmailerComponent,
+    
+    DistributionListComponent,
+    TemplateListComponent,
+    TemplateEditorComponent,
+    SenderListComponent
+  ],
+  providers: [
+    TemplatesDataSource,
+    DistributionsDataSource,
+    SendersDataSource
+  ]
+})
+export class EmailerModule { }

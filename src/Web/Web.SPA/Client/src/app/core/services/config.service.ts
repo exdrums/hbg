@@ -11,6 +11,8 @@ export class ConfigService implements IClientAppSettings {
   public hbgidentity: string;
   public hbgfiles: string;
   public hbgprojects: string;
+  public hbgemailer: string;
+
 
   private baseURI = environment.serverUri != null ?
     environment.serverUri

@@ -5,6 +5,7 @@ export interface IClientAppSettings {
     // hbgidentityadmin: string;
     hbgfiles: string;
     hbgprojects: string;
+    hbgemailer: string;
 
     // audience: string;
 }
@@ -21,5 +22,7 @@ export const defaultSettings: IClientAppSettings = {
 
     hbgfiles: "http://localhost:5701",
     hbgprojects: "http://localhost:5702",
+    hbgemailer: "http://localhost:5703"
+
     // audience: null
 };

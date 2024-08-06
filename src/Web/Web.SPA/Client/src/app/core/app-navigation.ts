@@ -9,6 +9,11 @@ export const navigation = [
     path: '/projects',
     icon: 'product'
   },
+  {
+    text: 'Emailer',
+    path: '/emailer',
+    icon: 'email'
+  },
   // {
   //   text: 'Examples',
   //   icon: 'folder',

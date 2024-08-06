@@ -1,15 +1,15 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { isNotEmpty } from "@app/core/utils/string-utils";
 import DevExpress from "devextreme";
-import CustomStore from "devextreme/data/custom_store";
-import { catchError, firstValueFrom, map, of, tap } from "rxjs";
+import { firstValueFrom, of } from "rxjs";
 import { DataStoreError } from "./errors";
 import { LoadedData, RestDataStoreUrls } from "./options";
+import { CustomDataStore } from "./custom-data-store";
 
 /**
  * See functions of AspNetData.createStore if you hav troubles with requests construction
  */
-export class RestDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomStore<TGET, TKEY> {
+export class RestDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomDataStore<TGET, TKEY> {
     constructor(private readonly http: HttpClient, protected urls: RestDataStoreUrls) {
         super({
             key: urls.key,
@@ -18,6 +18,7 @@ export class RestDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomStor
             update: (key, values) => this.updateAction(key, values, urls.updateUrl),
             remove: (key) => this.removeAction(key, urls.removeUrl)
         });
+        // console.log('RestDataStore_ctor', this, urls);
     }
 
     //#region Standardized requests
@@ -68,7 +69,7 @@ export class RestDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomStor
                 params = params.set(arg.key, arg.value);
             });
         }
-        return this.http.post<any>(url, values, { params: params }).toPromise();
+        return firstValueFrom(this.http.post<any>(url, values, { params: params }));
     }
 
     private updateAction(key: any, values: any, url: string) {
