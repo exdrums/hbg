@@ -223,6 +223,7 @@
 
                     "api_files",
                     "api_projects",
+                    "api_emailer",
                     "api_contacts",
                     "svcs"
                 ]

@@ -3,6 +3,7 @@ using API.Common;
 using API.Emailer.Database;
 using API.Emailer.Services;
 using Common.Exceptions;
+using Emailer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -11,10 +12,10 @@ namespace API.Emailer;
 
 public static class ConfigureServices
 {
-    public static AppSettings RegisterServices(this IServiceCollection services, IConfiguration config)
+    public static EmailerAppSettings RegisterServices(this IServiceCollection services, IConfiguration config)
     {            
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-        var appSettings = services.ConfigureAppSettings(config);
+        var appSettings = services.ConfigureEmailerAppSettings(config);
         RegisterIdentity(services, appSettings);
         RegisterSwagger(services, appSettings);
         RegisterCors(services, appSettings);
@@ -27,6 +28,7 @@ public static class ConfigureServices
             options.UseNpgsql(appSettings.HBGEMAILERDB);
         });
 
+        services.AddSingleton<SenderService>();
         // services.AddScoped<EmailerService>();
 
         // services.AddSingleton<IUserIdProvider, UserIdProvider>();
@@ -40,7 +42,7 @@ public static class ConfigureServices
         return appSettings;
     }
 
-    private static void RegisterIdentity(IServiceCollection services, AppSettings appSettings)
+    private static void RegisterIdentity(IServiceCollection services, EmailerAppSettings appSettings)
     {
         services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
         {
@@ -68,7 +70,7 @@ public static class ConfigureServices
         });
     }
 
-    private static void RegisterSwagger(IServiceCollection services, AppSettings appSettings)
+    private static void RegisterSwagger(IServiceCollection services, EmailerAppSettings appSettings)
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
@@ -101,7 +103,7 @@ public static class ConfigureServices
         });
     }
 
-    private static void RegisterCors(IServiceCollection services, AppSettings appSettings)
+    private static void RegisterCors(IServiceCollection services, EmailerAppSettings appSettings)
     {
         services.AddCors(options =>
         {
