@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace API.Emailer.Models;
 
 public class Template
@@ -14,5 +16,6 @@ public class Template
     /// <summary>
     /// The template can be distributed many times
     /// </summary>
+    [InverseProperty(nameof(Distribution.Template))]
     public ICollection<Distribution> Distributions { get; set; }
 }
