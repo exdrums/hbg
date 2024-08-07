@@ -1,12 +1,11 @@
-using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using API.Emailer.Database;
+using API.Emailer.Dtos;
 using API.Emailer.Models;
 using AutoMapper;
 using Common.Exceptions;
 using Common.Utils;
 using DevExtreme.AspNet.Data;
-using Emailer.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Emailer.Controllers;

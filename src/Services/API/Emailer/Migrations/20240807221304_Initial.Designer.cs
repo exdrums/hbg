@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Emailer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240721124218_Initial")]
+    [Migration("20240807221304_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,7 +79,7 @@ namespace API.Emailer.Migrations
 
                     b.HasIndex("ReceiverID");
 
-                    b.ToTable("Email");
+                    b.ToTable("Emails");
                 });
 
             modelBuilder.Entity("API.Emailer.Models.Receiver", b =>
@@ -92,18 +92,20 @@ namespace API.Emailer.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<long>("DistributionID")
-                        .HasColumnType("bigint");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("ReceiverID");
-
-                    b.HasIndex("DistributionID");
 
                     b.ToTable("Receivers");
                 });
@@ -204,7 +206,7 @@ namespace API.Emailer.Migrations
                         .IsRequired();
 
                     b.HasOne("API.Emailer.Models.Receiver", "Receiver")
-                        .WithMany()
+                        .WithMany("Emails")
                         .HasForeignKey("ReceiverID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -214,18 +216,12 @@ namespace API.Emailer.Migrations
                     b.Navigation("Receiver");
                 });
 
-            modelBuilder.Entity("API.Emailer.Models.Receiver", b =>
+            modelBuilder.Entity("API.Emailer.Models.Distribution", b =>
                 {
-                    b.HasOne("API.Emailer.Models.Distribution", "Distribution")
-                        .WithMany()
-                        .HasForeignKey("DistributionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Distribution");
+                    b.Navigation("Emails");
                 });
 
-            modelBuilder.Entity("API.Emailer.Models.Distribution", b =>
+            modelBuilder.Entity("API.Emailer.Models.Receiver", b =>
                 {
                     b.Navigation("Emails");
                 });

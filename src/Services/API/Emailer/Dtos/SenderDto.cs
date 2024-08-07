@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Emailer.Dtos;
+namespace API.Emailer.Dtos;
 
 public class SenderDto
 {

@@ -1,0 +1,22 @@
+<dx-data-grid
+  width="99%"
+  height="100%"
+  [dataSource]="ds$ | async"
+  [remoteOperations]="true"
+  [errorRowEnabled]="false"
+  (onInitialized)="grid = $event.component">
+
+  <dxo-selection mode="single"></dxo-selection>
+  <dxo-editing [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false" mode="batch"></dxo-editing>
+
+  <dxo-toolbar>
+    <!-- Remove default batch editing buttons -->
+    <dxi-item name="saveButton"   [visible]="false"></dxi-item>
+    <dxi-item name="revertButton" [visible]="false"></dxi-item>
+  </dxo-toolbar>
+
+  <dxi-column dataField="receiverID"      [visible]="false" [allowEditing]="false"></dxi-column>
+  <dxi-column dataField="assigned"        [visible]="true"  [allowEditing]="true"   dataType="boolean"></dxi-column>
+  <dxi-column dataField="name"            [visible]="true"  [allowEditing]="false"  dataType="string"></dxi-column>
+  <dxi-column dataField="address"         [visible]="true"  [allowEditing]="false"  dataType="string"></dxi-column>
+</dx-data-grid>

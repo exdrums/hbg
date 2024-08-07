@@ -8,11 +8,20 @@ public class Receiver
     [Key]
     [Required]
     public long ReceiverID { get; set; }
-    public long DistributionID { get; set; }
+
+    [Required]
+    [StringLength(50)]
+    public string UserID { get; set; }
+
+    [Required]
+    [StringLength(100)]
     public string Name { get; set; }
+
+    [Required]
+    [StringLength(100)]
     public string Address { get; set; }
 
-    [ForeignKey(nameof(DistributionID))]
-    public Distribution Distribution { get; set; }
+    [InverseProperty(nameof(Email.Receiver))]
+    public ICollection<Email> Emails { get; set; }
 
 }

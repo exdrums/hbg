@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { IPopup, PopupContext, PopupToolbarItem, ToolbarID } from '@app/core/components/hbg-popup/popup-context';
 import { BehaviorSubject } from 'rxjs';
 import { DistributionsDataSource } from '../data/distributions.data-source';
@@ -8,6 +8,7 @@ import { Properties as SelectBoxOptions } from 'devextreme/ui/select_box';
 import { SendersDataSource } from '../data/sender.data-source';
 import { SenderListComponent, SenderListPopupContext, SenderListPopupData } from '../sender-list/sender-list.component';
 import { Distribution } from '../models/distribution.model';
+import { EmailingReceiverListComponent, EmailingReceiverListPopupContext, EmailingReceiverListPopupData } from '../emailing-receivers-list/emailing-receiver-list.component';
 
 export interface DistributionListPopupData { templateID: number; }
 
@@ -44,9 +45,17 @@ export class DistributionListComponent implements IPopup<DistributionListPopupDa
   public readonly data$ = new BehaviorSubject<DistributionListPopupContext>(undefined);
 
   public grid: dxDataGrid;
+  public selectedRowKey$ = new BehaviorSubject<number>(undefined);
+
+  @HostListener("document:keyup", ["$event"])
+  handleKeyboardEvent(e) {
+    if (e.key === "Enter" && this.grid?.hasEditData())
+      this.grid.saveEditData();
+  }
+  
   public senderEditorOptions: SelectBoxOptions = {
     dataSource: this.sendersDs,
-    valueExpr: "senderId",
+    valueExpr: "senderID",
     displayExpr: "name",
     searchEnabled: true,
     searchMode: "startswith",
@@ -67,7 +76,10 @@ export class DistributionListComponent implements IPopup<DistributionListPopupDa
   public onInitNewRow(e: InitNewRowEvent<Distribution, number> ) {
     if (!e.data.templateID)
       e.data.templateID = this.data$.value.data.templateID;
-    console.log('onInitNewRow', e, this.data$.value.data.templateID);
+  }
+
+  public onOpenEmails() {
+    this.popups.pushPopup<EmailingReceiverListComponent, EmailingReceiverListPopupData>(new EmailingReceiverListPopupContext({distributionID: this.selectedRowKey$.value})).subscribe();
   }
 
 }

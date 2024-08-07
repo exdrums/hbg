@@ -69,7 +69,7 @@ export class ShellComponent implements OnInit, OnDestroy  {
     const path = (event.itemData as any).path;
     const pointerEvent = event.event;
 
-    if (path && this.menuOpened) {
+    if (path) {
       if (event.node?.selected) {
         pointerEvent?.preventDefault();
       } else {

@@ -1,7 +1,6 @@
 using API.Emailer.Dtos;
 using API.Emailer.Models;
 using AutoMapper;
-using Emailer.Dtos;
 
 namespace API.Emailer.Services;
 
@@ -33,5 +32,15 @@ public class AutoMapperProfile : Profile
             .ForMember(x => x.SenderID, opts => opts.Ignore())
             .ForMember(x => x.UserID, opts => opts.Ignore())
             .ForAllMembers(opts => opts.AllowNull());
+
+        CreateMap<Receiver, ReceiverDto>()
+            .ReverseMap()
+            .ForMember(x => x.ReceiverID, opts => opts.Ignore())
+            .ForMember(x => x.UserID, opts => opts.Ignore())
+            .ForAllMembers(opts => opts.AllowNull());
+
+        long? distributionId = null;
+        CreateProjection<Receiver, EmailingReceiverDto>()
+            .ForMember(x => x.Assigned, opt => opt.MapFrom(src => src.Emails.Any(e => e.DistributionID == distributionId)));
     }
 }

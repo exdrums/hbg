@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using API.Emailer.Models;
 
-namespace Emailer.Dtos;
+namespace API.Emailer.Dtos;
 
 public class DistributionDto
 {
@@ -16,10 +16,10 @@ public class DistributionDto
     public string Subject { get; set; }
     
     [StringLength(100)]
-    public string SenderName { get; set; }
+    public string? SenderName { get; set; }
     
     [StringLength(100)]
-    public string TemplateName { get; set; }
+    public string? TemplateName { get; set; }
 
     public EmailStatus Status { get; set; }
     public int EmailsCount { get; set; }

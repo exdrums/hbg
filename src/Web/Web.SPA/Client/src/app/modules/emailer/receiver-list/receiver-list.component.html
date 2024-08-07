@@ -9,12 +9,9 @@
   <dxo-editing [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" mode="popup">
     <dxo-popup height="440" width="400"></dxo-popup>
     <dxo-form colCount="1">
-      <!-- <dxi-item dataField="senderID"></dxi-item> -->
+      <!-- <dxi-item dataField="receiverID"></dxi-item> -->
       <dxi-item dataField="name"></dxi-item>
       <dxi-item dataField="address"></dxi-item>
-      <dxi-item dataField="serverAddress"></dxi-item>
-      <dxi-item dataField="login"></dxi-item>
-      <dxi-item dataField="passcode" [editorOptions]="{ mode: 'password' }"></dxi-item>
     </dxo-form>
   </dxo-editing>
 
@@ -23,12 +20,7 @@
     <dxi-item name="columnChooserButton"></dxi-item>
   </dxo-toolbar>
 
-  <dxi-column dataField="senderID"      [visible]="false"></dxi-column>
+  <dxi-column dataField="receiverID"    [visible]="false"></dxi-column>
   <dxi-column dataField="name"          [visible]="true"></dxi-column>
   <dxi-column dataField="address"       [visible]="false"></dxi-column>
-  <dxi-column dataField="serverAddress" [visible]="false"></dxi-column>
-  <dxi-column dataField="login"         [visible]="false"></dxi-column>
-  <dxi-column dataField="passcode"      [visible]="false"></dxi-column>
-
-
 </dx-data-grid>

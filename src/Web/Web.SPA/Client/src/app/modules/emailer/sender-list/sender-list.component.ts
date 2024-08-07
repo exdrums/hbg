@@ -1,19 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IPopup, PopupContext, PopupToolbarItem, ToolbarID } from '@app/core/components/hbg-popup/popup-context';
 import { SendersDataSource } from '../data/sender.data-source';
 import { BehaviorSubject } from 'rxjs';
 import dxDataGrid from 'devextreme/ui/data_grid';
 
-export interface SenderListPopupData {
-
-}
+export interface SenderListPopupData {}
 
 export class SenderListPopupContext extends PopupContext<SenderListComponent, SenderListPopupData>{
   constructor(data: SenderListPopupData) { super(data); }
 
   public fullScreen: boolean = false;
-  public height: string = "600px"
-  public width: string = "600px";
+  public height: string = "400px"
+  public width: string = "350px";
   public showTitle: boolean = true;
   public title: string = "Senders";
   public component = SenderListComponent;
@@ -31,7 +29,7 @@ export class SenderListPopupContext extends PopupContext<SenderListComponent, Se
 }
 
 @Component({
-  selector: 'msd-sender-list',
+  selector: 'hbg-sender-list',
   templateUrl: './sender-list.component.html',
   styleUrls: ['./sender-list.component.scss']
 })
@@ -40,7 +38,5 @@ export class SenderListComponent implements IPopup<SenderListPopupData> {
   public ds: SendersDataSource = inject(SendersDataSource);
 
   public readonly data$ = new BehaviorSubject<SenderListPopupContext>(undefined);
-
   public grid: dxDataGrid;
-
 }

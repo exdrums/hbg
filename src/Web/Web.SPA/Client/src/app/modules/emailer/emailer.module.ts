@@ -10,6 +10,9 @@ import { DistributionListComponent } from './distribution-list/distribution-list
 import { DistributionsDataSource } from './data/distributions.data-source';
 import { SendersDataSource } from './data/sender.data-source';
 import { SenderListComponent } from './sender-list/sender-list.component';
+import { ReceiversDataSource } from './data/receivers.data-source';
+import { ReceiverListComponent } from './receiver-list/receiver-list.component';
+import { EmailingReceiverListComponent } from './emailing-receivers-list/emailing-receiver-list.component';
 
 @NgModule({
   imports: [
@@ -22,12 +25,15 @@ import { SenderListComponent } from './sender-list/sender-list.component';
     DistributionListComponent,
     TemplateListComponent,
     TemplateEditorComponent,
-    SenderListComponent
+    SenderListComponent,
+    ReceiverListComponent,
+    EmailingReceiverListComponent
   ],
   providers: [
     TemplatesDataSource,
     DistributionsDataSource,
-    SendersDataSource
+    SendersDataSource,
+    ReceiversDataSource
   ]
 })
 export class EmailerModule { }

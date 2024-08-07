@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<Distribution> Distributions { get; set; }
     public DbSet<Sender> Senders { get; set; }
     public DbSet<Receiver> Receivers { get; set; }
+    public DbSet<Email> Emails { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -34,6 +35,9 @@ public class AppDbContext : DbContext
     public async Task<List<Distribution>> GetDistribiutionList(string userId) =>
         await Distributions
             .Where(d => d.Template.UserID == userId)
+            .Include(d => d.Sender)
+            .Include(d => d.Template)
+            .Include(d => d.Emails)
             .ToListAsync();
 
     public async Task<Distribution> GetDistribution(string userId, long distributionId) =>
@@ -50,4 +54,14 @@ public class AppDbContext : DbContext
         await Senders
             .FirstOrDefaultAsync(t => t.UserID == userId && t.SenderID == senderId)
             ?? throw new NotFoundException("Sender not found.");
+
+    public async Task<List<Receiver>> GetReceiversList(string userId) =>
+        await Receivers
+            .Where(t => t.UserID == userId)
+            .ToListAsync();
+
+    public async Task<Receiver> GetReceiver(string userId, long receiverId) =>
+        await Receivers
+            .FirstOrDefaultAsync(t => t.UserID == userId && t.ReceiverID == receiverId)
+            ?? throw new NotFoundException("Receiver not found.");
 }

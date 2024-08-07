@@ -6,6 +6,7 @@ import { TemplateEditorComponent, TemplateEditorPopupContext, TemplateEditorPopu
 import { DistributionListComponent, DistributionListPopupContext, DistributionListPopupData } from '../distribution-list/distribution-list.component';
 import { Subject } from 'rxjs';
 import { SenderListComponent, SenderListPopupContext, SenderListPopupData } from '../sender-list/sender-list.component';
+import { ReceiverListComponent, ReceiverListPopupContext, ReceiverListPopupData } from '../receiver-list/receiver-list.component';
 
 @Component({
   selector: 'hbg-template-list',
@@ -22,7 +23,7 @@ export class TemplateListComponent {
 
   @HostListener("document:keyup", ["$event"])
   handleKeyboardEvent(e) {
-    if (e.key === "Enter" && this.grid.hasEditData())
+    if (e.key === "Enter" && this.grid?.hasEditData())
       this.grid.saveEditData();
   }
 
@@ -39,5 +40,9 @@ export class TemplateListComponent {
 
   public onOpenSenders() {
     this.popups.pushPopup<SenderListComponent, SenderListPopupData>(new SenderListPopupContext({})).subscribe();
+  }
+
+  public onOpenReceivers() {
+    this.popups.pushPopup<ReceiverListComponent, ReceiverListPopupData>(new ReceiverListPopupContext({})).subscribe();
   }
 }

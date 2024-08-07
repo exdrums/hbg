@@ -16,15 +16,30 @@
   </dxo-editing>
 
   <dxo-toolbar>
+    <dxi-item name="senders" location="before">
+      <div *dxTemplate>
+        <dx-button
+          icon="group"
+          text="Accounts"
+          hint="Open list of all configured email accounts"
+          (onClick)="onOpenSenders()">
+        </dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item name="receivers" location="before">
+      <div *dxTemplate>
+        <dx-button
+          icon="card"
+          text="Contacts"
+          hint="Open list of all contacts"
+          (onClick)="onOpenReceivers()"></dx-button>
+      </div>
+    </dxi-item>
+
     <dxi-item name="addRowButton"></dxi-item>
     <dxi-item name="distributions" location="after">
       <div *dxTemplate>
         <dx-button icon="upload" (onClick)="onOpenDistributions()" [disabled]="(selectedRowKey$ | async) == null"></dx-button>
-      </div>
-    </dxi-item>
-    <dxi-item name="senders" location="after">
-      <div *dxTemplate>
-        <dx-button icon="card" (onClick)="onOpenSenders()" hint="Open list of all senders"></dx-button>
       </div>
     </dxi-item>
     <dxi-item name="columnChooserButton"></dxi-item>

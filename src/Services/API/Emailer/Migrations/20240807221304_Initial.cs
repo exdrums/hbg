@@ -10,6 +10,21 @@ namespace API.Emailer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Receivers",
+                columns: table => new
+                {
+                    ReceiverID = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserID = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Address = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Receivers", x => x.ReceiverID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Senders",
                 columns: table => new
                 {
@@ -71,28 +86,7 @@ namespace API.Emailer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Receivers",
-                columns: table => new
-                {
-                    ReceiverID = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DistributionID = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Receivers", x => x.ReceiverID);
-                    table.ForeignKey(
-                        name: "FK_Receivers_Distributions_DistributionID",
-                        column: x => x.DistributionID,
-                        principalTable: "Distributions",
-                        principalColumn: "DistributionID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Email",
+                name: "Emails",
                 columns: table => new
                 {
                     EmailID = table.Column<long>(type: "bigint", nullable: false)
@@ -103,15 +97,15 @@ namespace API.Emailer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Email", x => x.EmailID);
+                    table.PrimaryKey("PK_Emails", x => x.EmailID);
                     table.ForeignKey(
-                        name: "FK_Email_Distributions_DistributionID",
+                        name: "FK_Emails_Distributions_DistributionID",
                         column: x => x.DistributionID,
                         principalTable: "Distributions",
                         principalColumn: "DistributionID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Email_Receivers_ReceiverID",
+                        name: "FK_Emails_Receivers_ReceiverID",
                         column: x => x.ReceiverID,
                         principalTable: "Receivers",
                         principalColumn: "ReceiverID",
@@ -129,31 +123,26 @@ namespace API.Emailer.Migrations
                 column: "TemplateID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Email_DistributionID",
-                table: "Email",
+                name: "IX_Emails_DistributionID",
+                table: "Emails",
                 column: "DistributionID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Email_ReceiverID",
-                table: "Email",
+                name: "IX_Emails_ReceiverID",
+                table: "Emails",
                 column: "ReceiverID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Receivers_DistributionID",
-                table: "Receivers",
-                column: "DistributionID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Email");
-
-            migrationBuilder.DropTable(
-                name: "Receivers");
+                name: "Emails");
 
             migrationBuilder.DropTable(
                 name: "Distributions");
+
+            migrationBuilder.DropTable(
+                name: "Receivers");
 
             migrationBuilder.DropTable(
                 name: "Senders");
