@@ -20,4 +20,7 @@ export class DistributionsDataSource extends CustomDataSource<Distribution> {
             usePutForInsert: true
         }));
     }
+
+    public readonly startDistribution = (distId: number) =>
+        this.http.get(`${this.config.hbgemailer}/api/distributions/${distId}/start`).subscribe();
 }

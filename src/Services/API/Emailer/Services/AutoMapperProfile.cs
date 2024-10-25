@@ -1,5 +1,6 @@
 using API.Emailer.Dtos;
 using API.Emailer.Models;
+using API.Emailer.WebSocket;
 using AutoMapper;
 
 namespace API.Emailer.Services;
@@ -42,5 +43,11 @@ public class AutoMapperProfile : Profile
         long? distributionId = null;
         CreateProjection<Receiver, EmailingReceiverDto>()
             .ForMember(x => x.Assigned, opt => opt.MapFrom(src => src.Emails.Any(e => e.DistributionID == distributionId)));
+
+        CreateMap<Distribution, DistributionUpdatedHubDto>()
+            .ForMember(x => x.DistributionId, opt => opt.MapFrom(src => src.DistributionID))
+            .ForMember(x => x.EmailsSent, opt => opt.MapFrom(src => src.Emails.Count(e => e.Status == EmailStatus.Sent)))
+            .ForMember(x => x.EmailsPending, opt => opt.MapFrom(src => src.Emails.Count(e => e.Status == EmailStatus.Pending)))
+            .ForMember(x => x.EmailsError, opt => opt.MapFrom(src => src.Emails.Count(e => e.Status == EmailStatus.Error)));
     }
 }

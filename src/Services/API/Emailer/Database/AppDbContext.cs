@@ -1,5 +1,6 @@
 using API.Emailer.Models;
 using Common.Exceptions;
+using Common.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Emailer.Database;
@@ -40,8 +41,12 @@ public class AppDbContext : DbContext
             .Include(d => d.Emails)
             .ToListAsync();
 
-    public async Task<Distribution> GetDistribution(string userId, long distributionId) =>
+    public async Task<Distribution> GetDistribution(string userId, long distributionId, bool asNoTracking = false) =>
         await Distributions
+            .Include(d => d.Sender)
+            .Include(d => d.Template)
+            .Include(d => d.Emails)
+            .AsNoTrackingByCondition(asNoTracking)
             .FirstOrDefaultAsync(d => d.Template.UserID == userId && d.DistributionID == distributionId)
             ?? throw new NotFoundException("Distribution not found");
 

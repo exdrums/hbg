@@ -82,4 +82,5 @@ export class DistributionListComponent implements IPopup<DistributionListPopupDa
     this.popups.pushPopup<EmailingReceiverListComponent, EmailingReceiverListPopupData>(new EmailingReceiverListPopupContext({distributionID: this.selectedRowKey$.value})).subscribe();
   }
 
+  public onStartDistribution = () => this.ds.startDistribution(this.selectedRowKey$.value);
 }

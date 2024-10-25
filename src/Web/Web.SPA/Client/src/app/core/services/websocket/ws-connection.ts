@@ -25,6 +25,7 @@ export abstract class WsConnection {
 	public isConnected$ = new BehaviorSubject<boolean>(false);
 	public isConnectedPromise = () => firstValueFrom(this.isConnected$.pipe(filter(o => o)));
 	public isConnected = () => this.connection != null && this.connection.state === HubConnectionState.Connected;
+	public isDisconnected$ = this.isConnected$.pipe(filter(o => o === false));
 
 	/** Add new handler function to the connection */
 	public readonly addHandler = (action: SignalRAction) => this.connection.on(action.name, action.handler);

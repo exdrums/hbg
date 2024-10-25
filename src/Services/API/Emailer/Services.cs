@@ -3,8 +3,10 @@ using API.Common;
 using API.Emailer.Database;
 using API.Emailer.Services;
 using Common.Exceptions;
+using Common.WebSocket;
 using Emailer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -31,11 +33,11 @@ public static class ConfigureServices
         services.AddSingleton<SenderService>();
         // services.AddScoped<EmailerService>();
 
-        // services.AddSingleton<IUserIdProvider, UserIdProvider>();
-        // services.AddSignalR(options =>
-        // {
-        //     options.EnableDetailedErrors = true;
-        // }).AddJsonProtocol();
+        services.AddSingleton<IUserIdProvider, UserIdProvider>();
+        services.AddSignalR(options =>
+        {
+            options.EnableDetailedErrors = true;
+        }).AddJsonProtocol();
 
         services.AddControllers();
 

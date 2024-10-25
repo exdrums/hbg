@@ -13,6 +13,8 @@ import { SenderListComponent } from './sender-list/sender-list.component';
 import { ReceiversDataSource } from './data/receivers.data-source';
 import { ReceiverListComponent } from './receiver-list/receiver-list.component';
 import { EmailingReceiverListComponent } from './emailing-receivers-list/emailing-receiver-list.component';
+import { EmailerWebSocketConnection } from './data/emailer-ws-connection.service';
+import { DistProgressCellComponent } from './distribution-list/dist-progress-cell/dist-progress-cell.component';
 
 @NgModule({
   imports: [
@@ -23,6 +25,7 @@ import { EmailingReceiverListComponent } from './emailing-receivers-list/emailin
     EmailerComponent,
     
     DistributionListComponent,
+    DistProgressCellComponent,
     TemplateListComponent,
     TemplateEditorComponent,
     SenderListComponent,
@@ -33,7 +36,8 @@ import { EmailingReceiverListComponent } from './emailing-receivers-list/emailin
     TemplatesDataSource,
     DistributionsDataSource,
     SendersDataSource,
-    ReceiversDataSource
+    ReceiversDataSource,
+    EmailerWebSocketConnection
   ]
 })
 export class EmailerModule { }

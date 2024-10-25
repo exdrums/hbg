@@ -8,6 +8,7 @@ using Common.Utils;
 using DevExtreme.AspNet.Data;
 using Emailer.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace API.Emailer.Controllers;
 
@@ -18,12 +19,14 @@ public class TemplatesController : Controller
     private readonly AppDbContext appDbContext;
     private readonly IMapper mapper;
     private readonly SenderService sender;
+    private readonly IOptionsSnapshot<EmailerAppSettings> emailerSettings;
 
-    public TemplatesController(AppDbContext appDbContext, IMapper mapper, SenderService sender)
+    public TemplatesController(AppDbContext appDbContext, IMapper mapper, SenderService sender, IOptionsSnapshot<EmailerAppSettings> emailerSettings)
     {
         this.sender = sender;
         this.mapper = mapper;
         this.appDbContext = appDbContext;
+        this.emailerSettings = emailerSettings;
     }
 
     [HttpGet]
@@ -32,6 +35,8 @@ public class TemplatesController : Controller
         string userId = User.FindFirstValue("sub");
 
         var templates = await appDbContext.GetTemplateList(userId);
+        var settings = this.emailerSettings.Value;
+        appDbContext.SeedEmailerDb(settings, userId);
 
         // AutoMapper
         var list = this.mapper.Map<List<TemplateListDto>>(templates);
@@ -78,7 +83,7 @@ public class TemplatesController : Controller
     {
         string userId = User.FindFirstValue("sub");
 
-        if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentNullException("Cqannot put the Template. Name is required");
+        if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentNullException("Cannot put the Template. Name is required");
 
         Template? template = null;
 

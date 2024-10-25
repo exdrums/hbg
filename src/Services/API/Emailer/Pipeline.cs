@@ -1,3 +1,6 @@
+using API.Emailer.WebSocket;
+using Microsoft.AspNetCore.Http.Connections;
+
 namespace API.Emailer;
 
 public static class Pipeline
@@ -25,6 +28,7 @@ public static class Pipeline
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapHub<EmailerHub>("/hub", options => options.Transports = HttpTransportType.WebSockets);
         });
     }
 

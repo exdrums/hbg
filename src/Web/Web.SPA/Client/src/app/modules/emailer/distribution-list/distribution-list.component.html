@@ -32,16 +32,26 @@
         <dx-button icon="message" (onClick)="onOpenEmails()" hint="Open list of envolved receivers" [disabled]="(selectedRowKey$ | async) == null"></dx-button>
       </div>
     </dxi-item>
+    <dxi-item name="start" location="after">
+      <div *dxTemplate>
+        <dx-button icon="check" (onClick)="onStartDistribution()" hint="Start sending emails for selected distribution" [disabled]="(selectedRowKey$ | async) == null"></dx-button>
+      </div>
+    </dxi-item>
     <dxi-item name="columnChooserButton"></dxi-item>
   </dxo-toolbar>
 
   <dxi-column dataField="distributionID"  [visible]="false"></dxi-column>
   <dxi-column dataField="senderID"        [visible]="false"></dxi-column>
   <dxi-column dataField="templateID"      [visible]="false"></dxi-column>
+  <dxi-column caption="Status"            [visible]="true"  [minWidth]="300" cellTemplate="distProgressTemplate"></dxi-column>
   <dxi-column dataField="name"            [visible]="true"></dxi-column>
   <dxi-column dataField="subject"         [visible]="true"></dxi-column>
   <dxi-column dataField="senderName"      [visible]="true"></dxi-column>
   <dxi-column dataField="templateName"    [visible]="true"></dxi-column>
   <dxi-column dataField="status"          [visible]="true"></dxi-column>
   <dxi-column dataField="emailsCount"     [visible]="true"></dxi-column>
+
+  <div *dxTemplate="let d of 'distProgressTemplate'">
+    <hbg-dist-progress-cell [distributionId]="d.data.distributionID"></hbg-dist-progress-cell>
+  </div>
 </dx-data-grid>

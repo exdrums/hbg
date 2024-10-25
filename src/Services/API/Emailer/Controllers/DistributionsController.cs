@@ -6,6 +6,7 @@ using AutoMapper;
 using Common.Exceptions;
 using Common.Utils;
 using DevExtreme.AspNet.Data;
+using Emailer.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Emailer.Controllers;
@@ -16,9 +17,11 @@ public class DistributionsController : Controller
 {
     private readonly AppDbContext appDbContext;
     private readonly IMapper mapper;
+    private readonly SenderService service;
 
-    public DistributionsController(AppDbContext appDbContext, IMapper mapper)
+    public DistributionsController(AppDbContext appDbContext, IMapper mapper, SenderService service)
     {
+        this.service = service;
         this.mapper = mapper;
         this.appDbContext = appDbContext;
     }
@@ -106,6 +109,17 @@ public class DistributionsController : Controller
 
         appDbContext.Distributions.Remove(distribution);
         await appDbContext.SaveChangesAsync();
+        
+        return Ok();
+    }
+
+    [HttpGet("{distributionId:int}/start")]
+    public async Task<IActionResult> StartDistribution(long distributionId)
+    {
+        string userId = User.FindFirstValue("sub");
+
+        var dist = await appDbContext.GetDistribution(userId, distributionId, true);
+        this.service.ProcessDistribution(dist);
         
         return Ok();
     }
