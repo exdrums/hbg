@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Common.Models;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 
@@ -77,11 +76,11 @@ namespace API.Files
             return result;
         }
 
-        public static string GetDirectoryName(this PermissionLevel level) => level switch
-        {
-            PermissionLevel.Private => "users",
-            PermissionLevel.Profile => "profiles",
-            _ => throw new ArgumentException("Invalid permission level")
-        };
+        // public static string GetDirectoryName(this PermissionLevel level) => level switch
+        // {
+        //     PermissionLevel.Private => "users",
+        //     PermissionLevel.Profile => "profiles",
+        //     _ => throw new ArgumentException("Invalid permission level")
+        // };
     }
 }

@@ -22,6 +22,7 @@ public static class ConfigureServices {
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddTransient<AuthService>();
         services.AddTransient<FilesRepo>();
+        services.AddTransient<ProjectPermissionsService>();
 
         services.AddControllers();
     }
