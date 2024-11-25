@@ -1,6 +1,7 @@
 import { Component, NgModule } from '@angular/core';
 import { ThemeService } from '@app/core/services/theme.service';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
+import { ButtonStyle } from 'devextreme/common';
 
 @Component({
   selector: 'hbg-oauth-buttons',
@@ -8,7 +9,7 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
   styleUrls: ['./oauth-buttons.component.scss']
 })
 export class OauthButtonsComponent {
-  btnStylingMode: string;
+  btnStylingMode: ButtonStyle;
 
   constructor(private themeService: ThemeService) {
     this.themeService.isDark.subscribe((value: boolean) => {

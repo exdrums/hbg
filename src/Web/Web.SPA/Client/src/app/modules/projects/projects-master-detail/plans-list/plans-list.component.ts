@@ -1,8 +1,9 @@
 import { Component, HostListener, Input, OnInit, inject } from '@angular/core';
 import { PlansWsDataSource } from '../../data/plans-ws.data-source';
-import dxDataGrid, { ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
+import dxDataGrid, { ColumnButtonClickEvent, SelectionChangedEvent } from 'devextreme/ui/data_grid';
 import { PopupService } from '@app/core/services/popup.service';
 import { PlanPopupComponent, PlanPopupContext, PlanPopupData } from '../../popups/plan-popup/plan-popup.component';
+import { Plan } from '../../models/plan.model';
 
 @Component({
   selector: 'hbg-plans-list',
@@ -28,8 +29,16 @@ export class PlansListComponent {
   }
 
   public readonly openPlan = (e: ColumnButtonClickEvent) => {
-    const data: PlanPopupData = { planID: 444 };
+    const model: Plan = e.row.data
+    this.ds.setSelected(model);
+    const data: PlanPopupData = { model };
     this.popups.pushPopup<PlanPopupComponent, PlanPopupData>(new PlanPopupContext(data)).subscribe();
+  }
+
+  public onSelectionChanged(e: SelectionChangedEvent) {
+    const plan: Plan = e.selectedRowsData[0];
+    if (!plan) return;
+    this.ds.setSelected(plan);
   }
 
 }

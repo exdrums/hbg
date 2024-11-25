@@ -1,0 +1,12 @@
+<div leaflet leafletDraw style="height: 700px;"
+  [leafletOptions]="options"
+  [leafletBaseLayers]="baseLayers"
+  [leafletDrawOptions]="drawOptions"
+  (leafletDrawOptions)="onDrawCreated($event)"
+  (leafletClick)="onClick($event)"
+  (leafletMapReady)="onMapReady($event)"
+>
+  <hbg-plan-layer [map]="map$ | async"></hbg-plan-layer>
+  <hbg-article-icons-layer></hbg-article-icons-layer>
+  <!-- <hbg-draw-layer></hbg-draw-layer> -->
+</div>

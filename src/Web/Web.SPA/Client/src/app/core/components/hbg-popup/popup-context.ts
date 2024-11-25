@@ -23,10 +23,14 @@ constructor(
     public showTitle: boolean = true;
     public title: string = "Default_title";
     public fullScreen: boolean = false;
+    public showCloseButton: boolean = false;
     public abstract component: Type<T>;
     public abstract toolbar: PopupToolbarItem[];
     public popupInitialised(popup: DxPopup) {
         this.dxPopupComponent$.next(popup);
+    }
+    public defaultClosed() {
+        this.clicked$.next(ToolbarID.Cancel);
     }
     /**
      * Most commonly used buttons configuration

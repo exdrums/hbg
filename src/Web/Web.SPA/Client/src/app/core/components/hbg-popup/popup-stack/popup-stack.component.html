@@ -13,11 +13,12 @@
 	[resizeEnabled]="context.resizeEnabled"
 	[fullScreen]="context.fullScreen"
 	[showTitle]="context.showTitle"
+	[showCloseButton]="context.showCloseButton"
 	[title]="context.title"
 	[shading]="true"
-	[showCloseButton]="false"
 	[visible]="true"
-	(onInitialized)="context.popupInitialised($event.component)">
+	(onInitialized)="context.popupInitialised($event.component)"
+	(onHiding)="context.defaultClosed()">
 
 	<div [class.flex-height]="context.height">
 		<div [class.flex-height-content]="context.height">

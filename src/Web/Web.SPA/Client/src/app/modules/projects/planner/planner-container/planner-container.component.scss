@@ -1,0 +1,27 @@
+@use "../../../../../styles/variables.scss" as *;
+
+:host {
+	display: flex;
+	position: relative;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	background-color: var(--side-panel-background);
+}
+
+.empty-part {
+	width: 100%;
+	height: 100%;
+	background-image: url(^assets/icons/icon-512x512.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.uploader-part {
+	width: 100%;
+	height: 100%;
+	background-size: auto 30%;
+	background-repeat: no-repeat;
+	background-position: center;
+}

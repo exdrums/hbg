@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Projects.Models;
 
+/// <summary>
+/// Model describing highest level of working entity
+/// Contains all necessary informations about working project
+/// </summary>
 [Table("Project")]
 public class Project 
 {
@@ -18,7 +22,8 @@ public class Project
     [MaxLength(2000)]
     public string Description { get; set; }
 
-    
+    public decimal DefaultCoorX { get; set; }
+    public decimal DefaultCoorY { get; set; }
 
     [InverseProperty(nameof(ProjectPermission.Project))]
     public ICollection<ProjectPermission> ProjectPermissions { get; set; } = new List<ProjectPermission>();

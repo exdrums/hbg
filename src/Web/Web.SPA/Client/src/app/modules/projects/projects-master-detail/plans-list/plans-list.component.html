@@ -1,6 +1,7 @@
 <dx-data-grid
   [dataSource]="ds"
   [remoteOperations]="true"
+  (onSelectionChanged)="onSelectionChanged($event)"
   (onInitialized)="grid = $event.component">
   <dxo-selection mode="single"></dxo-selection>
   <dxo-editing [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" mode="popup">

@@ -57,10 +57,31 @@ namespace API.Projects.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PlanID"));
 
+                    b.Property<bool>("HasPlanPicture")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<decimal>("PicCenterX")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("PicCenterY")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("PicHeight")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("PicRotation")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("PicScale")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("PicWidth")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("ProjectID")
                         .HasColumnType("integer");
@@ -79,6 +100,12 @@ namespace API.Projects.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProjectID"));
+
+                    b.Property<decimal>("DefaultCoorX")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("DefaultCoorY")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Description")
                         .HasMaxLength(2000)

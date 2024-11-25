@@ -13,4 +13,7 @@ public class ProjectDto
 
     [MaxLength(2000)]
     public string Description { get; set; }
+
+    public decimal DefaultCoorX { get; set; }
+    public decimal DefaultCoorY { get; set; }
 }

@@ -11,14 +11,14 @@ export class CutImageService {
     private readonly popups = inject(PopupService);
     private readonly domSanitizer = inject(DomSanitizer);
 
-	public cutImage(file: File): Observable<File> {
+	public cutImage(file: File): Observable<CutImagePopupData> {
 		const url = URL.createObjectURL(file);
 		return this.popups.pushPopup<CutImagePopupComponent, CutImagePopupData>(new CutImagePopupContext({ url: this.domSanitizer.bypassSecurityTrustResourceUrl(url) }))
             .pipe(
 				filter((x) => x.data.blob !== null),
 				map((result) =>
                     result.closedBy === ToolbarID.Ok ?
-                        new File([result.data.blob], "hbg-image.jpg", { lastModified: file.lastModified, type: result.data.blob.type })
+						{ ...result.data, blob: new File([result.data.blob], "hbg-image.jpg", { lastModified: file.lastModified, type: result.data.blob.type }) }
                         : null
 				),
 				finalize(() => URL.revokeObjectURL(url))

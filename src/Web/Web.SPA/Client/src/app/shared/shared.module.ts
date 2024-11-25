@@ -10,6 +10,7 @@ import { SwitchableItemDirective } from './directives/switchable-item.directive'
 import { ConnectionCheckComponent } from './components/connection-check/connection-check.component';
 import { FormItemDescriptionDirective } from './directives/form-item-helper.directive';
 import { FormItemDescComponent } from './components/form-item-desc/form-item-desc.component';
+import { ImgDirective } from './directives/img.directive';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { FormItemDescComponent } from './components/form-item-desc/form-item-des
     FormItemDescComponent,
     FormItemDescriptionDirective,
     SwitchableItemDirective,
+    ImgDirective,
     ConnectionCheckComponent
   ],
   declarations: [
@@ -41,6 +43,7 @@ import { FormItemDescComponent } from './components/form-item-desc/form-item-des
     FormItemDescComponent,
     FormItemDescriptionDirective,
     SwitchableItemDirective,
+    ImgDirective,
     ConnectionCheckComponent
   ]
 })

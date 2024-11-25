@@ -1,0 +1,23 @@
+.leaflet-move-handle {
+    background-color: blue;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    border: 2px solid white;
+}
+
+.leaflet-resize-handle {
+    background-color: red;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    border: 2px solid white;
+}
+
+.leaflet-rotate-handle {
+    background-color: green;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    border: 2px solid yellow;
+}

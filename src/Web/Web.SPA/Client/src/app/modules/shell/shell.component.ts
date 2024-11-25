@@ -3,6 +3,7 @@ import { Router, NavigationEnd, Event } from '@angular/router';
 import { ScreenService } from '@app/core/services/screen.service';
 import { DxScrollViewComponent } from 'devextreme-angular';
 import { DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
+import { OpenedStateMode, RevealMode } from 'devextreme/ui/drawer';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -26,8 +27,8 @@ export class ShellComponent implements OnInit, OnDestroy  {
   selectedRoute = '';
   menuOpened!: boolean;
   temporaryMenuOpened = false;
-  menuMode = 'shrink';
-  menuRevealMode = 'expand';
+  menuMode: OpenedStateMode = 'shrink';
+  menuRevealMode: RevealMode = 'expand';
   minMenuSize = 0;
   shaderEnabled = false;
   routerSubscription: Subscription;

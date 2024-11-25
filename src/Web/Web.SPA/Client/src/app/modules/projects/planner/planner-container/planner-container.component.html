@@ -1,20 +1,22 @@
 <ng-container [ngSwitch]="mode$ | async">
 
-  <div *ngSwitchCase="PlannerMode.Empty"></div>
+  <div *ngSwitchCase="PlannerMode.Empty" class="empty-part"></div>
 
-  <div *ngSwitchCase="PlannerMode.Uploader" class="file-uploader">
+  <div *ngSwitchCase="PlannerMode.Uploader" class="uploader-part">
     <dx-file-uploader
       width="100%"
       accept=".jpg, .jpeg"
       height="100%"
       name="file"
       [multiple]="false"
-      [disabled]="isReadonly$ | async"
+      [disabled]="isReadOnly$ | async"
       (onInitialized)="uploaderComponent$.next($event.component)"
       [uploadFile]="uploadFile"
     ></dx-file-uploader>
   </div>
 
-  <div *ngSwitchCase="PlannerMode.Main"></div>
+  <div *ngSwitchCase="PlannerMode.Main">
+    <hbg-planner-view></hbg-planner-view>
+  </div>
 
 </ng-container>

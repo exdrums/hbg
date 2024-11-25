@@ -13,7 +13,9 @@ export interface ResultImageSettings {
 
 export interface CutImagePopupData {
 	url: SafeUrl;
-	blob?: Blob;
+	blob?: Blob | File;
+  resultWidth?: number;
+  resultHeight?: number;
 }
 
 export class CutImagePopupContext extends PopupContext<CutImagePopupComponent, CutImagePopupData> {
@@ -105,21 +107,23 @@ export class CutImagePopupComponent implements IPopup<CutImagePopupData> {
   private exportAndClose(context: CutImagePopupContext) {
 		// hide popup for loading
 		// context.dxPopupComponent$.value.option("visible", false);
-		this.exportBlob$().subscribe((blob) => {
+		this.exportBlob$().subscribe((result) => {
 			context.data.url = null;
-			context.data.blob = blob;
+      context.data.blob = result.blob;
+      context.data.resultWidth = result.canvas.width;
+      context.data.resultHeight = result.canvas.height;
       context.closed$.next({ data: context.data, closedBy: ToolbarID.Ok });
 		});
   }
   
-  private exportBlob$(): Observable<Blob> {
+  private exportBlob$(): Observable<{ blob: Blob , canvas: HTMLCanvasElement }> {
 		// get adjusted canvas to max9-11 megapixel
-		const canvas = this.getAdjustedCanvas();
+    const canvas = this.getAdjustedCanvas();
 		// get first cropped BLOB (without any resolution/quality changes)
 		return this.adjustQuality$(canvas);
   }
   
-  private readonly adjustQuality$ = (canvas: HTMLCanvasElement): Observable<Blob> => this.getBlob$(canvas).pipe(
+  private readonly adjustQuality$ = (canvas: HTMLCanvasElement): Observable<{ blob: Blob , canvas: HTMLCanvasElement }> => this.getBlob$(canvas).pipe(
     switchMap((blob) => {
       if (blob.size > this.maxAllowedFileSize) {
         let step = 0.1;
@@ -129,7 +133,7 @@ export class CutImagePopupComponent implements IPopup<CutImagePopupData> {
         blob = null;
         return this.adjustQuality$(canvas);
       }
-      else return of(blob);
+      else return of({ blob, canvas});
     })
   );
   

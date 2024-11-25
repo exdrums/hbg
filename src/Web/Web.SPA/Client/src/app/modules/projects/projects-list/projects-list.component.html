@@ -3,7 +3,8 @@
   [remoteOperations]="true"
   (onInitialized)="grid = $event.component"
   (onRowExpanding)="onRowExpanding($event)"
-  (onInitNewRow)="onInitNewRow($event)">
+  (onInitNewRow)="onInitNewRow($event)"
+  (onSelectionChanged)="onSelectionChanged($event)">
   <dxo-selection mode="single"></dxo-selection>
   <dxo-editing [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" mode="popup">
     <dxo-form>

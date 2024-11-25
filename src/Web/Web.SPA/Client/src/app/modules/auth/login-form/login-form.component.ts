@@ -3,6 +3,7 @@ import { Router,  } from '@angular/router';
 
 import { ThemeService } from '@app/core/services/theme.service';
 import { AuthService } from '@app/core/services/auth.service';
+import { ButtonStyle } from 'devextreme/common';
 
 @Component({
   selector: 'hbg-login-form',
@@ -13,7 +14,7 @@ export class LoginFormComponent {
   @Input() resetLink = '/auth/reset-password';
   @Input() createAccountLink = '/auth/create-account';
 
-  btnStylingMode: string;
+  btnStylingMode: ButtonStyle;
 
   passwordMode = 'password';
 

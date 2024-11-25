@@ -47,19 +47,32 @@
               "core-js",
               "raf",
               "rgbcolor",
-              "jszip"
+              "jszip",
+              "cropperjs",
+              "angular2-uuid",
+              "leaflet"
             ],
+            "inlineStyleLanguage": "scss",
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/manifest.webmanifest"
+              "src/manifest.webmanifest",
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images/",
+                "output": "./assets"
+              }
             ],
             "styles": [
+              "./node_modules/leaflet/dist/leaflet.css",
+              "./node_modules/leaflet-draw/dist/leaflet.draw.css",
               "src/styles/dx-styles.scss",
               "src/styles/styles.scss",
               "src/styles/cropper-js.scss",
@@ -79,7 +92,8 @@
               {
                 "input": "src/styles/themes/variables-dark.scss",
                 "bundleName": "theme-dark"
-              }
+              },
+              "src/styles/leaflet.scss"
             ],
             "scripts": []
           },
@@ -157,7 +171,6 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [

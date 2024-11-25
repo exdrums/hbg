@@ -16,7 +16,9 @@ namespace API.Projects.Migrations
                     ProjectID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true)
+                    Description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
+                    DefaultCoorX = table.Column<decimal>(type: "numeric", nullable: false),
+                    DefaultCoorY = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,7 +32,14 @@ namespace API.Projects.Migrations
                     PlanID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ProjectID = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    HasPlanPicture = table.Column<bool>(type: "boolean", nullable: false),
+                    PicCenterX = table.Column<decimal>(type: "numeric", nullable: false),
+                    PicCenterY = table.Column<decimal>(type: "numeric", nullable: false),
+                    PicWidth = table.Column<decimal>(type: "numeric", nullable: false),
+                    PicHeight = table.Column<decimal>(type: "numeric", nullable: false),
+                    PicScale = table.Column<decimal>(type: "numeric", nullable: false),
+                    PicRotation = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {

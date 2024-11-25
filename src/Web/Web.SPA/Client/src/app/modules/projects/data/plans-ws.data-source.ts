@@ -16,5 +16,12 @@ export class PlansWsDataSource extends CustomDataSource<Plan> {
     void this.reload();
   }
 
-  public readonly refresh = () => void this.reload();
+
+  public async refresh() {
+    const plan = this.selected();
+    await this.reload();
+    if (!plan) return;
+    const toSelect = plan ? this.items().find(x => x.planID === plan.planID) : this.items()[0] ?? undefined;
+    this.setSelected(toSelect);
+}
 }

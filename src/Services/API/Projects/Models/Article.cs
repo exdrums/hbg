@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Projects.Models;
 
+/// <summary>
+/// First abstraction of one working item
+/// </summary>
 [Table("Article")]
 public class Article
 {

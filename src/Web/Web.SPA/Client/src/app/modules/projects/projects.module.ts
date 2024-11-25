@@ -11,27 +11,47 @@ import { ArticlesListComponent } from './projects-master-detail/articles-list/ar
 import { PlansWsDataSource } from './data/plans-ws.data-source';
 import { ArticlesWsDataSource } from './data/articles-ws.data-source';
 import { PlanPopupComponent } from './popups/plan-popup/plan-popup.component';
-import { PlannerComponent } from './planner/planner.component';
+import { LeafletModule } from '@bluehalo/ngx-leaflet';
+import { LeafletDrawModule } from '@bluehalo/ngx-leaflet-draw';
+import { PlannerComponent } from './planner/planner-container/planner-view/planner/planner.component';
+import { PlannerContainerComponent } from './planner/planner-container/planner-container.component';
+import { PlannerViewComponent } from './planner/planner-container/planner-view/planner-view.component';
+import { PlannerControlsComponent } from './planner/planner-container/planner-view/planner-controls/planner-controls.component';
+import { PlanLayerComponent } from './planner/planner-container/planner-view/planner/layers/plan-layer/plan-layer.component';
+import { ArticleIconsLayerComponent } from './planner/planner-container/planner-view/planner/layers/article-icons-layer/article-icons-layer.component';
+import { DrawLayerComponent } from './planner/planner-container/planner-view/planner/layers/draw-layer/draw-layer.component';
+import { ImagesDataSource } from './data/images.data-source';
+import { CoordinatesService } from './planner/services/coordinates.service';
 
 @NgModule({
   imports: [
-    SharedModule
+    SharedModule,
+    LeafletModule,
+    LeafletDrawModule
   ],
   declarations: [
     ProjectsComponent,
     ProjectsListComponent,
     ProjectsMasterDetailComponent,
-    PlansListComponent,
     PlanPopupComponent,
+    PlansListComponent,
+    PlannerContainerComponent,
+    PlannerViewComponent,
+    PlannerControlsComponent,
     PlannerComponent,
+    PlanLayerComponent,
+    ArticleIconsLayerComponent,
+    DrawLayerComponent,
     ArticlesListComponent
   ],
   providers: [
     ProjectsService,
+    CoordinatesService,
     ProjectsWebSocketConntection,
     ProjectsWsDataSource,
     PlansWsDataSource,
-    ArticlesWsDataSource
+    ArticlesWsDataSource,
+    ImagesDataSource
   ]
 })
 export class ProjectsModule { }
