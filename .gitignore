@@ -288,3 +288,4 @@ obj
 .angular
 
 *.Development.json
+Uploads/
