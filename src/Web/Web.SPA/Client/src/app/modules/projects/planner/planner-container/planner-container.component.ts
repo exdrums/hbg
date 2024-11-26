@@ -47,26 +47,14 @@ export class PlannerContainerComponent {
     .cutImage(file).pipe(
       switchMap((f) => this.uploadAction(f)),
       // patch the model
-      switchMap((data) => this.patchFlag(data, true)),
+      switchMap((data) => this.ds.patchPositionCreated(data, true)),
       // refresh selection
       switchMap(() => this.ds.refresh()),
       map(() => true)
     )
   );
 
-  private async patchFlag(data: CutImagePopupData, hasPicture: boolean) {
-    const model: Plan = this.ds.selected();
-    const defaultPoint = latLng(46.879966, -121.676909);
 
-    model.picCenterX = defaultPoint.lat;
-    model.picCenterY = defaultPoint.lng;
-    model.picWidth = data.resultWidth;
-    model.picHeight = data.resultHeight;
-    model.picScale = this.crdnts.defaultPlaneScaleValue;
-    model.picRotation = 0;
-    
-    await this.ds.store().update(model.planID, { ...model, hasPlanPicture: hasPicture });
-  }
 
   private readonly uploadAction = (data: CutImagePopupData) : Observable<any> => {
     if (!data.blob) {

@@ -1,20 +1,21 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { PlansWsDataSource } from '@app/modules/projects/data/plans-ws.data-source';
 import { Map, latLngBounds } from 'leaflet';
-import { BehaviorSubject, filter, map, Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, debounceTime, filter, map, Observable, switchMap, takeUntil, tap } from 'rxjs';
 import { ImagesDataSource } from '@app/modules/projects/data/images.data-source';
 import { Plan } from '@app/modules/projects/models/plan.model';
 import { PlanLayer } from './plan-layer';
+import { BaseComponent } from '@app/shared/base/base-component';
 
 @Component({
   selector: 'hbg-plan-layer',
   templateUrl: './plan-layer.component.html',
   styleUrls: ['./plan-layer.component.scss']
 })
-export class PlanLayerComponent implements OnInit {
+export class PlanLayerComponent extends BaseComponent {
   private readonly ds = inject(PlansWsDataSource);
   private readonly images = inject(ImagesDataSource);
-  constructor() { }
+  constructor() { super(); }
   @Input() set map(value: Map) {
     if (!value) return;
     this.map$.next(value);
@@ -31,8 +32,6 @@ export class PlanLayerComponent implements OnInit {
       ))
     ))
   );
-  
-  ;
 
   private createImageOverlay(mapObj: Map, url: string, plan: Plan) {
     const widthOffset = (plan.picWidth / 2) * plan.picScale;
@@ -61,9 +60,19 @@ export class PlanLayerComponent implements OnInit {
       {
         editable: true,
         interactive: true,
-      }
+      },
+      plan.picWidth,
+      plan.picHeight
     );
+
+    this.positionChanging$(overlay);
 
     return overlay; 
   }
+
+  private readonly positionChanging$ = (layer: PlanLayer) => layer.positionChanged$.pipe(
+    takeUntil(this.destroyed$),
+    debounceTime(1000),
+    tap(x => this.ds.patchPosition(x))
+  ).subscribe();
 }

@@ -1,11 +1,12 @@
 import * as L from "leaflet";
+import { Subject } from "rxjs";
 
 export interface PlanLayerOptions extends L.ImageOverlayOptions {
     editable?: boolean;
 }
 
 export class PlanLayer extends L.ImageOverlay {
-    constructor(imageUrl: string, bounds: L.LatLngBoundsExpression, options: PlanLayerOptions) {
+    constructor(imageUrl: string, bounds: L.LatLngBoundsExpression, options: PlanLayerOptions, private imageWidth: number, private imageHeight: number) {
         super(imageUrl, bounds, options);
         if (options.editable)
             setTimeout(() => this.editing.enable(), 100);
@@ -14,16 +15,25 @@ export class PlanLayer extends L.ImageOverlay {
     private readonly editing: PlanLayerEditing = new PlanLayerEditing(this);
 
     public readonly changeEditing = (value: boolean) => value ? this.editing.enable() : this.editing.disable();
+
+    public readonly positionChanged$ = new Subject<{ centerX: number, centerY: number, scale: number }>();
+
+    public updatePosition(corners: L.LatLng[], centerX: number, centerY: number): void {
+        const a = this._map.latLngToContainerPoint(corners[0]);
+        const b = this._map.latLngToContainerPoint(corners[1]);
+        const scale = (b.x - a.x) / this.imageWidth;
+        this.positionChanged$.next({ centerX, centerY, scale });
+    }
 }
 
 class PlanLayerEditing extends L.Edit.SimpleShape {
-    private _overlay: L.ImageOverlay;
+    private _overlay: PlanLayer;
     private _rotationAngle: number = 0; // Rotation angle in radians
     private _moveMarker?: L.Marker;
     private _resizeMarkers: L.Marker[] = [];
     private _rotateMarker?: L.Marker;
 
-    constructor(overlay: L.ImageOverlay) {
+    constructor(overlay: PlanLayer) {
         super(overlay as any); // Explicit cast as L.Edit.SimpleShape expects specific types
         this._overlay = overlay;
     }
@@ -211,20 +221,22 @@ class PlanLayerEditing extends L.Edit.SimpleShape {
     // Update all markers
     private _updateMarkers(): void {
         const bounds = this._overlay.getBounds();
+        const center = bounds.getCenter()
+
+        const corners = [
+            bounds.getNorthWest(),
+            bounds.getNorthEast(),
+            bounds.getSouthWest(),
+            bounds.getSouthEast(),
+        ];
 
         // Update move marker
         if (this._moveMarker) {
-            this._moveMarker.setLatLng(bounds.getCenter());
+            this._moveMarker.setLatLng(center);
         }
 
         // Update resize markers
         if (this._resizeMarkers) {
-            const corners = [
-                bounds.getNorthWest(),
-                bounds.getNorthEast(),
-                bounds.getSouthWest(),
-                bounds.getSouthEast(),
-            ];
             this._resizeMarkers.forEach((marker, index) =>
                 marker.setLatLng(corners[index])
             );
@@ -235,5 +247,7 @@ class PlanLayerEditing extends L.Edit.SimpleShape {
             const rotatePosition = this._calculateRotateMarkerPosition();
             this._rotateMarker.setLatLng(rotatePosition);
         }
+
+        this._overlay.updatePosition(corners, center.lat, center.lng);
     }
 }
