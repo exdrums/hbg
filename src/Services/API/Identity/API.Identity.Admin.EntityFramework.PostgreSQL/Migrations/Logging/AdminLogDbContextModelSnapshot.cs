@@ -22,7 +22,7 @@ namespace API.Identity.Admin.EntityFramework.PostgreSQL.Migrations.Logging
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Skoruba.IdentityServer4.Admin.EntityFramework.Entities.Log", b =>
+            modelBuilder.Entity("API.Identity.Admin.EntityFramework.Entities.Log", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

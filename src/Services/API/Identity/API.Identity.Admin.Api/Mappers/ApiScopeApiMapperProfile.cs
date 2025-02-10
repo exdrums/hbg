@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using API.Identity.Admin.Api.Dtos.ApiScopes;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Configuration;
+using API.Identity.Admin.BusinessLogic.Dtos.Configuration;
 
 namespace API.Identity.Admin.Api.Mappers
 {

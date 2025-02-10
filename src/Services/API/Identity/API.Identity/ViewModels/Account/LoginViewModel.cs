@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity;
+using API.Identity.Shared.Configuration.Configuration.Identity;
 
 namespace API.Identity.ViewModels.Account
 {

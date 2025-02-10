@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.Configuration;
+using API.Identity.Admin.EntityFramework.Configuration.Configuration;
 using SqlMigrationAssembly = API.Identity.Admin.EntityFramework.SqlServer.Helpers.MigrationAssembly;
 using MySqlMigrationAssembly = API.Identity.Admin.EntityFramework.MySql.Helpers.MigrationAssembly;
 using PostgreSQLMigrationAssembly = API.Identity.Admin.EntityFramework.PostgreSQL.Helpers.MigrationAssembly;

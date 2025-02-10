@@ -22,7 +22,7 @@ namespace API.Identity.Admin.EntityFramework.SqlServer.Migrations.Logging
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Skoruba.IdentityServer4.Admin.EntityFramework.Entities.Log", b =>
+            modelBuilder.Entity("API.Identity.Admin.EntityFramework.Entities.Log", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity;
+using API.Identity.Shared.Configuration.Configuration.Identity;
 using API.Identity.Configuration;
 using API.Identity.Helpers;
 using API.Identity.Helpers.Localization;

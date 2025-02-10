@@ -20,17 +20,17 @@ using API.Identity.Configuration.Interfaces;
 using API.Identity.Helpers.Localization;
 using System.Linq;
 using IdentityServer4.Configuration;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Helpers;
+using API.Identity.Admin.EntityFramework.Interfaces;
+using API.Identity.Admin.EntityFramework.Helpers;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Identity.Web;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.MySql;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.PostgreSQL;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.SqlServer;
-using Skoruba.IdentityServer4.Shared.Configuration.Authentication;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity;
+using API.Identity.Admin.EntityFramework.Configuration.Configuration;
+using API.Identity.Admin.EntityFramework.Configuration.MySql;
+using API.Identity.Admin.EntityFramework.Configuration.PostgreSQL;
+using API.Identity.Admin.EntityFramework.Configuration.SqlServer;
+using API.Identity.Shared.Configuration.Authentication;
+using API.Identity.Shared.Configuration.Configuration.Identity;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace API.Identity.Helpers

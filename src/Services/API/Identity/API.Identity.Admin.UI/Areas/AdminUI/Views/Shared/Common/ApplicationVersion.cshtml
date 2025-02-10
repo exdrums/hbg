@@ -1,0 +1,12 @@
+﻿@using System.Reflection
+@using API.Identity.Admin
+@using API.Identity.Admin.UI.Configuration
+
+@{
+    var runtimeVersion = typeof(AdminConfiguration)
+        .GetTypeInfo()
+        .Assembly
+        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+}
+
+@runtimeVersion

@@ -4,7 +4,7 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
+using API.Identity.Shared.Configuration.Helpers;
 using API.Identity.Helpers;
 using API.Identity.ViewModels.Home;
 

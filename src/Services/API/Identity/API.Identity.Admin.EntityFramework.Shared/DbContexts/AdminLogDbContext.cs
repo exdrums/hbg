@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Constants;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
+using API.Identity.Admin.EntityFramework.Constants;
+using API.Identity.Admin.EntityFramework.Entities;
+using API.Identity.Admin.EntityFramework.Interfaces;
 
 namespace API.Identity.Admin.EntityFramework.Shared.DbContexts
 {

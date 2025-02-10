@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
+using API.Identity.Shared.Configuration.Helpers;
 
 namespace API.Identity.Admin.Api
 {

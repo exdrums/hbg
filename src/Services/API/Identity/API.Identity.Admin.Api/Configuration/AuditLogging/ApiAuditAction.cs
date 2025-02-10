@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
-using Skoruba.AuditLogging.Events;
+using API.Identity.AuditLogging.Events;
 
 namespace API.Identity.Admin.Api.AuditLogging
 {

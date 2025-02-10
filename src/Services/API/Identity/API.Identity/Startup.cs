@@ -12,7 +12,7 @@ using API.Identity.Configuration.Constants;
 using API.Identity.Configuration.Interfaces;
 using API.Identity.Helpers;
 using System;
-using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
+using API.Identity.Shared.Configuration.Helpers;
 
 namespace API.Identity
 {

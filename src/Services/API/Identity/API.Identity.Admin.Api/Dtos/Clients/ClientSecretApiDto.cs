@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Helpers;
+using API.Identity.Admin.EntityFramework.Helpers;
 
 namespace API.Identity.Admin.Api.Dtos.Clients
 {
@@ -18,7 +18,7 @@ namespace API.Identity.Admin.Api.Dtos.Clients
 
         public string HashType { get; set; }
 
-        public HashType HashTypeEnum => Enum.TryParse(HashType, true, out HashType result) ? result : Skoruba.IdentityServer4.Admin.EntityFramework.Helpers.HashType.Sha256;
+        public HashType HashTypeEnum => Enum.TryParse(HashType, true, out HashType result) ? result : API.Identity.Admin.EntityFramework.Helpers.HashType.Sha256;
 
         public DateTime? Expiration { get; set; }
     }

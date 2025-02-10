@@ -3,8 +3,8 @@ using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Configuration;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Common;
-using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
+using API.Identity.Shared.Configuration.Configuration.Common;
+using API.Identity.Shared.Configuration.Helpers;
 
 namespace API.Identity.Helpers
 {

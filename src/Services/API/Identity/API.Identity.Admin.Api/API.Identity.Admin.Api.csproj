@@ -4,10 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-        <UserSecretsId>4bb8cb2f-18b9-4669-80e6-3532ce00e663</UserSecretsId>
-        <!-- <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <DockerfileContext>..\..</DockerfileContext> -->
+        <UserSecretsId>4bb8cb2f-18a9-1329-80e6-4532ce31e663</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -39,9 +36,6 @@
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
         <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.6.1" />
         <PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
-        <PackageReference Include="Skoruba.IdentityServer4.Admin.BusinessLogic" Version="2.1.0" />
-        <PackageReference Include="Skoruba.IdentityServer4.Admin.BusinessLogic.Identity" Version="2.1.0" />
-        <PackageReference Include="Skoruba.IdentityServer4.Shared.Configuration" Version="2.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
         <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.3" />
     </ItemGroup>
@@ -52,9 +46,9 @@
         <!-- <ProjectReference Include="..\API.Identity.Admin.EntityFramework.Shared\API.Identity.Admin.EntityFramework.Shared.csproj" /> -->
         <ProjectReference Include="..\API.Identity.Admin.EntityFramework.SqlServer\API.Identity.Admin.EntityFramework.SqlServer.csproj" />
         <ProjectReference Include="..\API.Identity.Shared\API.Identity.Shared.csproj" />
-        <!-- <ProjectReference Include="..\..\..\..\..\..\IdentityServer4.Admin\src\Skoruba.IdentityServer4.Admin.BusinessLogic\Skoruba.IdentityServer4.Admin.BusinessLogic.csproj"/> -->
-        <!-- <ProjectReference Include="..\..\..\..\..\..\IdentityServer4.Admin\src\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity^\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.csproj"/> -->
-        <!-- <ProjectReference Include="..\..\..\..\..\..\IdentityServer4.Admin\src\Skoruba.IdentityServer4.Shared.Configuration\Skoruba.IdentityServer4.Shared.Configuration.csproj"/> -->
+        <ProjectReference Include="..\API.Identity.Admin.BusinessLogic\API.Identity.Admin.BusinessLogic.csproj"/>
+        <ProjectReference Include="..\API.Identity.Admin.BusinessLogic.Identity\API.Identity.Admin.BusinessLogic.Identity.csproj"/>
+        <ProjectReference Include="..\API.Identity.Shared.Configuration\API.Identity.Shared.Configuration.csproj"/>
 
     </ItemGroup>
 

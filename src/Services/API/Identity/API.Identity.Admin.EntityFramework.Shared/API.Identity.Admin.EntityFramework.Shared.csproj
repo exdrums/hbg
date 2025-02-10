@@ -8,10 +8,14 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="6.0.1" />
-        <PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="1.0.0" />
-        <PackageReference Include="Skoruba.IdentityServer4.Admin.EntityFramework" Version="2.1.0" />
-        <PackageReference Include="Skoruba.IdentityServer4.Admin.EntityFramework.Configuration" Version="2.1.0" />
-        <PackageReference Include="Skoruba.IdentityServer4.Admin.EntityFramework.Identity" Version="2.1.0" />
+        <!-- <PackageReference Include="API.Identity.AuditLogging.EntityFramework" Version="1.0.0" /> -->
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\API.Identity.AuditLogging.EntityFramework\API.Identity.AuditLogging.EntityFramework.csproj" />
+        <ProjectReference Include="..\API.Identity.Admin.EntityFramework\API.Identity.Admin.EntityFramework.csproj" />
+        <ProjectReference Include="..\API.Identity.Admin.EntityFramework.Configuration\API.Identity.Admin.EntityFramework.Configuration.csproj" />
+        <ProjectReference Include="..\API.Identity.Admin.EntityFramework.Identity\API.Identity.Admin.EntityFramework.Identity.csproj" />
     </ItemGroup>
 </Project>
 

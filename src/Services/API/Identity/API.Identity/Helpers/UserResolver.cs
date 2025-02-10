@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity;
+using API.Identity.Shared.Configuration.Configuration.Identity;
 
 namespace API.Identity.Helpers
 {

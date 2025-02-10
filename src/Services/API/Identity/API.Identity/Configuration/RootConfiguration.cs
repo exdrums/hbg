@@ -1,4 +1,4 @@
-﻿using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity;
+﻿using API.Identity.Shared.Configuration.Configuration.Identity;
 using API.Identity.Configuration.Interfaces;
 
 namespace API.Identity.Configuration;

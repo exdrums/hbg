@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity;
+using API.Identity.Shared.Configuration.Configuration.Identity;
 
 namespace API.Identity.ViewModels.Account
 {

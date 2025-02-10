@@ -5,14 +5,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Skoruba.AuditLogging.EntityFramework.Entities;
+using API.Identity.AuditLogging.EntityFramework.Entities;
 using API.Identity.Admin.Configuration.Database;
 using API.Identity.Admin.EntityFramework.Shared.DbContexts;
 using API.Identity.Admin.EntityFramework.Shared.Entities.Identity;
 using API.Identity.Shared.Dtos;
 using API.Identity.Shared.Dtos.Identity;
 using API.Identity.Admin.Helpers;
-using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
+using API.Identity.Shared.Configuration.Helpers;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace API.Identity.Admin;

@@ -24,7 +24,7 @@ namespace API.Identity.Admin.EntityFramework.PostgreSQL.Migrations.AuditLogging
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Skoruba.AuditLogging.EntityFramework.Entities.AuditLog", b =>
+            modelBuilder.Entity("API.Identity.AuditLogging.EntityFramework.Entities.AuditLog", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

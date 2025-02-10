@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Skoruba.AuditLogging.EntityFramework.DbContexts;
-using Skoruba.AuditLogging.EntityFramework.Entities;
+using API.Identity.AuditLogging.EntityFramework.DbContexts;
+using API.Identity.AuditLogging.EntityFramework.Entities;
 
 namespace API.Identity.Admin.EntityFramework.Shared.DbContexts
 {

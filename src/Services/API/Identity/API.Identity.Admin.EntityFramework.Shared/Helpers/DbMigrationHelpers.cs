@@ -9,18 +9,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Skoruba.AuditLogging.EntityFramework.DbContexts;
-using Skoruba.AuditLogging.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
+using API.Identity.AuditLogging.EntityFramework.DbContexts;
+using API.Identity.AuditLogging.EntityFramework.Entities;
+using API.Identity.Admin.EntityFramework.Configuration.Configuration;
+using API.Identity.Admin.EntityFramework.Interfaces;
 
 namespace API.Identity.Admin.EntityFramework.Shared.Helpers
 {
 	public static class DbMigrationHelpers
     {
         /// <summary>
-        /// Generate migrations before running this method, you can use these steps bellow:
-        /// https://github.com/skoruba/IdentityServer4.Admin#ef-core--data-access
+        /// Generate migrations before running this method
         /// </summary>
         /// <param name="host"></param>
         /// <param name="applyDbMigrationWithDataSeedFromProgramArguments"></param>

@@ -6,7 +6,7 @@ using API.Identity.Admin.Api.Dtos.PersistedGrants;
 using API.Identity.Admin.Api.ExceptionHandling;
 using API.Identity.Admin.Api.Helpers;
 using API.Identity.Admin.Api.Mappers;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Services.Interfaces;
+using API.Identity.Admin.BusinessLogic.Identity.Services.Interfaces;
 
 namespace API.Identity.Admin.Api.Controllers
 {

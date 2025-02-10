@@ -6,8 +6,8 @@ using API.Identity.Admin.Api.Dtos.Clients;
 using API.Identity.Admin.Api.ExceptionHandling;
 using API.Identity.Admin.Api.Mappers;
 using API.Identity.Admin.Api.Resources;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Configuration;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Services.Interfaces;
+using API.Identity.Admin.BusinessLogic.Dtos.Configuration;
+using API.Identity.Admin.BusinessLogic.Services.Interfaces;
 
 namespace API.Identity.Admin.Api.Controllers
 {

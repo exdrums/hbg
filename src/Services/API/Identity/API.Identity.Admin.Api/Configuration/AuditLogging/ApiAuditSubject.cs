@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Http;
-using Skoruba.AuditLogging.Constants;
-using Skoruba.AuditLogging.Events;
+using API.Identity.AuditLogging.Constants;
+using API.Identity.AuditLogging.Events;
 using API.Identity.Admin.Api.Configuration;
 
 namespace API.Identity.Admin.Api.AuditLogging

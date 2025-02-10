@@ -19,7 +19,7 @@ namespace API.Identity.Admin.EntityFramework.MySql.Migrations.AuditLogging
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.5");
 
-            modelBuilder.Entity("Skoruba.AuditLogging.EntityFramework.Entities.AuditLog", b =>
+            modelBuilder.Entity("API.Identity.AuditLogging.EntityFramework.Entities.AuditLog", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

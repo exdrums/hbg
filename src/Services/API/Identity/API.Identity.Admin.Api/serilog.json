@@ -3,7 +3,7 @@
         "MinimumLevel": {
             "Default": "Debug",
             "Override": {
-                "Skoruba": "Information"
+                "API.Identity": "Debug"
             }
         },
         "WriteTo": [

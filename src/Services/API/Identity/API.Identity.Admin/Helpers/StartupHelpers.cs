@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Skoruba.IdentityServer4.Admin.UI.Configuration;
+using API.Identity.Admin.UI.Configuration;
 
 namespace API.Identity.Admin.Helpers;
 

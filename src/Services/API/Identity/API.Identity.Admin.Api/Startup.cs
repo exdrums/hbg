@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Skoruba.AuditLogging.EntityFramework.Entities;
+using API.Identity.AuditLogging.EntityFramework.Entities;
 using API.Identity.Admin.Api.Configuration;
 using API.Identity.Admin.Api.Configuration.Authorization;
 using API.Identity.Admin.Api.ExceptionHandling;
@@ -18,7 +18,7 @@ using API.Identity.Admin.Api.Mappers;
 using API.Identity.Admin.Api.Resources;
 using API.Identity.Admin.EntityFramework.Shared.DbContexts;
 using API.Identity.Admin.EntityFramework.Shared.Entities.Identity;
-using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
+using API.Identity.Shared.Configuration.Helpers;
 using API.Identity.Shared.Dtos;
 using API.Identity.Shared.Dtos.Identity;
 

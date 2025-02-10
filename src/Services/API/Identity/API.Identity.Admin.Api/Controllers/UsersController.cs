@@ -12,8 +12,8 @@ using API.Identity.Admin.Api.Dtos.Users;
 using API.Identity.Admin.Api.ExceptionHandling;
 using API.Identity.Admin.Api.Helpers.Localization;
 using API.Identity.Admin.Api.Resources;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Identity;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Services.Interfaces;
+using API.Identity.Admin.BusinessLogic.Identity.Dtos.Identity;
+using API.Identity.Admin.BusinessLogic.Identity.Services.Interfaces;
 
 namespace API.Identity.Admin.Api.Controllers
 {

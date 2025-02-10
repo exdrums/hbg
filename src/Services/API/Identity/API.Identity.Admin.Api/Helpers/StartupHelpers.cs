@@ -10,23 +10,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Skoruba.AuditLogging.EntityFramework.DbContexts;
-using Skoruba.AuditLogging.EntityFramework.Entities;
-using Skoruba.AuditLogging.EntityFramework.Extensions;
-using Skoruba.AuditLogging.EntityFramework.Repositories;
-using Skoruba.AuditLogging.EntityFramework.Services;
+using API.Identity.AuditLogging.EntityFramework.DbContexts;
+using API.Identity.AuditLogging.EntityFramework.Entities;
+using API.Identity.AuditLogging.EntityFramework.Extensions;
+using API.Identity.AuditLogging.EntityFramework.Repositories;
+using API.Identity.AuditLogging.EntityFramework.Services;
 using API.Identity.Admin.Api.AuditLogging;
 using API.Identity.Admin.Api.Configuration;
 using API.Identity.Admin.Api.Configuration.ApplicationParts;
 using API.Identity.Admin.Api.Configuration.Constants;
 using API.Identity.Admin.Api.Helpers.Localization;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Identity;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.MySql;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.PostgreSQL;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.SqlServer;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Helpers;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
+using API.Identity.Admin.BusinessLogic.Identity.Dtos.Identity;
+using API.Identity.Admin.EntityFramework.Configuration.Configuration;
+using API.Identity.Admin.EntityFramework.Configuration.MySql;
+using API.Identity.Admin.EntityFramework.Configuration.PostgreSQL;
+using API.Identity.Admin.EntityFramework.Configuration.SqlServer;
+using API.Identity.Admin.EntityFramework.Helpers;
+using API.Identity.Admin.EntityFramework.Interfaces;
 
 namespace API.Identity.Admin.Api.Helpers
 {

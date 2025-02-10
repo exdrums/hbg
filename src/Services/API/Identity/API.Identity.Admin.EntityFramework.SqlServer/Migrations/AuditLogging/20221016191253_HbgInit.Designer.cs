@@ -24,7 +24,7 @@ namespace API.Identity.Admin.EntityFramework.SqlServer.Migrations.AuditLogging
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Skoruba.AuditLogging.EntityFramework.Entities.AuditLog", b =>
+            modelBuilder.Entity("API.Identity.AuditLogging.EntityFramework.Entities.AuditLog", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

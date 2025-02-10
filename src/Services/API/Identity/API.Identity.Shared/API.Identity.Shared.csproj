@@ -3,8 +3,6 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
-		<Description>Shared common layer for the administration of the IdentityServer4 and Asp.Net Core Identity</Description>
-
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -15,7 +13,10 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.22" />
 		<PackageReference Include="Sendgrid" Version="9.25.2" />
-		<PackageReference Include="Skoruba.IdentityServer4.Admin.BusinessLogic.Identity" Version="2.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\API.Identity.Admin.BusinessLogic.Identity\API.Identity.Admin.BusinessLogic.Identity.csproj"/>
 	</ItemGroup>
 
 </Project>
