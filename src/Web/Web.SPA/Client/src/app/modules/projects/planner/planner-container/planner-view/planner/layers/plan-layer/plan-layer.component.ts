@@ -6,28 +6,22 @@ import { ImagesDataSource } from '@app/modules/projects/data/images.data-source'
 import { Plan } from '@app/modules/projects/models/plan.model';
 import { PlanLayer } from './plan-layer';
 import { BaseComponent } from '@app/shared/base/base-component';
+import { BaseLayerComponent } from '../base-layer';
 
 @Component({
   selector: 'hbg-plan-layer',
   templateUrl: './plan-layer.component.html',
   styleUrls: ['./plan-layer.component.scss']
 })
-export class PlanLayerComponent extends BaseComponent {
-  private readonly ds = inject(PlansWsDataSource);
-  private readonly images = inject(ImagesDataSource);
+export class PlanLayerComponent extends BaseLayerComponent {
   constructor() { super(); }
-  @Input() set map(value: Map) {
-    if (!value) return;
-    this.map$.next(value);
-  }
-  private readonly map$ = new BehaviorSubject<Map>(undefined);
 
   ngOnInit() { }
 
   public layer$ = this.map$.pipe(
     filter(x => x != null),
-    switchMap(mapObj => this.ds.selected$.pipe(
-      switchMap(plan => this.images.getPlanImage$(plan).pipe(
+    switchMap(mapObj => this.plansDataSource.selected$.pipe(
+      switchMap(plan => this.imagesDataSource.getPlanImage$(plan).pipe(
         map(url => this.createImageOverlay(mapObj, url, plan)),
       ))
     ))
@@ -73,6 +67,6 @@ export class PlanLayerComponent extends BaseComponent {
   private readonly positionChanging$ = (layer: PlanLayer) => layer.positionChanged$.pipe(
     takeUntil(this.destroyed$),
     debounceTime(1000),
-    tap(x => this.ds.patchPosition(x))
+    tap(x => this.plansDataSource.patchPosition(x))
   ).subscribe();
 }
