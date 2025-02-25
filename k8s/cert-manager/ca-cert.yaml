@@ -1,0 +1,22 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hbg-selfsigned-ca
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: hbg-selfsigned-ca
+  secretName: hbg-selfsigned-ca-secret
+  duration: 87600h
+  subject:
+    organizations:
+    - HBG GmbH
+    organizationalUnits:
+    - LocalDeployment
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io

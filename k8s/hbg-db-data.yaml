@@ -1,31 +1,41 @@
 # Describes a volumes storage for postgres pod
 
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: docker-sc
+provisioner: docker.io/hostpath
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: postgres-pv-volume
+  name: hbg-db-pv
   labels:
     type: local
     app: postgres
 spec:
-  storageClassName: hostpath
+  storageClassName: docker-sc
+  persistentVolumeReclaimPolicy: Retain
   capacity:
     storage: 5Gi
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   hostPath:
-    path: "/mnt/data"
+    path: "/Volumes/cluster-data/database-files"
 ---
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: postgres-pv-claim
+  name: hbg-db-pvc
   labels:
+    type: local
     app: postgres
 spec:
-  storageClassName: hostpath
+  storageClassName: docker-sc
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   resources:
     requests:
       storage: 5Gi

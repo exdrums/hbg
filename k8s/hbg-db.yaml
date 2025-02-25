@@ -29,12 +29,12 @@ spec:
           valueFrom:
             secretKeyRef:
               name: hbg-secret
-              key: houbirgdb_username
+              key: hbgdb_username
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               name: hbg-secret
-              key: houbirgdb_password
+              key: hbgdb_password
         resources:
           limits:
             memory: "128Mi"
@@ -45,7 +45,7 @@ spec:
       volumes:
       - name: hbg-db-data
         persistentVolumeClaim:
-          claimName: postgres-pv-claim
+          claimName: hbg-db-pvc
 ---
 apiVersion: v1
 kind: Service

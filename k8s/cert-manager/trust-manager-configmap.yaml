@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trust-manager
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trust-manager-config
+  namespace: trust-manager
+data:
+  # This configuration tells trust-manager which CA secrets to watch and where to mount them.
+  caSecrets: |
+    - name: hbg-selfsigned-ca-secret
+      namespace: cert-manager
+      mountPath: /etc/trusted-cas

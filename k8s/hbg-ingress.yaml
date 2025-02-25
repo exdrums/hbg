@@ -4,20 +4,21 @@ metadata:
   name: hbg-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-    # cert-manager.io/cluster-issuer: hbg-clusterissuer
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: hbg-ca-issuer #hbg-clusterissuer
     # kubernetes.io/ingress.class: traefik
     # traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
     # traefik.ingress.kubernetes.io/router.middlewares: nginx1-redirecttohttps@kubernetescrd
 spec:
   tls:
-    - hosts:
-      - sts.houbirg.local
-      - admin.houbirg.local
-      - spa.houbirg.local
-      secretName: hbg-tls-secret
+  - hosts:
+    - sts.hbg.local
+    - admin.hbg.local
+    - spa.hbg.local
+    secretName: hbg-tls-secret
   ingressClassName: nginx
   rules:
-  - host: "sts.houbirg.local"
+  - host: sts.hbg.local
     http:
       paths:
       - path: /
@@ -27,7 +28,7 @@ spec:
             name: hbg-sts-service
             port:
               number: 80
-  - host: "admin.houbirg.local"
+  - host: admin.hbg.local
     http:
       paths:
       - path: /
@@ -37,7 +38,7 @@ spec:
             name: hbg-admin-service
             port:
               number: 80
-  - host: "spa.houbirg.local"
+  - host: spa.hbg.local
     http:
       paths:
       - path: /
@@ -47,7 +48,7 @@ spec:
             name: hbg-spa-service
             port:
               number: 80
-              
+
 # if running local, add each domain name to the "hosts"
 
 # if ingress has no localhost in ADDRESS call

@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hbg-cert
+  namespace: default
+spec:
+  secretName: hbg-tls-secret # This secret will contain your TLS certificate and key
+  issuerRef:
+    name: hbg-ca-issuer
+    kind: ClusterIssuer
+  commonName: sts.hbg.local
+  dnsNames:
+  - "sts.hbg.local"
+  - "admin.hbg.local"
+  - "spa.hbg.local"
+  duration: 2160h # 90 days validity (adjust if needed)

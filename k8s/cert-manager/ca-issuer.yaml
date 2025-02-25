@@ -1,0 +1,7 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: hbg-ca-issuer
+spec:
+  ca:
+    secretName: hbg-selfsigned-ca-secret

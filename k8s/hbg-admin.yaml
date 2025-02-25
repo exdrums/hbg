@@ -13,6 +13,9 @@ spec:
     metadata:
       labels:
         app: hbg-admin
+      annotations:
+        # This annotation tells trust-manager to inject the CA from /etc/trusted-cas into the container’s trust store.
+        trust-manager/inject: "true"
     spec:
       containers:
       - name: hbg-admin
@@ -26,7 +29,7 @@ spec:
             cpu: "500m"
         env:
         - name: VIRTUAL_HOST
-          value: admin.houbirg.local
+          value: admin.hbg.local
         - name: ASPNETCORE_ENVIRONMENT
           value: Development
         - name: DockerConfiguration__UpdateCaCertificate
@@ -35,32 +38,32 @@ spec:
           valueFrom:
             secretKeyRef:
               name: hbg-secret
-              key: houbirgdb_string
+              key: hbgdb-identity_string
         - name: ConnectionStrings__PersistedGrantDbConnection
           valueFrom:
             secretKeyRef:
               name: hbg-secret
-              key: houbirgdb_string
+              key: hbgdb-identity_string
         - name: ConnectionStrings__IdentityDbConnection
           valueFrom:
             secretKeyRef:
               name: hbg-secret
-              key: houbirgdb_string
+              key: hbgdb-identity_string
         - name: ConnectionStrings__AdminLogDbConnection
           valueFrom:
             secretKeyRef:
               name: hbg-secret
-              key: houbirgdb_string
+              key: hbgdb-identity_string
         - name: ConnectionStrings__AdminAuditLogDbConnection
           valueFrom:
             secretKeyRef:
               name: hbg-secret
-              key: houbirgdb_string
+              key: hbgdb-identity_string
         - name: ConnectionStrings__DataProtectionDbConnection
           valueFrom:
             secretKeyRef:
               name: hbg-secret
-              key: houbirgdb_string
+              key: hbgdb-identity_string
         - name: AdminConfiguration__RequireHttpsMetadata
           value: "false"
         - name: AdminConfiguration__IdentityAdminBaseUrl
@@ -112,7 +115,14 @@ spec:
           valueFrom:
             secretKeyRef:
               name: hbg-secret
-              key: houbirgdb_string
+              key: hbgdb-identity_string
+        # Optionally, if your trust-manager requires a volume mount:
+        volumeMounts:
+        - name: trusted-ca
+          mountPath: /etc/ssl/certs/trusted
+      volumes:
+      - name: trusted-ca
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

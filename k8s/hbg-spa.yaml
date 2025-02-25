@@ -13,10 +13,13 @@ spec:
     metadata:
       labels:
         app: hbg-spa
+      annotations:
+        # This annotation tells trust-manager to inject the CA from /etc/trusted-cas into the container’s trust store.
+        trust-manager/inject: "true"
     spec:
       containers:
       - name: hbg-spa
-        imagePullPolicy: Never                  # never pull local images from docker, always use local
+        imagePullPolicy: Never # never pull local images from docker, always use local
         image: exdrums/hbg-spa
         ports:
         - containerPort: 80
@@ -28,17 +31,17 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT
           value: Development
         - name: ASPNETCORE_URLS
-          valueFrom: 
+          valueFrom:
             configMapKeyRef:
               name: hbg-configmap
               key: asp_hosting_urls
         - name: 'HBGIDENTITY'
-          valueFrom: 
+          valueFrom:
             configMapKeyRef:
               name: hbg-configmap
               key: hbg-sts-url
         - name: 'HBGSPA'
-          valueFrom: 
+          valueFrom:
             configMapKeyRef:
               name: hbg-configmap
               key: hbg-spa-url
@@ -48,11 +51,17 @@ spec:
               name: hbg-configmap
               key: hbg-admin-url
         - name: 'HBGDB'
-          valueFrom: 
+          valueFrom:
             secretKeyRef:
               name: hbg-secret
-              key: houbirgdb_string
-        
+              key: hbgdb-identity_string # TODO: link with other database within the same postgres server
+        # Optionally, if your trust-manager requires a volume mount:
+        volumeMounts:
+        - name: trusted-ca
+          mountPath: /etc/ssl/certs/trusted
+      volumes:
+      - name: trusted-ca
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
@@ -65,7 +74,7 @@ spec:
   selector:
     app: hbg-spa
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-      # nodePort: 30788
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    # nodePort: 30788
