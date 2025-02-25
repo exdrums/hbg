@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Projects.Models.Enums;
 
 namespace Projects.Models;
 
@@ -23,6 +24,12 @@ public class Article
     [MaxLength(100)]
     public string Name { get; set; }
 
+    public ArticleType Type { get; set; }
+
+    public string TypeAsString => Type.ToString();
+
+    public decimal? X { get; set; }
+    public decimal? Y { get; set; }
 
 
     [ForeignKey(nameof(ProjectID))]
