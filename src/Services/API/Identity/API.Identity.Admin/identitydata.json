@@ -12,6 +12,9 @@
       },
       {
         "Name": "ProjEmpl"
+      },
+      {
+        "Name": "ContactsAdmin"
       }
     ],
     "Users": [
@@ -23,7 +26,8 @@
           "SysAdmin",
           "ProjAdmin",
           "ProjMgr",
-          "ProjEmpl"
+          "ProjEmpl",
+          "ContactsAdmin"
         ],
         "Claims": [
           {

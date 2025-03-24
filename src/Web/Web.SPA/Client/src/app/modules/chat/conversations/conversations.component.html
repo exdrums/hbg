@@ -1,0 +1,209 @@
+<div class="conversation-list-container">
+  <!-- Search and new conversation row -->
+  <div class="list-header">
+    <div class="search-container">
+      <input 
+        type="text" 
+        placeholder="Search conversations..." 
+        [(ngModel)]="searchText" 
+        class="search-input">
+    </div>
+    <div class="action-buttons">
+      <dx-button 
+        type="default"
+        stylingMode="contained"
+        icon="plus"
+        [text]="'New'"
+        (onClick)="showCreateDialog()">
+      </dx-button>
+      <dx-button 
+        type="default"
+        stylingMode="contained"
+        icon="robot"
+        [text]="'AI'"
+        (onClick)="showCreateAiDialog()">
+      </dx-button>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div class="loading-state" *ngIf="isLoading">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
+    <div class="loading-text">Loading conversations...</div>
+  </div>
+
+  <!-- Connection error -->
+  <div class="connection-error" *ngIf="!isConnected && !isLoading">
+    <div class="error-icon">
+      <i class="dx-icon-warning"></i>
+    </div>
+    <div class="error-text">
+      Connection to chat server lost. Reconnecting...
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!isLoading && isConnected && conversations.length === 0">
+    <div class="empty-icon">
+      <i class="dx-icon-message"></i>
+    </div>
+    <div class="empty-text">
+      No conversations yet
+    </div>
+    <div class="empty-actions">
+      <dx-button 
+        text="Start a new chat"
+        type="default"
+        (onClick)="showCreateDialog()">
+      </dx-button>
+      <dx-button 
+        text="Chat with AI"
+        type="default"
+        (onClick)="showCreateAiDialog()">
+      </dx-button>
+    </div>
+  </div>
+
+  <!-- Conversation list -->
+  <div class="conversations-list" *ngIf="!isLoading && conversations.length > 0">
+    <div 
+      *ngFor="let conversation of filteredConversations" 
+      class="conversation-item"
+      [class.selected]="conversation.id === selectedConversationId"
+      [class.unread]="(unreadMessageCounts.get(conversation.id) || 0) > 0"
+      (click)="selectConversation(conversation.id)">
+      
+      <!-- Conversation avatar/icon -->
+      <div class="conversation-avatar">
+        <div class="avatar-container" *ngIf="conversation.type === 0">
+          <!-- Show participant avatar if it's a user-to-user conversation -->
+          <div class="avatar" *ngIf="conversation.participants.length > 0">
+            <img 
+              *ngIf="conversation.participants[0].avatarUrl" 
+              [src]="conversation.participants[0].avatarUrl" 
+              [alt]="conversation.participants[0].avatarAlt || 'User avatar'">
+            <div 
+              *ngIf="!conversation.participants[0].avatarUrl" 
+              class="avatar-placeholder">
+              {{ conversation.participants[0].name.charAt(0) }}
+            </div>
+          </div>
+        </div>
+        
+        <!-- AI assistant icon -->
+        <div class="ai-avatar" *ngIf="conversation.type === 1">
+          <i class="dx-icon-robot"></i>
+        </div>
+      </div>
+      
+      <!-- Conversation details -->
+      <div class="conversation-details">
+        <div class="conversation-header">
+          <div class="conversation-title">{{ conversation.title }}</div>
+          <div class="conversation-time">{{ getFormattedTime(conversation.id) }}</div>
+        </div>
+        
+        <div class="conversation-preview">
+          <div class="preview-text">{{ getPreviewText(conversation.id) }}</div>
+          <div class="unread-badge" *ngIf="(unreadMessageCounts.get(conversation.id) || 0) > 0">
+            {{ unreadMessageCounts.get(conversation.id) }}
+          </div>
+        </div>
+        
+        <div class="conversation-type-badge">
+          {{ getConversationTypeLabel(conversation.type) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Conversation Dialog -->
+<dx-popup
+  [width]="400"
+  [height]="'auto'"
+  [showTitle]="true"
+  [title]="'New Conversation'"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="true"
+  [showCloseButton]="true"
+  [(visible)]="createDialogVisible">
+  <div *dxTemplate="let data of 'content'" class="create-dialog-content">
+    <form>
+      <div class="form-group">
+        <label for="conversationTitle">Conversation Title</label>
+        <input 
+          type="text" 
+          id="conversationTitle" 
+          placeholder="Enter conversation title" 
+          #titleInput>
+      </div>
+      
+      <div class="form-group">
+        <label>Select Participants</label>
+        <dx-tag-box
+          [items]="availableUsers"
+          [value]="selectedParticipantIds"
+          (onValueChanged)="selectedParticipantIds = $event.value"
+          displayExpr="name"
+          valueExpr="id"
+          [searchEnabled]="true"
+          placeholder="Select users to chat with">
+        </dx-tag-box>
+      </div>
+      
+      <div class="form-actions">
+        <dx-button 
+          text="Cancel" 
+          stylingMode="outlined"
+          (onClick)="cancelCreate()">
+        </dx-button>
+        <dx-button 
+          text="Create" 
+          type="default"
+          stylingMode="contained"
+          [disabled]="selectedParticipantIds.length === 0"
+          (onClick)="createUserConversation(titleInput.value)">
+        </dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>
+
+<!-- Create AI Conversation Dialog -->
+<dx-popup
+  [width]="400"
+  [height]="'auto'"
+  [showTitle]="true"
+  [title]="'New AI Assistant'"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="true"
+  [showCloseButton]="true"
+  [(visible)]="createAiDialogVisible">
+  <div *dxTemplate="let data of 'content'" class="create-dialog-content">
+    <form>
+      <div class="form-group">
+        <label for="aiConversationTitle">AI Assistant Name</label>
+        <input 
+          type="text" 
+          id="aiConversationTitle" 
+          placeholder="Enter a name for this AI assistant" 
+          #aiTitleInput>
+      </div>
+      
+      <div class="form-actions">
+        <dx-button 
+          text="Cancel" 
+          stylingMode="outlined"
+          (onClick)="cancelCreate()">
+        </dx-button>
+        <dx-button 
+          text="Create" 
+          type="default"
+          stylingMode="contained"
+          (onClick)="createAiConversation(aiTitleInput.value)">
+        </dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>
