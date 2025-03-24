@@ -122,6 +122,8 @@ public static class ConfigureServices
         services.AddScoped<IRealtimeNotificationService, SignalRNotificationService>();
         services.AddScoped<IRateLimitingService, DistributedCacheRateLimitingService>();
         services.AddScoped<IOidcAuthenticationService, OidcAuthenticationService>();
+        services.AddScoped<IReadReceiptService, ReadReceiptService>();
+        services.AddScoped<IFileMessageHandler, FileMessageHandler>();
 
         // Register SignalR
         services.AddSignalR();

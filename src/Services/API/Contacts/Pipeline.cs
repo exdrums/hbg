@@ -27,6 +27,14 @@ public static class Configure
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapHub<ChatHub>("/chathub");
         });
+        
+        // Ensure file storage directory exists
+        var fileStoragePath = app.Configuration["FileStorage:BasePath"] ?? Path.Combine(Path.GetTempPath(), "ChatFiles");
+        if (!Directory.Exists(fileStoragePath))
+        {
+            Directory.CreateDirectory(fileStoragePath);
+        }
     }
 } 
