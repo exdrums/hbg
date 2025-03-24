@@ -29,6 +29,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.SPA", "Web\Web.SPA\Web.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Emailer", "Services\API\Emailer\API.Emailer.csproj", "{3C44B9DC-D6A0-4E4A-B004-31F77CFEA47A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{3524E781-7387-4395-A9FE-5F0BC3C43109}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{7A3291FC-8A74-4B47-A528-3DC01EEAD516}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Contacts", "Services\API\Contacts\API.Contacts.csproj", "{C8982C10-B121-46A6-829C-4F4522F6A759}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,5 +96,13 @@ Global
 		{3C44B9DC-D6A0-4E4A-B004-31F77CFEA47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C44B9DC-D6A0-4E4A-B004-31F77CFEA47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C44B9DC-D6A0-4E4A-B004-31F77CFEA47A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8982C10-B121-46A6-829C-4F4522F6A759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8982C10-B121-46A6-829C-4F4522F6A759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8982C10-B121-46A6-829C-4F4522F6A759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8982C10-B121-46A6-829C-4F4522F6A759}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7A3291FC-8A74-4B47-A528-3DC01EEAD516} = {3524E781-7387-4395-A9FE-5F0BC3C43109}
+		{C8982C10-B121-46A6-829C-4F4522F6A759} = {7A3291FC-8A74-4B47-A528-3DC01EEAD516}
 	EndGlobalSection
 EndGlobal

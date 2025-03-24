@@ -1,5 +1,5 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
-import { NestedOptionHost } from 'devextreme-angular';
+import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { DxTemplateHost, NestedOptionHost } from 'devextreme-angular';
 import { DxoLabelComponent } from 'devextreme-angular/ui/nested';
 
 @Component({
@@ -8,8 +8,8 @@ import { DxoLabelComponent } from 'devextreme-angular/ui/nested';
   styleUrls: ['./form-item-desc.component.scss']
 })
 export class FormItemDescComponent extends DxoLabelComponent {
-  constructor(parentOptionHost: NestedOptionHost, optionHost: NestedOptionHost, private ref: ElementRef) { 
-    super(parentOptionHost, optionHost);
+  constructor(parentOptionHost: NestedOptionHost, optionHost: NestedOptionHost, renderer: Renderer2, templateHost: DxTemplateHost, element: ElementRef) { 
+    super(parentOptionHost, optionHost, renderer, document, templateHost, element);
     console.log('this', this);
     // console.log('LabelElement', ref);
     // this.text = "EditedText";

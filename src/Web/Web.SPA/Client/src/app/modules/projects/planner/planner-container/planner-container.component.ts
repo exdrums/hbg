@@ -43,7 +43,7 @@ export class PlannerContainerComponent {
   
   public readonly uploaderComponent$ = new BehaviorSubject<dxFileUploader>(undefined);
 
-  public readonly uploadFile = (file: File, e: dxFileUploader) => firstValueFrom(this.cutter
+  public readonly uploadFile = (file: File, progressCallback: Function) => firstValueFrom(this.cutter
     .cutImage(file).pipe(
       switchMap((f) => this.uploadAction(f)),
       // patch the model

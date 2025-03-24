@@ -17,7 +17,7 @@
 	[title]="context.title"
 	[shading]="true"
 	[visible]="true"
-	(onInitialized)="context.popupInitialised($event.component)"
+	(onInitialized)="context.popupInitialised($event)"
 	(onHiding)="context.defaultClosed()">
 
 	<div [class.flex-height]="context.height">
@@ -28,7 +28,7 @@
 
 	<div *ngIf="true" class="h-line"></div>
 
-	<dxi-toolbar-item *ngFor="let i of context.toolbar"
+	<dxi-popup-toolbar-item *ngFor="let i of context.toolbar"
 		[widget]="i.widget"
 		[disabled]="i.disabled$ ? (i.disabled$ | async) : false"
 		[location]="i.location"
@@ -36,5 +36,5 @@
 		[template]="i.template"
 		[toolbar]="i.toolbar || 'bottom'"
 		[visible]="i.visible$ ? (i.visible$ | async) : true">
-	</dxi-toolbar-item>
+	</dxi-popup-toolbar-item>
 </dx-popup>

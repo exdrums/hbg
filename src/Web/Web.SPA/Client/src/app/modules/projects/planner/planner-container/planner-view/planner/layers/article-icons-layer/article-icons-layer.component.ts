@@ -30,7 +30,7 @@ export class ArticleIconsLayerComponent extends BaseLayerComponent implements On
       });
 
       const articleMarker = marker([article.y, article.x], { 
-        articleIcon, 
+        icon: articleIcon, 
         draggable: true 
       }).addTo(this.layer);
 
@@ -42,15 +42,16 @@ export class ArticleIconsLayerComponent extends BaseLayerComponent implements On
     const marker = event.target as L.Marker;
     const position = marker.getLatLng();
 
-    this.articlesDataSource.store().update();
+    //
+    // this.articlesDataSource.store().update();
 
     // Update device position in the backend
-    this.http.put(`/api/devices/${device.id}`, {
-      x: position.lng,
-      y: position.lat
-    }).subscribe(() => {
-      console.log(`Device ${device.id} position updated.`);
-    });
+    // this.http.put(`/api/devices/${device.id}`, {
+    //   x: position.lng,
+    //   y: position.lat
+    // }).subscribe(() => {
+    //   console.log(`Device ${device.id} position updated.`);
+    // });
   }
 
 

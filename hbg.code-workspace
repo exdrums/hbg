@@ -25,6 +25,10 @@
 			"name": "API.Emailer"
 		},
 		{
+			"path": "src/Services/API/Contacts",
+			"name": "API.Contacts"
+		},
+		{
 			"path": "src/Web/Web.SPA"
 		}
 	],
@@ -92,6 +96,23 @@
 					"exdrums/hbg-projects",
 					"-f",
 					"src/Services/API/Projects/Dockerfile",
+					"."
+				],
+				"group": "build",
+				"presentation": {
+					"group": "docker"
+				}
+			},
+			{
+				"path": "./src/",
+				"label": "DOCKER hbg-contacts",
+				"command": "docker",
+				"args": [
+					"build",
+					"-t",
+					"exdrums/hbg-contacts",
+					"-f",
+					"src/Services/API/Contacts/Dockerfile",
 					"."
 				],
 				"group": "build",

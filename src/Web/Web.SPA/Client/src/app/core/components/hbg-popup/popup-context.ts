@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable, Subject } from "rxjs";
-import DxPopup, { dxPopupToolbarItem } from "devextreme/ui/popup";
+import DxPopup, { dxPopupToolbarItem, InitializedEvent } from "devextreme/ui/popup";
 import { Type } from "@angular/core";
 
 /** All data requered for a Popup component, extend this for each IPopup */
@@ -26,8 +26,8 @@ constructor(
     public showCloseButton: boolean = false;
     public abstract component: Type<T>;
     public abstract toolbar: PopupToolbarItem[];
-    public popupInitialised(popup: DxPopup) {
-        this.dxPopupComponent$.next(popup);
+    public popupInitialised(popup: InitializedEvent) {
+        this.dxPopupComponent$.next(popup.component);
     }
     public defaultClosed() {
         this.clicked$.next(ToolbarID.Cancel);
