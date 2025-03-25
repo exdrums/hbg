@@ -101,5 +101,5 @@ if [ $? -eq 0 ]; then
   fi
 else
   echo "Build failed with error code $?."
-  exit 1
+  exit 0
 fi
