@@ -1,2 +1,2 @@
 [commands]
-test = ["./src/Web/Web.SPA/Client/test-client.sh"]
+test = ["./test-client.sh"]
