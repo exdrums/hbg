@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ConfigService } from "./config.service";
 import { AuthConfig, OAuthService, OAuthModuleConfig } from "angular-oauth2-oidc";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable, map } from "rxjs";
 import { Router } from "@angular/router";
 import { NotificationService } from "./notification.service";
 
@@ -19,7 +19,7 @@ export class AuthService {
   /** Init Auth protocol with APP_INITIALIZER */
   async connectOidc(): Promise<void> {
     const configReady = await this.configs.isReady();
-  
+
     const conf: AuthConfig = {
       // Url of the Identity Provider
       issuer: this.configs.hbgidentity,
@@ -35,7 +35,7 @@ export class AuthService {
       // and it might not enforce further best practices vital for security
       // such applications.
       dummyClientSecret: "js_secret",
-    
+
       scope: "openid profile email roles offline_access api_files api_projects api_emailer",
       showDebugInformation: true,
       oidc: false,
@@ -60,6 +60,7 @@ export class AuthService {
         // console.log('UserLoaded', y);
         this.loginInfo = x;
         this.authStatus$.next(true);
+        this.userProfileSubject.next(this.auth.getIdentityClaims());
       }
       this.authStatus$.next(true);
       // console.log("CompleteAuthSetup");
@@ -70,13 +71,31 @@ export class AuthService {
     }
   }
 
-  public authStatus$ = new BehaviorSubject<boolean>(true); 
+  public authStatus$ = new BehaviorSubject<boolean>(true);
+  
+  // Added isAuthenticated$ property as an alias to authStatus$
+  public get isAuthenticated$(): Observable<boolean> {
+    return this.authStatus$;
+  }
+  
+  // Added userProfile$ to provide access to user profile information
+  private userProfileSubject = new BehaviorSubject<any>(null);
+  public get userProfile$(): Observable<any> {
+    return this.userProfileSubject.asObservable();
+  }
+  
   public get authStatus(): boolean {
     return this.authStatus$.value;
   }
+  
+  // Added isAuthenticated() method
+  public isAuthenticated(): boolean {
+    return this.authStatus$.value;
+  }
+  
   private loginInfo: any;
 
-  
+
   public login(lgn: string, psw: string) {
     // console.log("Loginn...");
     this.auth
@@ -85,6 +104,7 @@ export class AuthService {
       .then((x) => {
         this.loginInfo = x;
         this.authStatus$.next(true);
+        this.userProfileSubject.next(this.auth.getIdentityClaims());
         this.router.navigate(["/home"]);
       });
   }
@@ -98,13 +118,14 @@ export class AuthService {
   public createAccount(email: string, psw: string) {
     this.notification.newMessage$.next("Create account not implemented");
   }
-  
+
   public resetPassword(email: string) {
     this.notification.newMessage$.next("Reset password not implemented");
   }
 
   public logout() {
     this.authStatus$.next(false);
+    this.userProfileSubject.next(null);
     this.auth.logOut();
   }
 

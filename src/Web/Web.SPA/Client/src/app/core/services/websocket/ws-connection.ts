@@ -19,7 +19,7 @@ export abstract class WsConnection {
 	
 	private logDebug = environment.production ? false : true; // activate here
 	protected abstract hubUrl: string;
-	protected abstract canConnect: () => boolean;
+	protected abstract canConnect(): boolean;
 	protected abstract actions: SignalRAction[];
 	public connection: HubConnection;
 	public isConnected$ = new BehaviorSubject<boolean>(false);

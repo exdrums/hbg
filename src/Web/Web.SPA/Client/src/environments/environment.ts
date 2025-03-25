@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  serverUri: 'https://localhost:5799/'
+  serverUri: 'https://localhost:5799/',
+  apiBaseUrl: 'https://localhost:5799/api' // Added apiBaseUrl property
 };
 
 /*
