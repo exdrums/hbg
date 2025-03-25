@@ -10,6 +10,7 @@ import { ChangePasswordFormComponent } from './modules/auth/change-password-form
 import { ShellComponent } from './modules/shell/shell.component';
 import { ProjectsComponent } from './modules/projects/projects.component';
 import { EmailerComponent } from './modules/emailer/emailer.component';
+import { ChatPageComponent } from './modules/chat/chat-page/chat-page.component';
 
 export const routes: Routes = [
   {
@@ -64,6 +65,10 @@ export const routes: Routes = [
       {
         path: "emailer",
         component: EmailerComponent
+      },
+      {
+        path: "chat",
+        component: ChatPageComponent
       }
       // {
       //   path: 'scheduler',

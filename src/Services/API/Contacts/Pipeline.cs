@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
+
+using API.Contacts.Services;
 
 namespace API.Contacts;
 
-public static class Configure 
+public static class Configure
 {
     public static void ConfigureApp(this WebApplication app)
     {
@@ -23,13 +23,13 @@ public static class Configure
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
-    
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
             endpoints.MapHub<ChatHub>("/chathub");
         });
-        
+
         // Ensure file storage directory exists
         var fileStoragePath = app.Configuration["FileStorage:BasePath"] ?? Path.Combine(Path.GetTempPath(), "ChatFiles");
         if (!Directory.Exists(fileStoragePath))

@@ -14,6 +14,11 @@ export const navigation = [
     path: '/emailer',
     icon: 'email'
   },
+  {
+    text: 'Chat',
+    path: '/chat',
+    icon: 'chat'
+  },
   // {
   //   text: 'Examples',
   //   icon: 'folder',

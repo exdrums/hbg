@@ -9,12 +9,14 @@ import { ChatService } from './chat.service';
 import { ChatSignalRConnection } from './chat-connection.service';
 import { ChatMessageStore } from './messages.data-store';
 import { ChatConversationStore } from './conversations.data-store';
+import { ChatPageComponent } from './chat-page/chat-page.component';
 
 @NgModule({
   declarations: [
     HbgChatComponent,
     ConversationsComponent,
-    ChatContainerComponent
+    ChatContainerComponent,
+    ChatPageComponent
   ],
   imports: [
     CommonModule,
@@ -27,9 +29,10 @@ import { ChatConversationStore } from './conversations.data-store';
     DxTagBoxModule
   ],
   exports: [
-    HbgChatComponent,
-    ConversationsComponent,
-    ChatContainerComponent
+    // HbgChatComponent,
+    // ConversationsComponent,
+    // ChatContainerComponent,
+    ChatPageComponent
   ],
   providers: [
     ChatService,
