@@ -1,5 +1,5 @@
-
-using API.Contacts.Services;
+using API.Contacts.Infrastructure.SignalR;
+using System.IO;
 
 namespace API.Contacts;
 
@@ -19,16 +19,15 @@ public static class Configure
             c.OAuthUsePkce();
             c.OAuthAppName("Contacts Swagger UI");
         });
-        // app.UseHttpsRedirection();
+
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapHub<ChatHub>("/chathub");
-        });
+        app.MapControllers();
+
+        // Map SignalR hub endpoint
+        app.MapHub<ChatHub>("/chathub");
 
         // Ensure file storage directory exists
         var fileStoragePath = app.Configuration["FileStorage:BasePath"] ?? Path.Combine(Path.GetTempPath(), "ChatFiles");
@@ -37,4 +36,4 @@ public static class Configure
             Directory.CreateDirectory(fileStoragePath);
         }
     }
-} 
+}

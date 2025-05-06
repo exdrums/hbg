@@ -1,147 +1,150 @@
-# Chat Microservice
+# Chat Functionality
 
-This microservice provides real-time chat functionality for the application. It uses SignalR for real-time communication and integrates with the Angular client via DevExtreme UI components.
-
-## Features
-
-- Real-time messaging between users
-- Group conversations
-- AI assistant integration
-- Typing indicators
-- Read receipts
-- File attachments
-- Message history
-- OIDC authentication integration
+This document provides an overview of the refactored chat functionality for the HBG application.
 
 ## Architecture
 
-The chat microservice follows a clean architecture approach:
+The chat system has been refactored to follow Domain-Driven Design (DDD) principles with a clean architecture approach. The main components are:
 
-- **Domain Layer**: Entity models and domain logic
-- **Application Layer**: Services that orchestrate the domain operations
-- **Infrastructure Layer**: External integrations and technical implementations
-- **API Layer**: REST controllers and SignalR hub
+### Domain Layer
 
-## Configuration
+- **Domain Models**: Represents the core business entities such as `User`, `Conversation`, `Message`, and `Alert`.
+- **Repository Interfaces**: Defines contracts for data access operations.
 
-The service is configured through the `appsettings.json` file:
+### Application Layer
+
+- **Application Services**: Implements business logic and coordinates the domain layer.
+- **DTOs**: Data Transfer Objects for communication with the presentation layer.
+
+### Infrastructure Layer
+
+- **Repository Implementations**: Concrete implementations of the repository interfaces.
+- **SignalR Hub**: Real-time communication infrastructure.
+- **External Services**: Implementation of external service integrations.
+
+### Presentation Layer
+
+- **REST API Controllers**: HTTP endpoints for client applications.
+- **SignalR Hub**: Real-time messaging endpoints.
+
+## Key Features
+
+- **Real-time Messaging**: Users can send and receive messages in real time.
+- **Typing Indicators**: Shows when users are typing.
+- **Read Receipts**: Tracks when messages are read by recipients.
+- **Alerts and Notifications**: Notifies users of new messages and other events.
+- **AI Assistant**: Integration with an AI service for conversational assistance.
+- **File Attachments**: Support for sharing files in conversations.
+
+## Implementation Details
+
+### Core Services
+
+1. **ChatService**: Main service for chat operations.
+2. **UserService**: Manages user-related operations.
+3. **MessageService**: Handles message creation, editing, and retrieval.
+4. **AlertService**: Manages alerts and notifications.
+5. **ReadReceiptService**: Tracks message read status.
+6. **TypingService**: Manages typing indicators.
+7. **AuthenticationService**: Handles authorization checks.
+8. **AiAssistantService**: Integrates with AI services for conversational assistance.
+
+### Real-time Communication
+
+The chat system uses SignalR for real-time communication between clients and the server. The main components are:
+
+1. **ChatHub**: SignalR hub for chat operations.
+2. **ConnectionManager**: Manages client connections.
+3. **NotificationService**: Sends real-time notifications to clients.
+
+### Data Persistence
+
+The current implementation uses in-memory repositories for simplicity, but these can be replaced with database implementations. The repositories are:
+
+1. **UserRepository**: Stores user data.
+2. **ConversationRepository**: Stores conversation data.
+3. **MessageRepository**: Stores message data.
+4. **AlertRepository**: Stores alert data.
+
+## Getting Started
+
+### Prerequisites
+
+- .NET 6.0 SDK or later
+- An OpenID Connect identity provider (e.g., Identity Server)
+
+### Configuration
+
+1. Configure the application settings in `appsettings.json`:
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=chat;Username=postgres;Password=postgres"
-  },
-  "AppSettings": {
-    "HBGIDENTITY": "http://localhost:5000",
-    "AUDIENCE": "api_contacts",
-    "HBGSPA": "http://localhost:4200",
-    "HBGSPADEV": "http://localhost:4200"
-  },
-  "FileStorage": {
-    "BasePath": "./ChatFiles",
-    "MaxFileSizeMB": 5,
-    "AllowedExtensions": [".jpg", ".jpeg", ".png", ".gif", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt", ".csv", ".zip"]
+    "DefaultConnection": "Your database connection string"
   },
   "AiAssistant": {
-    "Endpoint": "https://public-api.devexpress.com/demo-openai",
-    "ApiKey": "DEMO",
-    "DeploymentName": "gpt-4o-mini",
-    "MaxTokens": 1000,
+    "Endpoint": "Your AI service endpoint",
+    "ApiKey": "Your AI service API key",
+    "DeploymentName": "Your deployment name",
+    "MaxRequestsPerHour": 10,
+    "MaxTokens": 2000,
     "Temperature": 0.7,
-    "ApiVersion": "2024-02-01",
-    "RequestLimitPerMinute": 5,
-    "RequestLimitCooldownMinutes": 1
+    "SystemPrompt": "You are a helpful assistant."
+  },
+  "FileStorage": {
+    "BasePath": "Path to file storage directory"
   }
 }
 ```
 
-## API Endpoints
+2. Configure authentication in the `ConfigureServices` method in `Services.cs`.
 
-### REST API
+### Starting the Server
 
-- `POST /api/files/upload/{conversationId}` - Upload a file to a conversation
-- `GET /api/files/{fileId}` - Download a file
+1. Navigate to the project directory.
+2. Run the application:
 
-### SignalR Hub Methods
-
-#### Connection Management
-- `JoinConversation(string conversationId)` - Join a specific conversation
-- `LeaveConversation(string conversationId)` - Leave a conversation
-
-#### Conversation Operations
-- `LoadConversations()` - Get all conversations for the current user
-- `CreateConversation(string[] participantIds, string title)` - Create a new conversation
-- `CreateAiAssistantConversation(string title)` - Create a new AI assistant conversation
-
-#### Messaging
-- `SendMessage(string conversationId, string text, string parentMessageId)` - Send a message
-- `SendMessageToAi(string conversationId, string text)` - Send a message to AI assistant
-- `RegenerateAiResponse(string conversationId, string messageId)` - Regenerate an AI response
-
-#### Typing Indicators
-- `UserStartedTyping(string conversationId)` - Indicate that user started typing
-- `UserStoppedTyping(string conversationId)` - Indicate that user stopped typing
-
-#### Read Receipts
-- `MarkAsRead(string conversationId)` - Mark messages as read
-- `GetReadReceipts(string conversationId)` - Get read receipts for a conversation
-
-#### File Handling
-- `IsFileMessage(string messageText)` - Check if a message contains a file
-- `GetFileInfo(string messageText)` - Extract file information from a message
-
-### SignalR Client Events
-
-- `ReceiveMessage` - When a new message is received
-- `LoadMessages` - When loading message history
-- `UserStartedTyping` - When a user starts typing
-- `UserStoppedTyping` - When a user stops typing
-- `AlertsChanged` - When user alerts change
-- `ReadReceiptsUpdated` - When read receipts change
-- `ConversationCreated` - When a new conversation is created
-- `ConversationUpdated` - When a conversation is updated
-- `ConversationArchived` - When a conversation is archived
-- `ConversationRestored` - When a conversation is restored
-
-## Angular Integration
-
-This microservice integrates with an Angular client using:
-
-1. DevExtreme Chat component
-2. Custom SignalR data stores (ChatMessageStore, ChatConversationStore)
-3. SignalR connection service
-
-To use the chat in an Angular component:
-
-```typescript
-import { ChatSignalRService } from '../services/chat-signalr.service';
-
-@Component({...})
-export class MyComponent {
-  conversation: Conversation;
-  messageDataSource: any;
-
-  constructor(private chatService: ChatSignalRService) {}
-
-  ngOnInit() {
-    // Get a conversation
-    this.chatService.getConversation('conversation-id').then(conversation => {
-      this.conversation = conversation;
-      
-      // Create a data source for messages
-      this.messageDataSource = this.chatService.createMessageDataSource(
-        conversation.id,
-        conversation.type
-      );
-    });
-  }
-}
+```bash
+dotnet run
 ```
 
-## Development
+### Client Integration
 
-To run the service:
+Clients can interact with the chat system through:
 
-1. Update the connection string in `appsettings.json`
-2. Run the service: `dotnet run`
-3. The SignalR hub will be available at `/chathub`
+1. **REST API**: HTTP endpoints for CRUD operations.
+2. **SignalR Hub**: Real-time communication for chat operations.
+
+#### SignalR Hub Methods
+
+- `JoinConversation(string conversationId)`: Joins a conversation.
+- `LeaveConversation(string conversationId)`: Leaves a conversation.
+- `LoadConversations()`: Gets all conversations for the current user.
+- `SendMessage(string conversationId, string text, string parentMessageId)`: Sends a message.
+- `UserStartedTyping(string conversationId)`: Indicates user started typing.
+- `UserStoppedTyping(string conversationId)`: Indicates user stopped typing.
+- `MarkAsRead(string conversationId)`: Marks messages as read.
+
+#### SignalR Hub Events
+
+- `ReceiveMessage(string conversationId, MessageDto message)`: Notifies of new messages.
+- `UsersTyping(string conversationId, UserDto[] users)`: Notifies of users typing.
+- `ReadReceiptsUpdated(string conversationId, Dictionary<string, DateTime> readReceipts)`: Notifies of read receipt updates.
+- `AlertsChanged(AlertDto[] alerts)`: Notifies of alert changes.
+
+## Example Usage
+
+See the `Examples/ChatClient.cs` file for a complete example of how to use the chat functionality.
+
+## Future Improvements
+
+1. **Database Persistence**: Replace in-memory repositories with database implementations.
+2. **Authentication**: Enhance authentication and authorization.
+3. **File Uploads**: Improve file attachment handling.
+4. **Message Encryption**: Add end-to-end encryption for messages.
+5. **Push Notifications**: Add support for mobile push notifications.
+6. **Message Search**: Implement full-text search for messages.
+7. **Group Management**: Enhanced group conversation management.
+8. **Message Reactions**: Add support for message reactions.
+9. **Message Formatting**: Support for rich text and markdown in messages.
+10. **Threading**: Improved support for message threads and replies.
