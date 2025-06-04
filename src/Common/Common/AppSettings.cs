@@ -5,6 +5,7 @@ namespace API.Common
         public string HBGDB { get; set; } = "";
         public string HBGPROJECTSDB { get; set; } = "";
         public string HBGEMAILERDB { get; set; } = "";
+        public string HBGCONTACTSDB { get; set; } = "";
 
         public string HBGSPA { get; set; } = "";
         public string HBGSPADEV { get; set; } = "";
@@ -13,6 +14,7 @@ namespace API.Common
         public string HBGFILES { get; set; } = "";
         public string HBGPROJECTS { get; set; } = "";
         public string HBGEMAILER { get; set; } = "";
+        public string HBGCONTACTS { get; set; } = "";
         
         public string BASEDIR { get; set; } = "";
         public string AUDIENCE { get; set; } = "";

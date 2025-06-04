@@ -1,0 +1,191 @@
+<div class="chat-view-container" [class.read-only]="isReadOnly">
+  <!-- Chat Header -->
+  <div class="chat-header" *ngIf="config.showHeader">
+    <div class="header-left">
+      <dx-button
+        icon="back"
+        stylingMode="text"
+        (onClick)="onBackClick()">
+      </dx-button>
+      <div class="conversation-info">
+        <h3>{{ getConversationTitle() }}</h3>
+        <div class="conversation-status" *ngIf="getStatusText()">
+          <span class="status-indicator" [class]="getStatusClass()"></span>
+          <span class="status-text">{{ getStatusText() }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <!-- AI Thinking Indicator -->
+      <div class="ai-thinking" *ngIf="isAIThinking">
+        <dx-load-indicator height="20" width="20"></dx-load-indicator>
+        <span>AI is thinking...</span>
+      </div>
+      
+      <!-- Custom Header Actions -->
+      <dx-button
+        *ngFor="let action of config.headerActions"
+        [text]="action.text"
+        [icon]="action.icon"
+        stylingMode="text"
+        (onClick)="action.onClick()">
+      </dx-button>
+      
+      <!-- Default Actions -->
+      <dx-button
+        icon="preferences"
+        hint="Conversation Settings"
+        stylingMode="text"
+        (onClick)="onSettingsClick()">
+      </dx-button>
+    </div>
+  </div>
+
+  <!-- Main Chat Component -->
+  <dx-chat
+    #chat
+    [user]="currentUser"
+    [dataSource]="dataSource"
+    [showAvatar]="true"
+    [showUserName]="true"
+    [showDayHeaders]="true"
+    [showMessageTimestamp]="true"
+    [disabled]="isReadOnly"
+    [height]="chatHeight"
+    (onMessageSend)="onMessageSend($event)"
+    (onTypingStart)="onTypingStart()"
+    (onTypingEnd)="onTypingEnd()"
+    class="chat-component">
+    
+    <!-- Custom Message Template -->
+    <div *dxTemplate="let message of 'message'">
+      <div class="message-wrapper" 
+            [class.own-message]="isOwnMessage(message)"
+            [class.system-message]="message.author.id === 'SYSTEM'"
+            [class.pending-message]="message.customData?.isPending"
+            [class.failed-message]="message.customData?.error"
+            (contextmenu)="onMessageContextMenu($event, message)">
+        
+        <!-- Reply Reference -->
+        <div class="reply-reference" *ngIf="message.customData?.replyTo">
+          <i class="dx-icon dx-icon-comment"></i>
+          <div class="reply-content">
+            <span class="reply-author">{{ message.customData.replyTo.author }}</span>
+            <span class="reply-text">{{ message.customData.replyTo.text }}</span>
+          </div>
+        </div>
+        
+        <!-- Message Content Based on Type -->
+        <div class="message-content" [ngSwitch]="message.customData?.type">
+          <!-- Text Message -->
+          <div *ngSwitchCase="'Text'" class="text-message">
+            <span class="message-text" [innerHTML]="formatMessageText(message.text)"></span>
+          </div>
+          
+          <!-- Image Message -->
+          <div *ngSwitchCase="'Image'" class="image-message">
+            <img [src]="message.customData.metadata?.file?.fileUrl" 
+                  [alt]="message.text"
+                  (click)="onImageClick(message)">
+            <span class="image-caption" *ngIf="message.text">{{ message.text }}</span>
+          </div>
+          
+          <!-- File Message -->
+          <div *ngSwitchCase="'File'" class="file-message">
+            <i class="dx-icon dx-icon-doc"></i>
+            <div class="file-info">
+              <span class="file-name">{{ message.text }}</span>
+              <span class="file-size">{{ formatFileSize(message.customData.metadata?.file?.fileSize) }}</span>
+            </div>
+            <dx-button
+              icon="download"
+              stylingMode="text"
+              (onClick)="onFileDownload(message)">
+            </dx-button>
+          </div>
+          
+          <!-- System Message -->
+          <div *ngSwitchCase="'System'" class="system-message-content">
+            <i class="dx-icon dx-icon-info"></i>
+            <span>{{ message.text }}</span>
+          </div>
+          
+          <!-- Alert Message -->
+          <div *ngSwitchCase="'Alert'" class="alert-message" [class]="getAlertClass(message)">
+            <i class="dx-icon" [class]="getAlertIcon(message)"></i>
+            <span>{{ message.text }}</span>
+          </div>
+          
+          <!-- Default -->
+          <div *ngSwitchDefault class="text-message">
+            <span class="message-text">{{ message.text }}</span>
+          </div>
+        </div>
+        
+        <!-- Message Info -->
+        <div class="message-info">
+          <span class="message-time">{{ formatTime(message.timestamp) }}</span>
+          
+          <!-- Edited Indicator -->
+          <span class="edited-indicator" *ngIf="message.customData?.editedAt">
+            (edited)
+          </span>
+          
+          <!-- Read Receipts -->
+          <span class="read-receipts" *ngIf="config.showReadReceipts && isOwnMessage(message)">
+            <i class="dx-icon dx-icon-check" 
+                *ngIf="message.customData?.readByUserIds?.length > 1"
+                [class.all-read]="isMessageReadByAll(message)">
+            </i>
+          </span>
+          
+          <!-- Error Indicator -->
+          <span class="error-indicator" *ngIf="message.customData?.error">
+            <i class="dx-icon dx-icon-warning" 
+                [title]="message.customData.error.message">
+            </i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </dx-chat>
+
+  <!-- Typing Indicators -->
+  <div class="typing-indicators" *ngIf="config.showTypingIndicators && typingUsers.length > 0">
+    <div class="typing-animation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <span class="typing-text">{{ getTypingText() }}</span>
+  </div>
+
+  <!-- Read-Only Notice -->
+  <div class="read-only-notice" *ngIf="isReadOnly">
+    <i class="dx-icon dx-icon-info"></i>
+    <span>{{ readOnlyMessage }}</span>
+  </div>
+
+  <!-- Message Context Menu -->
+  <dx-context-menu
+    #contextMenu
+    [dataSource]="contextMenuItems"
+    [visible]="false"
+    [target]="contextMenuTarget"
+    (onItemClick)="onContextMenuItemClick($event)">
+  </dx-context-menu>
+
+  <!-- Image Preview Popup -->
+  <dx-popup
+    [(visible)]="showImagePreview"
+    [width]="'90%'"
+    [height]="'90%'"
+    [showTitle]="false"
+    [showCloseButton]="true"
+    [dragEnabled]="false">
+    <div class="image-preview">
+      <img [src]="previewImageUrl" alt="Image preview">
+    </div>
+  </dx-popup>
+</div>

@@ -29,6 +29,7 @@ public class ClientAppSettings
         HBGFILES = settings.HBGFILES;
         HBGPROJECTS = settings.HBGPROJECTS;
         HBGEMAILER = settings.HBGEMAILER;
+        HBGCONTACTS = settings.HBGCONTACTS;
     }
     public string HBGSPA { get; set; } = "";
     public string HBGSPADEV { get; set; } = "";
@@ -37,6 +38,7 @@ public class ClientAppSettings
     public string HBGFILES { get; set; } = "";
     public string HBGPROJECTS { get; set; } = "";
     public string HBGEMAILER { get; set; } = "";
+    public string HBGCONTACTS { get; set; } = "";
 
 }
 

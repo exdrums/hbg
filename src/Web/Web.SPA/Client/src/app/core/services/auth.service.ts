@@ -36,10 +36,11 @@ export class AuthService {
       // such applications.
       dummyClientSecret: "js_secret",
 
-      scope: "openid profile email roles offline_access api_files api_projects api_emailer",
+      scope: "openid profile email roles offline_access api_files api_projects api_emailer api_contacts",
       showDebugInformation: true,
       oidc: false,
-      useSilentRefresh: true
+      useSilentRefresh: true,
+      
     };
 
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgidentity);
@@ -47,6 +48,7 @@ export class AuthService {
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgprojects);
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgemailer);
 
+    this.moduleConfig.resourceServer.sendAccessToken = true;
 
     this.auth.setStorage(sessionStorage);
 
@@ -109,7 +111,10 @@ export class AuthService {
       });
   }
 
-  public readonly getToken = () => this.auth.getAccessToken();
+  public readonly getToken = () => {
+    console.log('GetToken', this.auth.getAccessToken());
+    return this.auth.getAccessToken();
+  }
 
   public changePassword(psw: string, code: string) {
     this.notification.newMessage$.next("Change password not implemented");

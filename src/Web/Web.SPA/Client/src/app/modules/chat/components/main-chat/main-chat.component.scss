@@ -1,0 +1,539 @@
+/**
+ * Main Chat Component Styles
+ * 
+ * Provides comprehensive styling for the chat interface including:
+ * - Responsive tabbed layout
+ * - Connection status indicators
+ * - Conversation list styling
+ * - Chat interface styling
+ * - Alert and notification styling
+ * - Mobile-friendly responsive design
+ */
+
+.chat-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+  position: relative;
+
+  // Connection Status Indicator
+  .connection-status {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: 1000;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+
+    &.connected {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+
+      .dx-icon {
+        color: #28a745;
+      }
+    }
+
+    &.disconnected {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      animation: pulse 2s infinite;
+
+      .dx-icon {
+        color: #dc3545;
+      }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+  }
+
+  // Tab Panel Styling
+  .chat-tab-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .dx-tabpanel-tabs {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e9ecef;
+      padding: 0 20px;
+
+      .dx-tab {
+        &.dx-state-selected {
+          border-bottom-color: #007bff;
+        }
+      }
+    }
+
+    .tab-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+
+      .tab-text {
+        font-weight: 500;
+      }
+
+      .badge {
+        background-color: #dc3545;
+        color: white;
+        border-radius: 10px;
+        padding: 2px 6px;
+        font-size: 11px;
+        font-weight: 600;
+        min-width: 18px;
+        text-align: center;
+      }
+    }
+
+    .dx-tabpanel-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  // Tab Content Styling
+  .tab-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  // Conversation List Container
+  .conversation-list-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e9ecef;
+
+      h3 {
+        margin: 0;
+        color: #495057;
+        font-weight: 600;
+      }
+    }
+
+    // Conversations Grid Styling
+    .conversations-grid {
+      flex: 1;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      .dx-datagrid-rowsview {
+        .dx-row {
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            background-color: #f8f9fa;
+          }
+
+          &.unread-conversation {
+            background-color: #e3f2fd;
+            font-weight: 600;
+
+            &:hover {
+              background-color: #bbdefb;
+            }
+          }
+        }
+      }
+
+      // Custom cell templates
+      .conversation-cell {
+        display: flex;
+        flex-direction: column;
+        padding: 8px 0;
+        position: relative;
+
+        .conversation-title {
+          font-weight: 500;
+          color: #212529;
+          margin-bottom: 2px;
+        }
+
+        .conversation-subtitle {
+          font-size: 12px;
+          color: #6c757d;
+        }
+
+        .unread-indicator {
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          background-color: #007bff;
+          color: white;
+          border-radius: 12px;
+          padding: 2px 8px;
+          font-size: 11px;
+          font-weight: 600;
+        }
+      }
+
+      .last-message {
+        .deleted-message {
+          font-style: italic;
+          color: #6c757d;
+        }
+      }
+
+      .status-badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+
+        &.status-open {
+          background-color: #d4edda;
+          color: #155724;
+        }
+
+        &.status-closed {
+          background-color: #f8d7da;
+          color: #721c24;
+        }
+      }
+    }
+  }
+
+  // Chat Container Styling
+  .chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e9ecef;
+      gap: 15px;
+
+      h3 {
+        flex: 1;
+        margin: 0;
+        color: #495057;
+        font-weight: 600;
+      }
+
+      .chat-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .chat-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .ai-indicator {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 4px 8px;
+          background-color: #e8f4f8;
+          border-radius: 12px;
+          font-size: 12px;
+          color: #0c5460;
+
+          .dx-icon {
+            color: #17a2b8;
+          }
+        }
+      }
+    }
+
+    // DevExtreme Chat Component Styling
+    .chat-component {
+      flex: 1;
+      
+      &.ai-chat {
+        .dx-chat-messagelist {
+          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+      }
+
+      .dx-chat-messagelist {
+        padding: 20px;
+      }
+
+      .dx-chat-message {
+        margin-bottom: 15px;
+
+        .dx-chat-message-content {
+          max-width: 70%;
+          border-radius: 12px;
+          padding: 12px 16px;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        &.dx-chat-message-own {
+          .dx-chat-message-content {
+            background-color: #007bff;
+            color: white;
+          }
+        }
+
+        &:not(.dx-chat-message-own) {
+          .dx-chat-message-content {
+            background-color: #ffffff;
+            color: #212529;
+            border: 1px solid #e9ecef;
+          }
+        }
+      }
+
+      .dx-chat-messagebox {
+        border-top: 1px solid #e9ecef;
+        padding: 15px 20px;
+        background-color: #ffffff;
+
+        .dx-texteditor {
+          border-radius: 20px;
+        }
+      }
+    }
+
+    // Custom Message Template Styling
+    .message-wrapper {
+      display: flex;
+      margin-bottom: 15px;
+
+      &.own-message {
+        justify-content: flex-end;
+
+        .message-content {
+          background-color: #007bff;
+          color: white;
+          border-radius: 18px 18px 4px 18px;
+        }
+      }
+
+      &:not(.own-message) {
+        justify-content: flex-start;
+
+        .message-content {
+          background-color: #ffffff;
+          color: #212529;
+          border: 1px solid #e9ecef;
+          border-radius: 18px 18px 18px 4px;
+        }
+      }
+
+      .message-content {
+        max-width: 70%;
+        padding: 12px 16px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+        .message-text {
+          margin-bottom: 4px;
+          line-height: 1.4;
+        }
+
+        .message-info {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 11px;
+          opacity: 0.7;
+
+          .message-status {
+            .dx-icon {
+              color: #28a745;
+            }
+          }
+        }
+      }
+    }
+
+    // Typing Indicators
+    .typing-indicators {
+      padding: 10px 20px;
+      background-color: #f8f9fa;
+      border-top: 1px solid #e9ecef;
+      font-size: 13px;
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    // Read-only Notice
+    .read-only-notice {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 15px 20px;
+      background-color: #fff3cd;
+      border-top: 1px solid #ffeaa7;
+      color: #856404;
+      font-size: 14px;
+
+      .dx-icon {
+        color: #ffc107;
+      }
+    }
+  }
+
+  // Dialog Styling
+  .dx-popup-content {
+    .popup-content {
+      padding: 20px;
+
+      .dx-form {
+        .dx-field-item {
+          margin-bottom: 20px;
+        }
+      }
+    }
+
+    .popup-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 15px 20px;
+      border-top: 1px solid #e9ecef;
+      background-color: #f8f9fa;
+    }
+  }
+}
+
+// Mobile Responsive Design
+@media (max-width: 768px) {
+  .chat-container {
+    .connection-status {
+      top: 5px;
+      right: 10px;
+      font-size: 10px;
+    }
+
+    .conversation-list-container {
+      padding: 10px;
+
+      .list-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+
+        h3 {
+          text-align: center;
+        }
+      }
+    }
+
+    .chat-container {
+      .chat-header {
+        padding: 10px 15px;
+
+        h3 {
+          font-size: 16px;
+        }
+      }
+
+      .message-wrapper {
+        .message-content {
+          max-width: 85%;
+          padding: 10px 14px;
+        }
+      }
+    }
+
+    .tab-header {
+      padding: 6px 8px;
+
+      .tab-text {
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-container {
+    .tab-header {
+      .tab-text {
+        display: none; // Hide text on very small screens, show only icons
+      }
+    }
+
+    .conversation-list-container {
+      .conversations-grid {
+        .conversation-cell {
+          .conversation-title {
+            font-size: 14px;
+          }
+
+          .conversation-subtitle {
+            font-size: 11px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .chat-container {
+    background-color: #1a1a1a;
+    color: #ffffff;
+
+    .conversation-list-container {
+      .conversations-grid {
+        background-color: #2d2d2d;
+        
+        .dx-datagrid-rowsview .dx-row {
+          &:hover {
+            background-color: #3a3a3a;
+          }
+
+          &.unread-conversation {
+            background-color: #1e3a5f;
+          }
+        }
+      }
+    }
+
+    .chat-container {
+      background-color: #2d2d2d;
+
+      .chat-header {
+        background-color: #2d2d2d;
+        border-bottom-color: #404040;
+      }
+
+      .chat-component {
+        .dx-chat-messagebox {
+          background-color: #2d2d2d;
+          border-top-color: #404040;
+        }
+      }
+    }
+  }
+}

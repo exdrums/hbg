@@ -1,13 +1,16 @@
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using API.Common;
-using API.Contacts.Infrastructure.DependencyInjection;
-using API.Contacts.Infrastructure.SignalR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Serialization;
+using API.Contacts.Data;
+using Microsoft.EntityFrameworkCore;
+using API.Contacts.Services.Interfaces;
+using API.Contacts.Services;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.SignalR;
+using Common.WebSocket;
 
 namespace API.Contacts;
 
@@ -15,26 +18,77 @@ public static class ConfigureServices
 {
     public static void RegisterServices(this IServiceCollection services, IConfiguration config)
     {
-        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+        // JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         var appSettings = services.ConfigureAppSettings(config);
+        RegisterCors(services, appSettings);
         RegisterIdentity(services, appSettings);
         RegisterSwagger(services, appSettings);
-        RegisterCors(services, appSettings);
-        RegisterChatServices(services, config);
+        RegisterChatServices(services, appSettings);
+        RegisterSignalR(services, appSettings);
 
         // to access HttpContext from all services
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-        services.AddControllers();
+        RegisterAdditional(services, appSettings);
     }
 
     private static void RegisterIdentity(IServiceCollection services, AppSettings appSettings)
     {
-        services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
         {
             options.Authority = appSettings.HBGIDENTITY;
             options.RequireHttpsMetadata = false;
             options.Audience = appSettings.AUDIENCE;
+
+            // Configure for SignalR
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    // Read token from query string for SignalR
+                    var accessToken = context.Request.Query["access_token"];
+                    var path = context.HttpContext.Request.Path;
+
+                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                    {
+                        context.Token = accessToken;
+                    }
+
+                    return Task.CompletedTask;
+                }
+            };
+
+            // Token validation parameters
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                // ValidateAudience = true,
+                // ValidateLifetime = true,
+                // ValidateIssuerSigningKey = true,
+                // ClockSkew = TimeSpan.Zero // Strict token expiration
+            };
+            options.BackchannelHttpHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+        });
+
+        services.AddAuthorization(options =>
+        {
+            // Basic policies
+            // options.AddPolicy("ChatUser", policy => policy.RequireAuthenticatedUser());
+            // options.AddPolicy("ChatSupport", policy => policy.RequireClaim("role", "hbg-chat-support"));
+            // options.AddPolicy("ChatAdmin", policy => policy.RequireClaim("role", "hbg-chat-admin"));
+
+            // // Conversation type specific policies
+            // options.AddPolicy("SupportConversation", policy =>
+            //     policy.RequireAssertion(context =>
+            //         context.User.HasClaim("role", "hbg-chat-support") ||
+            //         context.User.Identity.IsAuthenticated));
         });
     }
 
@@ -83,30 +137,75 @@ public static class ConfigureServices
         });
     }
 
-    public static void RegisterChatServices(IServiceCollection services, IConfiguration configuration)
+    public static void RegisterChatServices(IServiceCollection services, AppSettings appSettings)
     {
-        // Register all chat services from our refactored architecture
-        services.AddChatServices();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        // services.AddSingleton<IUserIdProvider, UserIdProvider>();
+        // Add Entity Framework Core
+        services.AddDbContext<ChatDbContext>(options =>
+        {
+            options.UseNpgsql(appSettings.HBGCONTACTSDB);
+        });
 
-        // Register AI assistant configuration
-        services.Configure<AiAssistantOptions>(configuration.GetSection("AiAssistant"));
+        // Register services with appropriate lifetimes
+        // Scoped services (per request/connection)
+        services.AddScoped<IConversationService, ConversationService>();
+        services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IAlertService, AlertService>(); // New alert service
 
-        // Register SignalR hub
+        // Singleton services (shared across all requests)
+        services.AddSingleton<IUserConnectionService, UserConnectionService>();
+
+        // Background services for maintenance and cleanup
+        // services.AddHostedService<ConnectionCleanupService>();
+        // services.AddHostedService<MessageRetentionService>();
+        // services.AddHostedService<AlertCleanupService>();
+    }
+
+    private static void RegisterSignalR(IServiceCollection services, AppSettings appSettings)
+    {
+        // Add SignalR with enhanced configuration
         services.AddSignalR(options =>
         {
+            // Configure SignalR options
             options.EnableDetailedErrors = true;
-            options.MaximumReceiveMessageSize = 102400; // 100 KB
+            // options.MaximumReceiveMessageSize = 102400; // 100KB
+            // options.StreamBufferCapacity = 10;
+
+            // // Configure timeouts
+            // options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+            // options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+
+            // // Additional configuration for chat functionality
+            // options.MaximumParallelInvocationsPerClient = 1;
+            // options.HandshakeTimeout = TimeSpan.FromSeconds(15);
+        })
+        .AddJsonProtocol(options =>
+        {
+            // // Configure JSON serialization for SignalR
+            // options.PayloadSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            // options.PayloadSerializerOptions.PropertyNamingPolicy = null; // Keep property names as-is
+            // options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // Serialize enums as strings
+            // options.PayloadSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         });
     }
-}
 
-public class AiAssistantOptions
-{
-    public string Endpoint { get; set; }
-    public string ApiKey { get; set; }
-    public string DeploymentName { get; set; }
-    public int MaxRequestsPerHour { get; set; } = 10;
-    public int MaxTokens { get; set; } = 2000;
-    public float Temperature { get; set; } = 0.7f;
-    public string SystemPrompt { get; set; } = "You are a helpful assistant.";
+    private static void RegisterAdditional(IServiceCollection services, AppSettings appSettings)
+    {
+        // Add health checks
+        services.AddHealthChecks()
+            .AddDbContextCheck<ChatDbContext>("database")
+            .AddCheck("signalr", () => HealthCheckResult.Healthy("SignalR is ready"))
+            .AddCheck("alert-service", () => HealthCheckResult.Healthy("Alert service is ready"));
+
+        // Add controllers for any REST endpoints
+        services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            options.JsonSerializerOptions.PropertyNamingPolicy = null; // Keep property names as-is
+        });
+        // Add API documentation with enhanced security definitions
+        services.AddEndpointsApiExplorer();
+    }
 }

@@ -10,7 +10,7 @@ import { ChangePasswordFormComponent } from './modules/auth/change-password-form
 import { ShellComponent } from './modules/shell/shell.component';
 import { ProjectsComponent } from './modules/projects/projects.component';
 import { EmailerComponent } from './modules/emailer/emailer.component';
-import { ChatPageComponent } from './modules/chat/chat-page/chat-page.component';
+import { MainChatComponent } from './modules/chat/components/main-chat/main-chat.component';
 
 export const routes: Routes = [
   {
@@ -68,7 +68,7 @@ export const routes: Routes = [
       },
       {
         path: "chat",
-        component: ChatPageComponent
+        component: MainChatComponent
       }
       // {
       //   path: 'scheduler',

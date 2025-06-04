@@ -1,0 +1,255 @@
+<div class="chat-container">
+  <!-- Connection Status Indicator -->
+  <div class="connection-status" [class.connected]="isConnected$ | async"
+    [class.disconnected]="!(isConnected$ | async)">
+    <dx-tooltip target=".connection-status" [showEvent]="'dxhoverstart'" [hideEvent]="'dxhoverend'" position="bottom">
+      <div *dxTemplate="let data of 'content'">
+        {{ (isConnected$ | async) ? 'Connected to chat service' : 'Disconnected from chat service' }}
+      </div>
+    </dx-tooltip>
+    <i class="dx-icon" [class.dx-icon-check]="isConnected$ | async" [class.dx-icon-close]="!(isConnected$ | async)"></i>
+  </div>
+
+  <!-- Main Chat Interface -->
+  <dx-tab-panel #tabPanel [dataSource]="tabs" [selectedIndex]="selectedTabIndex" [showNavButtons]="false"
+    [swipeEnabled]="false" [loop]="false" (onSelectionChanged)="onTabSelectionChanged($event)" class="chat-tab-panel">
+
+    <!-- Tab Template -->
+    <div *dxTemplate="let tab of 'title'">
+      <div class="tab-header">
+        <i class="dx-icon" [class]="'dx-icon-' + tab.icon"></i>
+        <span class="tab-text">{{ tab.text }}</span>
+        <span class="badge" *ngIf="tab.badge && tab.badge > 0">{{ tab.badge }}</span>
+      </div>
+    </div>
+
+    <!-- Contacts Tab Content -->
+    <div *dxTemplate="let item of 'item'" [ngSwitch]="item.id">
+      <div *ngSwitchCase="'Contacts'" class="tab-content">
+        <div [ngSwitch]="currentViewMode">
+          <!-- Contacts Conversation List -->
+          <div *ngSwitchCase="'list'" class="conversation-list-container">
+            <div class="list-header">
+              <h3>Contacts</h3>
+              <dx-button text="New Chat" icon="plus" type="default" stylingMode="outlined"
+                (onClick)="showCreateConversationDialog(ConversationType.Contacts)">
+              </dx-button>
+            </div>
+
+            <dx-data-grid [dataSource]="conversationsService.contactsDataSource" [showBorders]="false"
+              [rowAlternationEnabled]="false" [hoverStateEnabled]="true" [selection]="{ mode: 'single' }"
+              (onRowClick)="onConversationSelected($event)" (onRowPrepared)="onRowPrepared($event)"
+              class="conversations-grid">
+
+              <!-- Conversation Title Column -->
+              <dxi-column dataField="title" caption="Conversation" [cellTemplate]="'conversationCellTemplate'">
+              </dxi-column>
+
+              <!-- Last Message Column -->
+              <dxi-column dataField="lastMessagePreview" caption="Last Message"
+                [cellTemplate]="'lastMessageCellTemplate'">
+              </dxi-column>
+
+              <!-- Time Column -->
+              <dxi-column dataField="lastMessageAt" caption="Time" dataType="datetime" format="shortTime" width="80">
+              </dxi-column>
+
+              <!-- Custom Cell Templates -->
+              <div *dxTemplate="let data of 'conversationCellTemplate'">
+                <div class="conversation-cell">
+                  <div class="conversation-title">{{ getConversationDisplayTitle(data.data) }}</div>
+                  <div class="conversation-subtitle" *ngIf="data.data.type === 'Group'">
+                    {{ data.data.participantIds?.length || 0 }} participants
+                  </div>
+                  <span class="unread-indicator" *ngIf="data.data.unreadCount > 0">
+                    {{ data.data.unreadCount }}
+                  </span>
+                </div>
+              </div>
+
+              <div *dxTemplate="let data of 'lastMessageCellTemplate'">
+                <div class="last-message">
+                  <span [class.deleted-message]="data.data.lastMessagePreview === 'Message deleted'">
+                    {{ data.data.lastMessagePreview || 'No messages yet' }}
+                  </span>
+                </div>
+              </div>
+            </dx-data-grid>
+          </div>
+
+          <!-- Chat View -->
+          <div *ngSwitchCase="'chat'" class="chat-container">
+            <div class="chat-header">
+              <dx-button icon="back" text="Back" stylingMode="text" (onClick)="returnToConversationList()">
+              </dx-button>
+              <h3>{{ getConversationDisplayTitle(selectedConversation) }}</h3>
+              <div class="chat-actions">
+                <dx-button icon="preferences" hint="Conversation Settings" stylingMode="text"
+                  (onClick)="showConversationSettings()">
+                </dx-button>
+              </div>
+            </div>
+
+            <dx-chat [dataSource]="getCurrentMessageDataSource()" [user]="currentUser" [height]="'calc(100vh - 200px)'"
+              (onMessageSend)="onMessageSend($event)" (onTypingStart)="onTypingStart()" (onTypingEnd)="onTypingEnd()"
+              class="chat-component">
+
+              <!-- Custom Message Template -->
+              <div *dxTemplate="let message of 'message'">
+                <div class="message-wrapper" [class.own-message]="message.author.id === currentUser.id">
+                  <div class="message-content">
+                    <div class="message-text">{{ message.text }}</div>
+                    <div class="message-info">
+                      <span class="message-time">{{ message.timestamp | date:'short' }}</span>
+                      <span class="message-status" *ngIf="message.author.id === currentUser.id">
+                        <i class="dx-icon dx-icon-check" *ngIf="isMessageRead(message)"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </dx-chat>
+
+            <!-- Typing Indicators -->
+            <div class="typing-indicators" *ngIf="getTypingUsers().length > 0">
+              <span>{{ getTypingIndicatorText() }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Tab Content -->
+      <div *ngSwitchCase="'Support'" class="tab-content">
+        <div [ngSwitch]="currentViewMode">
+          <!-- Support Conversation List -->
+          <div *ngSwitchCase="'list'" class="conversation-list-container">
+            <div class="list-header">
+              <h3>Support</h3>
+              <dx-button text="New Ticket" icon="plus" type="default" stylingMode="outlined"
+                (onClick)="showCreateConversationDialog(ConversationType.Support)">
+              </dx-button>
+            </div>
+
+            <dx-data-grid [dataSource]="conversationsService.supportDataSource" [showBorders]="false"
+              [rowAlternationEnabled]="false" [hoverStateEnabled]="true" [selection]="{ mode: 'single' }"
+              (onRowClick)="onConversationSelected($event)" class="conversations-grid">
+
+              <!-- Support-specific columns -->
+              <dxi-column dataField="title" caption="Ticket Subject"></dxi-column>
+              <dxi-column dataField="lastMessagePreview" caption="Last Update"></dxi-column>
+              <dxi-column dataField="lastMessageAt" caption="Updated" dataType="datetime"
+                format="shortTime"></dxi-column>
+              <dxi-column dataField="isActive" caption="Status" [cellTemplate]="'statusCellTemplate'" width="100">
+              </dxi-column>
+
+              <div *dxTemplate="let data of 'statusCellTemplate'">
+                <span class="status-badge" [class.status-open]="data.data.isActive"
+                  [class.status-closed]="!data.data.isActive">
+                  {{ data.data.isActive ? 'Open' : 'Closed' }}
+                </span>
+              </div>
+            </dx-data-grid>
+          </div>
+
+          <!-- Support Chat View -->
+          <div *ngSwitchCase="'chat'" class="chat-container">
+            <!-- Similar to contacts chat but with support-specific features -->
+            <div class="chat-header">
+              <dx-button icon="back" text="Back" stylingMode="text" (onClick)="returnToConversationList()">
+              </dx-button>
+              <h3>{{ selectedConversation?.title }}</h3>
+              <div class="chat-actions">
+                <dx-button text="Close Ticket" type="default" stylingMode="outlined" *ngIf="canCloseSupportTicket()"
+                  (onClick)="closeSupportTicket()">
+                </dx-button>
+              </div>
+            </div>
+
+            <dx-chat [dataSource]="getCurrentMessageDataSource()" [user]="currentUser" [height]="'calc(100vh - 200px)'"
+              [disabled]="!selectedConversation?.isActive" (onMessageSend)="onMessageSend($event)"
+              class="chat-component">
+            </dx-chat>
+
+            <!-- Read-only notice for closed tickets -->
+            <div class="read-only-notice" *ngIf="!selectedConversation?.isActive">
+              <i class="dx-icon dx-icon-info"></i>
+              This support ticket has been closed. You cannot send new messages.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent Tab Content -->
+      <div *ngSwitchCase="'Agent'" class="tab-content">
+        <div [ngSwitch]="currentViewMode">
+          <!-- Agent Conversation List -->
+          <div *ngSwitchCase="'list'" class="conversation-list-container">
+            <div class="list-header">
+              <h3>AI Agent</h3>
+              <dx-button text="New Chat" icon="plus" type="default" stylingMode="outlined"
+                (onClick)="showCreateConversationDialog(ConversationType.Agent)">
+              </dx-button>
+            </div>
+
+            <dx-data-grid [dataSource]="conversationsService.agentDataSource" [showBorders]="false"
+              [rowAlternationEnabled]="false" [hoverStateEnabled]="true" [selection]="{ mode: 'single' }"
+              (onRowClick)="onConversationSelected($event)" class="conversations-grid">
+
+              <dxi-column dataField="title" caption="Chat Topic"></dxi-column>
+              <dxi-column dataField="lastMessagePreview" caption="Last Message"></dxi-column>
+              <dxi-column dataField="lastMessageAt" caption="Time" dataType="datetime" format="shortTime"></dxi-column>
+            </dx-data-grid>
+          </div>
+
+          <!-- Agent Chat View -->
+          <div *ngSwitchCase="'chat'" class="chat-container">
+            <div class="chat-header">
+              <dx-button icon="back" text="Back" stylingMode="text" (onClick)="returnToConversationList()">
+              </dx-button>
+              <h3>{{ selectedConversation?.title }}</h3>
+              <div class="chat-status">
+                <span class="ai-indicator">
+                  <i class="dx-icon dx-icon-favorites"></i>
+                  AI Assistant
+                </span>
+              </div>
+            </div>
+
+            <dx-chat [dataSource]="getCurrentMessageDataSource()" [user]="currentUser" [height]="'calc(100vh - 200px)'"
+              (onMessageSend)="onMessageSend($event)" class="chat-component ai-chat">
+            </dx-chat>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dx-tab-panel>
+
+  <!-- Create Conversation Dialog -->
+  <dx-popup [(visible)]="showCreateDialog" [width]="400" [height]="300" title="Create New Conversation"
+    [showCloseButton]="true" [dragEnabled]="false" [resizeEnabled]="false">
+
+    <div class="popup-content">
+      <dx-form [formData]="createConversationForm" [colCount]="1" labelLocation="top">
+
+        <dxi-item dataField="title" [label]="{ text: getTitleLabel() }"
+          [editorOptions]="{ placeholder: getTitlePlaceholder() }">
+        </dxi-item>
+
+        <dxi-item dataField="participants" [label]="{ text: 'Participants' }" editorType="dxTagBox" [editorOptions]="{ 
+                dataSource: availableUsers,
+                displayExpr: 'name',
+                valueExpr: 'id',
+                placeholder: 'Select participants...'
+              }" *ngIf="createDialogType === 'Contacts'">
+        </dxi-item>
+      </dx-form>
+    </div>
+
+    <div class="popup-footer">
+      <dx-button text="Cancel" stylingMode="outlined" (onClick)="closeCreateDialog()">
+      </dx-button>
+      <dx-button text="Create" type="default" (onClick)="createConversation()">
+      </dx-button>
+    </div>
+  </dx-popup>
+</div>

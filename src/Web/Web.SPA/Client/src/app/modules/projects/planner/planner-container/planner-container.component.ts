@@ -27,7 +27,7 @@ export class PlannerContainerComponent {
   private readonly crdnts = inject(CoordinatesService);
   constructor() { }
 
-  public readonly plan$ = this.ds.selected$.pipe(
+  public readonly plan$ = this.ds.selectedItem$.pipe(
     filter(x => x != null),
     tap(x => console.log('SELECTED', x)),
   );

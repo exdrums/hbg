@@ -22,7 +22,7 @@ export class ArticlesWsDataSource extends CustomDataSource<Article> {
 
   public readonly refresh = () => void this.reload();
 
-  public readonly loadInSelectedPlan$: Observable<Article[]> = this.plansDataSource.selected$.pipe(
+  public readonly loadInSelectedPlan$: Observable<Article[]> = this.plansDataSource.selectedItem$.pipe(
     switchMap(plan => from(this.load()).pipe(
       // filter articles by planID
       map(loadedResult => loadedResult)

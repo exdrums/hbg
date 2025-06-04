@@ -1,0 +1,541 @@
+/**
+ * Styles for the reusable conversation list component
+ * 
+ * This stylesheet follows a modular approach with clear separation of concerns:
+ * - Base styles for the grid structure
+ * - Cell-specific styles for different content types
+ * - State-based styles (unread, selected, closed)
+ * - Type-specific styles (support, agent)
+ * - Responsive design considerations
+ */
+
+.conversation-list-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  // Header section with title and create button
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 15px;
+    border-bottom: 1px solid #e9ecef;
+    background-color: #ffffff;
+
+    h3 {
+      margin: 0;
+      color: #212529;
+      font-weight: 600;
+      font-size: 18px;
+    }
+  }
+
+  // Main grid container
+  .conversations-grid {
+    flex: 1;
+    overflow: hidden;
+
+    // Remove default DevExtreme borders and backgrounds
+    ::ng-deep {
+      .dx-datagrid {
+        border: none;
+        background-color: transparent;
+      }
+
+      .dx-datagrid-headers {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #e9ecef;
+
+        .dx-header-row {
+          font-weight: 600;
+          color: #495057;
+          text-transform: uppercase;
+          font-size: 11px;
+          letter-spacing: 0.5px;
+        }
+      }
+
+      .dx-datagrid-rowsview {
+        .dx-row {
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border-bottom: 1px solid #f0f0f0;
+
+          &:hover {
+            background-color: #f8f9fa;
+          }
+
+          // Unread conversation styling
+          &.unread-conversation {
+            background-color: #e8f4fd;
+            font-weight: 600;
+
+            &:hover {
+              background-color: #d1e9fc;
+            }
+
+            .conversation-title {
+              font-weight: 600;
+            }
+
+            .message-preview {
+              font-weight: 500;
+            }
+          }
+
+          // Selected/focused row
+          &.dx-row-focused,
+          &.dx-selection {
+            background-color: #e3f2fd;
+            
+            &::after {
+              content: '';
+              position: absolute;
+              left: 0;
+              top: 0;
+              bottom: 0;
+              width: 3px;
+              background-color: #2196f3;
+            }
+          }
+
+          // Closed support ticket styling
+          &.closed-conversation {
+            opacity: 0.7;
+            
+            .conversation-title {
+              text-decoration: line-through;
+            }
+          }
+        }
+      }
+
+      // Remove cell borders
+      .dx-datagrid-content .dx-datagrid-table {
+        .dx-row > td {
+          border: none;
+          padding: 12px 16px;
+        }
+      }
+    }
+  }
+
+  // Cell templates styling
+  
+  // Conversation cell with title and metadata
+  .conversation-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0; // Enable text truncation
+
+    .conversation-icon {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #e3f2fd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      .dx-icon {
+        font-size: 20px;
+        color: #1976d2;
+      }
+
+      // Type-specific icon colors
+      &.icon-support {
+        background-color: #fff3cd;
+        .dx-icon { color: #856404; }
+      }
+
+      &.icon-agent {
+        background-color: #e8f5e9;
+        .dx-icon { color: #388e3c; }
+      }
+    }
+
+    .conversation-info {
+      flex: 1;
+      min-width: 0; // Enable text truncation
+
+      .conversation-title {
+        color: #212529;
+        font-size: 14px;
+        line-height: 1.4;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .conversation-subtitle {
+        color: #6c757d;
+        font-size: 12px;
+        margin-top: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .conversation-badges {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .unread-indicator {
+        background-color: #dc3545;
+        color: white;
+        border-radius: 12px;
+        padding: 2px 8px;
+        font-size: 11px;
+        font-weight: 600;
+        min-width: 20px;
+        text-align: center;
+      }
+
+      .conversation-badge {
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+
+        &.badge-support {
+          background-color: #fff3cd;
+          color: #856404;
+        }
+
+        &.badge-agent {
+          background-color: #d4edda;
+          color: #155724;
+        }
+
+        &.badge-default {
+          background-color: #e9ecef;
+          color: #495057;
+        }
+      }
+    }
+  }
+
+  // Last message preview cell
+  .last-message-cell {
+    .message-preview {
+      color: #495057;
+      font-size: 13px;
+      line-height: 1.4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+
+      &.deleted-message {
+        font-style: italic;
+        color: #6c757d;
+      }
+
+      &.system-message {
+        color: #6c757d;
+        font-style: italic;
+      }
+    }
+  }
+
+  // Time cell
+  .time-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+
+    .time-value {
+      color: #6c757d;
+      font-size: 12px;
+    }
+
+    .date-value {
+      color: #adb5bd;
+      font-size: 11px;
+    }
+  }
+
+  // Status badge (Support)
+  .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+
+    &.status-open {
+      background-color: #d1ecf1;
+      color: #0c5460;
+    }
+
+    &.status-closed {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    &.status-pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    &.status-resolved {
+      background-color: #d4edda;
+      color: #155724;
+    }
+  }
+
+  // Priority badge (Support)
+  .priority-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.priority-low {
+      background-color: #e9ecef;
+      color: #495057;
+    }
+
+    &.priority-medium {
+      background-color: #cfe2ff;
+      color: #084298;
+    }
+
+    &.priority-high {
+      background-color: #f8d7da;
+      color: #842029;
+    }
+
+    &.priority-urgent {
+      background-color: #842029;
+      color: white;
+    }
+  }
+
+  // Agent info (AI)
+  .agent-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #388e3c;
+    font-size: 12px;
+
+    .dx-icon {
+      font-size: 16px;
+    }
+  }
+
+  // Token usage (AI)
+  .token-usage {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .usage-bar {
+      width: 80px;
+      height: 6px;
+      background-color: #e9ecef;
+      border-radius: 3px;
+      overflow: hidden;
+
+      .usage-fill {
+        height: 100%;
+        background-color: #4caf50;
+        transition: width 0.3s ease;
+
+        // Color changes based on usage
+        &[style*="width: 7"],
+        &[style*="width: 8"],
+        &[style*="width: 9"] {
+          background-color: #ff9800;
+        }
+
+        &[style*="width: 100"] {
+          background-color: #f44336;
+        }
+      }
+    }
+
+    .usage-text {
+      font-size: 10px;
+      color: #6c757d;
+      text-align: center;
+    }
+  }
+
+  // Empty state
+  .empty-state {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 40px;
+
+    .dx-icon {
+      font-size: 64px;
+      color: #dee2e6;
+      margin-bottom: 20px;
+    }
+
+    p {
+      color: #6c757d;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .conversation-list-container {
+    .list-header {
+      padding: 15px;
+      
+      h3 {
+        font-size: 16px;
+      }
+    }
+
+    .conversations-grid {
+      ::ng-deep {
+        .dx-datagrid-content .dx-datagrid-table {
+          .dx-row > td {
+            padding: 10px 12px;
+          }
+        }
+      }
+    }
+
+    .conversation-cell {
+      .conversation-icon {
+        width: 36px;
+        height: 36px;
+        
+        .dx-icon {
+          font-size: 18px;
+        }
+      }
+
+      .conversation-info {
+        .conversation-title {
+          font-size: 13px;
+        }
+
+        .conversation-subtitle {
+          font-size: 11px;
+        }
+      }
+    }
+
+    // Hide some columns on mobile
+    ::ng-deep {
+      .dx-datagrid-headers .dx-header-row > td:nth-child(n+4) {
+        display: none;
+      }
+      
+      .dx-datagrid-rowsview .dx-row > td:nth-child(n+4) {
+        display: none;
+      }
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .conversation-list-container {
+    .list-header {
+      background-color: #1e1e1e;
+      border-bottom-color: #333;
+
+      h3 {
+        color: #ffffff;
+      }
+    }
+
+    .conversations-grid {
+      ::ng-deep {
+        .dx-datagrid-headers {
+          background-color: #2a2a2a;
+          border-bottom-color: #404040;
+
+          .dx-header-row {
+            color: #b0b0b0;
+          }
+        }
+
+        .dx-datagrid-rowsview {
+          .dx-row {
+            border-bottom-color: #333;
+
+            &:hover {
+              background-color: #2a2a2a;
+            }
+
+            &.unread-conversation {
+              background-color: #1a3a52;
+
+              &:hover {
+                background-color: #225070;
+              }
+            }
+
+            &.dx-row-focused,
+            &.dx-selection {
+              background-color: #2a4158;
+            }
+          }
+        }
+      }
+    }
+
+    .conversation-cell {
+      .conversation-icon {
+        background-color: #2a4158;
+      }
+
+      .conversation-info {
+        .conversation-title {
+          color: #ffffff;
+        }
+
+        .conversation-subtitle {
+          color: #b0b0b0;
+        }
+      }
+    }
+
+    .last-message-cell {
+      .message-preview {
+        color: #d0d0d0;
+
+        &.deleted-message,
+        &.system-message {
+          color: #888;
+        }
+      }
+    }
+
+    .time-cell {
+      .time-value {
+        color: #b0b0b0;
+      }
+
+      .date-value {
+        color: #888;
+      }
+    }
+  }
+}

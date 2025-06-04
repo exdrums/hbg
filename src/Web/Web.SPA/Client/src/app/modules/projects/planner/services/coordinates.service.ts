@@ -8,7 +8,7 @@ export class CoordinatesService {
   private readonly projectsDs = inject(ProjectsWsDataSource);
   constructor() { }
   
-  public defaultCoordinates$ = this.projectsDs.selected$.pipe(
+  public defaultCoordinates$ = this.projectsDs.selectedItem$.pipe(
     tap(x => console.log('default-coordinate', x)),
     map(p => latLng(p.defaultCoorX, p.defaultCoorY))
   )

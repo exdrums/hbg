@@ -5,7 +5,7 @@ import { environment } from "@env/environment";
 
 export interface SignalRAction<T = any> {
 	name: string,
-	handler: (message: T) => void
+	handler: (...message: T[]) => void
 }
 
 export abstract class WsConnection {
@@ -70,7 +70,8 @@ export abstract class WsConnection {
 	private readonly createConnection = () => new HubConnectionBuilder()
 		.withUrl(this.hubUrl, {
 			accessTokenFactory: () => this.auth.getToken(),
-			transport: HttpTransportType.WebSockets
+			skipNegotiation: true,
+			transport: HttpTransportType.WebSockets,
 		})
 		.withAutomaticReconnect()
 		.configureLogging(this.logDebug ? LogLevel.Debug : LogLevel.Error)
@@ -113,7 +114,7 @@ export abstract class WsConnection {
 	/**
 	 * Disconnect SignalR Hub
 	 */
-	private readonly disconnect = () => {
+	public disconnect() {
 		console.info('WebSocket => Disconnected');
 		this.isConnected$.next(false);
 		void this.connection?.stop();

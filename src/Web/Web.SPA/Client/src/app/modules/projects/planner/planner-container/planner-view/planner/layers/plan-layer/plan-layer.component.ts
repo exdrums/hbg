@@ -20,7 +20,7 @@ export class PlanLayerComponent extends BaseLayerComponent {
 
   public layer$ = this.map$.pipe(
     filter(x => x != null),
-    switchMap(mapObj => this.plansDataSource.selected$.pipe(
+    switchMap(mapObj => this.plansDataSource.selectedItem$.pipe(
       switchMap(plan => this.imagesDataSource.getPlanImage$(plan).pipe(
         map(url => this.createImageOverlay(mapObj, url, plan)),
       ))

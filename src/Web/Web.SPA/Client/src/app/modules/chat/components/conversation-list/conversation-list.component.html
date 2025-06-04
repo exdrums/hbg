@@ -1,0 +1,135 @@
+<div class="conversation-list-container">
+  <!-- Header Section -->
+  <div class="list-header">
+    <h3>{{ getTitle() }}</h3>
+    <dx-button
+      *ngIf="config.showCreateButton"
+      [text]="config.createButtonText || 'New'"
+      icon="plus"
+      type="default"
+      stylingMode="outlined"
+      (onClick)="onCreateClick()">
+    </dx-button>
+  </div>
+  
+  <!-- Conversation Grid -->
+  <dx-data-grid
+    #dataGrid
+    [dataSource]="dataSource"
+    [showBorders]="false"
+    [rowAlternationEnabled]="false"
+    [hoverStateEnabled]="true"
+    [selection]="{ mode: 'single' }"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    (onRowClick)="onRowClick($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onContentReady)="onContentReady()"
+    class="conversations-grid">
+    
+    <!-- Dynamic Columns based on type -->
+    <dxi-column
+      *ngFor="let column of getColumns()"
+      [dataField]="column.dataField"
+      [caption]="column.caption"
+      [dataType]="column.dataType"
+      [format]="column.format"
+      [width]="column.width"
+      [cellTemplate]="column.cellTemplate"
+      [sortOrder]="column.sortOrder"
+      [sortIndex]="column.sortIndex">
+    </dxi-column>
+
+    <!-- Cell Templates -->
+    
+    <!-- Conversation Title Template -->
+    <div *dxTemplate="let data of 'conversationTitleTemplate'">
+      <div class="conversation-cell">
+        <div class="conversation-icon" *ngIf="showIcon(data.data)">
+          <i class="dx-icon" [class]="getConversationIcon(data.data)"></i>
+        </div>
+        <div class="conversation-info">
+          <div class="conversation-title">
+            {{ getDisplayTitle(data.data) }}
+          </div>
+          <div class="conversation-subtitle" *ngIf="getSubtitle(data.data)">
+            {{ getSubtitle(data.data) }}
+          </div>
+        </div>
+        <div class="conversation-badges">
+          <span class="unread-indicator" *ngIf="config.showUnreadIndicator && data.data.unreadCount > 0">
+            {{ data.data.unreadCount > 99 ? '99+' : data.data.unreadCount }}
+          </span>
+          <span class="conversation-badge" *ngIf="getBadge(data.data)" [class]="getBadgeClass(data.data)">
+            {{ getBadge(data.data) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Last Message Template -->
+    <div *dxTemplate="let data of 'lastMessageTemplate'">
+      <div class="last-message-cell">
+        <span class="message-preview" 
+              [class.deleted-message]="data.data.lastMessagePreview === 'Message deleted'"
+              [class.system-message]="isSystemMessage(data.data.lastMessagePreview)">
+          {{ data.data.lastMessagePreview || getEmptyMessageText() }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Time Template -->
+    <div *dxTemplate="let data of 'timeTemplate'">
+      <div class="time-cell">
+        <span class="time-value">{{ formatTime(data.data.lastMessageAt) }}</span>
+        <span class="date-value" *ngIf="shouldShowDate(data.data.lastMessageAt)">
+          {{ formatDate(data.data.lastMessageAt) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Status Template (for Support) -->
+    <div *dxTemplate="let data of 'statusTemplate'">
+      <span class="status-badge" [class]="getStatusClass(data.data)">
+        {{ getStatusText(data.data) }}
+      </span>
+    </div>
+
+    <!-- Priority Template (for Support) -->
+    <div *dxTemplate="let data of 'priorityTemplate'">
+      <span class="priority-badge" [class]="getPriorityClass(data.data)">
+        {{ getPriorityText(data.data) }}
+      </span>
+    </div>
+
+    <!-- Agent Type Template (for AI) -->
+    <div *dxTemplate="let data of 'agentTypeTemplate'">
+      <div class="agent-info">
+        <i class="dx-icon dx-icon-favorites"></i>
+        <span>{{ getAgentType(data.data) }}</span>
+      </div>
+    </div>
+
+    <!-- Token Usage Template (for AI) -->
+    <div *dxTemplate="let data of 'tokenUsageTemplate'">
+      <div class="token-usage" *ngIf="getTokenUsage(data.data) as usage">
+        <div class="usage-bar">
+          <div class="usage-fill" [style.width.%]="usage.percentage"></div>
+        </div>
+        <span class="usage-text">{{ usage.text }}</span>
+      </div>
+    </div>
+  </dx-data-grid>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="isEmpty">
+    <i class="dx-icon" [class]="getEmptyStateIcon()"></i>
+    <p>{{ getEmptyStateMessage() }}</p>
+    <dx-button
+      *ngIf="config.showCreateButton"
+      [text]="getEmptyStateButtonText()"
+      type="default"
+      (onClick)="onCreateClick()">
+    </dx-button>
+  </div>
+</div>

@@ -24,7 +24,7 @@ export class PlannerComponent implements OnInit {
     center: latLng(46.879966, -121.676909)
   };
 
-  public map$ = new BehaviorSubject<Map>(undefined)
+  public map$ = new BehaviorSubject<Map>(undefined);
   public readonly drawnItems: FeatureGroup = featureGroup();
   public readonly drawOptions: Control.DrawConstructorOptions = { edit: {featureGroup: this.drawnItems} };
 

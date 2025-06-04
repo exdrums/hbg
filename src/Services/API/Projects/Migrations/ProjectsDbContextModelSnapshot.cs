@@ -40,6 +40,15 @@ namespace API.Projects.Migrations
                     b.Property<int>("ProjectID")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("X")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("Y")
+                        .HasColumnType("numeric");
+
                     b.HasKey("ArticleID");
 
                     b.HasIndex("PlanID");
