@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Identity.Admin.EntityFramework.PostgreSQL.Migrations.Logging
 {
     [DbContext(typeof(AdminLogDbContext))]
-    [Migration("20221016191311_HbgInit")]
+    [Migration("20250813191929_HbgInit")]
     partial class HbgInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

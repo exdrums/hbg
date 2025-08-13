@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Identity.Admin.EntityFramework.PostgreSQL.Migrations.DataProtection
 {
     [DbContext(typeof(IdentityServerDataProtectionDbContext))]
-    [Migration("20221016191322_HbgInit")]
+    [Migration("20250813191938_HbgInit")]
     partial class HbgInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

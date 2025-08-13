@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Identity.Admin.EntityFramework.PostgreSQL.Migrations.AuditLogging
 {
     [DbContext(typeof(AdminAuditLogDbContext))]
-    [Migration("20221016191315_HbgInit")]
+    [Migration("20250813191934_HbgInit")]
     partial class HbgInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

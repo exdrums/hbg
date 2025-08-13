@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Identity.Admin.EntityFramework.SqlServer.Migrations.Logging
 {
     [DbContext(typeof(AdminLogDbContext))]
-    [Migration("20221016191249_HbgInit")]
+    [Migration("20250813191956_HbgInit")]
     partial class HbgInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
