@@ -1,0 +1,16 @@
+<div class="side-navigation-menu"
+     [class.menu-opened]="menuOpened">
+
+  <div class="menu-container">
+    <dx-tree-view
+      [items]="menuItems"
+      selectionMode="single"
+      [selectByClick]="true"
+      keyExpr="path"
+      (onItemClick)="onItemClick($event)"
+      [selectedItem]="selectedItem"
+      expandEvent="click"
+      [width]="menuOpened ? 250 : 60">
+    </dx-tree-view>
+  </div>
+</div>

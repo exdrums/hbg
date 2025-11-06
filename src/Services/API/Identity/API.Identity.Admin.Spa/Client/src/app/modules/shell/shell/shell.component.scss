@@ -1,0 +1,34 @@
+::ng-deep {
+  .app-drawer {
+    height: 100vh;
+    width: 100%;
+
+    .dx-drawer-panel-content {
+      background-color: #f5f5f5;
+    }
+
+    .dx-drawer-content {
+      background-color: #fff;
+    }
+  }
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+.app-content {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+@media (max-width: 991px) {
+  .app-content {
+    padding: 15px;
+  }
+}

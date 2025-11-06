@@ -1,0 +1,45 @@
+.header {
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.header-toolbar {
+  padding: 0 16px;
+  height: 60px;
+}
+
+.header-title {
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.toolbar-item {
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep {
+  .menu-button {
+    .dx-button-content {
+      padding: 8px;
+    }
+  }
+
+  .user-button {
+    .dx-button-text {
+      font-weight: 500;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header-title h3 {
+    font-size: 16px;
+  }
+}

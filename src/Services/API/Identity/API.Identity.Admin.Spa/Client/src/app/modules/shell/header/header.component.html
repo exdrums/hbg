@@ -1,0 +1,50 @@
+<header class="header">
+  <dx-toolbar class="header-toolbar">
+    <dxi-item
+      *ngIf="menuToggleEnabled"
+      location="before"
+      widget="dxButton"
+      cssClass="menu-button"
+      [options]="{
+        icon: 'menu',
+        stylingMode: 'text',
+        onClick: toggleMenu
+      }">
+    </dxi-item>
+
+    <dxi-item
+      location="before"
+      cssClass="header-title">
+      <div class="toolbar-label">
+        <h3>Identity Admin</h3>
+      </div>
+    </dxi-item>
+
+    <dxi-item
+      location="after"
+      locateInMenu="never">
+      <div class="toolbar-item">
+        <hbg-theme-switcher></hbg-theme-switcher>
+      </div>
+    </dxi-item>
+
+    <dxi-item
+      location="after"
+      locateInMenu="never"
+      widget="dxButton"
+      cssClass="user-button"
+      [options]="{
+        icon: 'user',
+        text: userName,
+        stylingMode: 'text',
+        dropDownOptions: { width: 200 },
+        items: userMenuItems,
+        displayExpr: 'text',
+        keyExpr: 'text',
+        useSelectMode: false,
+        showArrowIcon: true,
+        elementAttr: { class: 'user-menu-button' }
+      }">
+    </dxi-item>
+  </dx-toolbar>
+</header>

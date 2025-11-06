@@ -1,0 +1,11 @@
+:host {
+  display: inline-block;
+}
+
+::ng-deep {
+  .dx-button {
+    .dx-icon {
+      font-size: 20px;
+    }
+  }
+}

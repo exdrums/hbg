@@ -1,0 +1,76 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <p>Welcome to Identity Server Administration</p>
+  </div>
+
+  <div class="stats-grid">
+    <div *ngFor="let stat of stats" class="stat-card" [routerLink]="stat.link">
+      <div class="stat-icon" [style.background-color]="stat.color">
+        <i class="dx-icon dx-icon-{{stat.icon}}"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{stat.value}}</div>
+        <div class="stat-title">{{stat.title}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="content-section">
+      <h2>Quick Actions</h2>
+      <div class="action-buttons">
+        <dx-button
+          text="Create Client"
+          icon="plus"
+          type="default"
+          routerLink="/clients"
+          stylingMode="contained">
+        </dx-button>
+        <dx-button
+          text="Create User"
+          icon="user"
+          type="default"
+          routerLink="/users"
+          stylingMode="contained">
+        </dx-button>
+        <dx-button
+          text="Manage Roles"
+          icon="group"
+          type="default"
+          routerLink="/roles"
+          stylingMode="contained">
+        </dx-button>
+        <dx-button
+          text="View Grants"
+          icon="check"
+          type="default"
+          routerLink="/grants"
+          stylingMode="contained">
+        </dx-button>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2>Getting Started</h2>
+      <div class="info-cards">
+        <div class="info-card">
+          <h3>OIDC Clients</h3>
+          <p>Manage OAuth2/OIDC client applications that can authenticate users and access protected resources.</p>
+        </div>
+        <div class="info-card">
+          <h3>Users & Roles</h3>
+          <p>Create and manage user accounts and assign them to roles for access control.</p>
+        </div>
+        <div class="info-card">
+          <h3>API Resources</h3>
+          <p>Define API resources and scopes that clients can request access to.</p>
+        </div>
+        <div class="info-card">
+          <h3>Identity Resources</h3>
+          <p>Configure OpenID Connect identity resources (scopes) for user information.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
