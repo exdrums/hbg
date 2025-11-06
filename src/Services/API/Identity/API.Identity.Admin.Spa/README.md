@@ -348,6 +348,94 @@ All endpoints are prefixed with the Admin API base URL (`http://localhost:5797/a
    - Backup and restore functionality
    - Multi-tenant support
 
+## Testing
+
+Comprehensive testing is set up for all layers of the application.
+
+### Quick Start
+
+**Run all tests (Linux/macOS):**
+```bash
+./run-tests.sh all
+```
+
+**Run all tests (Windows):**
+```powershell
+.\run-tests.ps1 -TestType all
+```
+
+### Test Types
+
+1. **Angular Unit Tests** - Component and service tests using Jasmine/Karma
+2. **ASP.NET Core Integration Tests** - API endpoint tests using xUnit
+3. **Docker Tests** - Container build and health check validation
+
+### Detailed Documentation
+
+See [TESTING.md](./TESTING.md) for complete testing guide including:
+- Running individual test suites
+- Writing new tests
+- Code coverage reports
+- CI/CD integration examples
+- Performance testing
+
+## Deployment
+
+### Local Docker Deployment
+
+```bash
+# Build image
+docker build -f Dockerfile -t exdrums/hbg-admin-spa:latest .
+
+# Run container
+docker run -d -p 5796:80 \
+  -e HBGIDENTITY=https://sts.hbg.local \
+  -e HBGIDENTITYADMINAPI=https://adminapi.hbg.local \
+  --name hbg-admin-spa \
+  exdrums/hbg-admin-spa:latest
+```
+
+### Kubernetes Deployment
+
+```bash
+# Apply configuration
+kubectl apply -f ../../../../../../k8s/hbg-configmap.yaml
+
+# Deploy application
+kubectl apply -f ../../../../../../k8s/hbg-admin-spa.yaml
+
+# Apply ingress
+kubectl apply -f ../../../../../../k8s/hbg-ingress.yaml
+
+# Verify deployment
+kubectl get pods -l app=hbg-admin-spa
+kubectl get service hbg-admin-spa-service
+```
+
+### Access Application
+
+**Via Ingress (add to /etc/hosts):**
+```
+127.0.0.1 adminspa.hbg.local
+```
+
+Then browse to: `https://adminspa.hbg.local`
+
+### Health Monitoring
+
+- **Health Check**: `https://adminspa.hbg.local/health`
+- **Health UI**: `https://adminspa.hbg.local/hc`
+- **Configuration**: `https://adminspa.hbg.local/configuration`
+
+### Detailed Documentation
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete deployment guide including:
+- Production deployment strategies
+- Scaling and high availability
+- TLS/SSL configuration
+- Monitoring and logging
+- Troubleshooting guide
+
 ## Contributing
 
 When adding new feature modules, follow this pattern:

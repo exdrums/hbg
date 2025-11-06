@@ -14,6 +14,7 @@ spec:
   - hosts:
     - sts.hbg.local
     - admin.hbg.local
+    - adminspa.hbg.local
     - spa.hbg.local
     secretName: hbg-tls-secret
   ingressClassName: nginx
@@ -36,6 +37,16 @@ spec:
         backend:
           service:
             name: hbg-admin-service
+            port:
+              number: 80
+  - host: adminspa.hbg.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hbg-admin-spa-service
             port:
               number: 80
   - host: spa.hbg.local
