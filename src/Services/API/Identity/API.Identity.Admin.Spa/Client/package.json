@@ -1,0 +1,48 @@
+{
+  "name": "identity-admin-spa",
+  "version": "0.0.1",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --configuration development --port 4201",
+    "build": "ng b --configuration production",
+    "test": "ng test",
+    "lint": "ng lint"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^18.2.12",
+    "@angular/cdk": "~18.2.12",
+    "@angular/common": "^18.2.12",
+    "@angular/compiler": "^18.2.12",
+    "@angular/core": "^18.2.12",
+    "@angular/forms": "^18.2.12",
+    "@angular/platform-browser": "^18.2.12",
+    "@angular/platform-browser-dynamic": "^18.2.12",
+    "@angular/router": "^18.2.12",
+    "@angular/service-worker": "~18.2.12",
+    "angular-oauth2-oidc": "15.0.1",
+    "rxjs": "~7.8.1",
+    "tslib": "^2.6.0",
+    "zone.js": "0.14.10",
+    "devextreme": "24.2.5",
+    "devextreme-angular": "24.2.5",
+    "devextreme-aspnet-data-nojquery": "^5.0.0",
+    "devextreme-schematics": "1.9.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^18.2.12",
+    "@angular/cli": "~18.2.12",
+    "@angular/compiler-cli": "~18.2.12",
+    "@angular/language-service": "^18.2.12",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^16.13.1",
+    "jasmine-core": "~5.0.1",
+    "jasmine-spec-reporter": "7.0.0",
+    "karma": "~6.4.2",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.1",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "^5.5.2"
+  }
+}

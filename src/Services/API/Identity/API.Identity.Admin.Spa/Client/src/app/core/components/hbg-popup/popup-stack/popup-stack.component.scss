@@ -1,0 +1,16 @@
+.flex-height {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.flex-height-content {
+  flex: 1;
+  overflow: auto;
+}
+
+.h-line {
+  height: 1px;
+  background-color: #ddd;
+  margin: 10px 0;
+}

@@ -1,0 +1,15 @@
+/* Dark Theme Variables */
+:root {
+  --primary-color: #90caf9;
+  --accent-color: #f48fb1;
+  --background-color: #303030;
+  --surface-color: #424242;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --divider-color: #616161;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-primary);
+}
