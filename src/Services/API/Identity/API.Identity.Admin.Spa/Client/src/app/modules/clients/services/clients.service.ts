@@ -8,7 +8,7 @@ import { Client } from '../models/client.model';
 @Injectable()
 export class ClientsService {
   private dataStore: RestDataStore<Client, string>;
-  public dataSource: CustomDataSource<Client>;
+  public dataSource: CustomDataSource<Client, string>;
 
   constructor(
     private http: HttpClient,

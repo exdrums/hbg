@@ -1,0 +1,391 @@
+<div class="client-form-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Edit Client' : 'Create New Client' }}</h1>
+    <p>{{ isEditMode ? 'Modify client configuration' : 'Configure a new OAuth2/OIDC client application' }}</p>
+  </div>
+
+  <div class="form-container" *ngIf="!isLoading">
+    <dx-tab-panel
+      [height]="'auto'"
+      [swipeEnabled]="false"
+      [animationEnabled]="true">
+
+      <!-- Basic Settings Tab -->
+      <dxi-item title="Basic Settings" icon="info">
+        <div class="tab-content">
+          <dx-form
+            [formData]="client"
+            [colCount]="2"
+            [labelLocation]="'top'"
+            [showColonAfterLabel]="false">
+
+            <dxi-item dataField="clientId" [isRequired]="true">
+              <dxo-label text="Client ID"></dxo-label>
+              <dxi-validation-rule type="required" message="Client ID is required"></dxi-validation-rule>
+            </dxi-item>
+
+            <dxi-item dataField="clientName" [isRequired]="true">
+              <dxo-label text="Client Name"></dxo-label>
+              <dxi-validation-rule type="required" message="Client Name is required"></dxi-validation-rule>
+            </dxi-item>
+
+            <dxi-item dataField="description" editorType="dxTextArea" [colSpan]="2" [editorOptions]="{ height: 80 }">
+              <dxo-label text="Description"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="clientUri">
+              <dxo-label text="Client URI"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="logoUri">
+              <dxo-label text="Logo URI"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="enabled" editorType="dxCheckBox">
+              <dxo-label text="Enabled"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="protocolType" editorType="dxSelectBox" [editorOptions]="{ items: protocolTypes, searchEnabled: false }">
+              <dxo-label text="Protocol Type"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </dxi-item>
+
+      <!-- Authentication Tab -->
+      <dxi-item title="Authentication" icon="key">
+        <div class="tab-content">
+          <dx-form
+            [formData]="client"
+            [colCount]="2"
+            [labelLocation]="'top'"
+            [showColonAfterLabel]="false">
+
+            <dxi-item [colSpan]="2">
+              <dxo-label text="Allowed Grant Types"></dxo-label>
+              <div *dxTemplate>
+                <dx-tag-box
+                  [(value)]="selectedGrantTypes"
+                  [items]="availableGrantTypes"
+                  [searchEnabled]="true"
+                  [showSelectionControls]="true"
+                  placeholder="Select grant types...">
+                </dx-tag-box>
+              </div>
+            </dxi-item>
+
+            <dxi-item [colSpan]="2">
+              <dxo-label text="Allowed Scopes"></dxo-label>
+              <div *dxTemplate>
+                <dx-tag-box
+                  [(value)]="selectedScopes"
+                  [items]="availableScopes"
+                  [searchEnabled]="true"
+                  [showSelectionControls]="true"
+                  [acceptCustomValue]="true"
+                  placeholder="Select scopes...">
+                </dx-tag-box>
+              </div>
+            </dxi-item>
+
+            <dxi-item dataField="requireClientSecret" editorType="dxCheckBox">
+              <dxo-label text="Require Client Secret"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="requirePkce" editorType="dxCheckBox">
+              <dxo-label text="Require PKCE"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="allowPlainTextPkce" editorType="dxCheckBox">
+              <dxo-label text="Allow Plain Text PKCE"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="requireRequestObject" editorType="dxCheckBox">
+              <dxo-label text="Require Request Object"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="allowOfflineAccess" editorType="dxCheckBox">
+              <dxo-label text="Allow Offline Access"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="enableLocalLogin" editorType="dxCheckBox">
+              <dxo-label text="Enable Local Login"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="allowAccessTokensViaBrowser" editorType="dxCheckBox">
+              <dxo-label text="Allow Access Tokens via Browser"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </dxi-item>
+
+      <!-- Token Settings Tab -->
+      <dxi-item title="Token Settings" icon="clock">
+        <div class="tab-content">
+          <dx-form
+            [formData]="client"
+            [colCount]="2"
+            [labelLocation]="'top'"
+            [showColonAfterLabel]="false">
+
+            <dxi-item dataField="identityTokenLifetime" editorType="dxNumberBox" [editorOptions]="{ min: 0 }">
+              <dxo-label text="Identity Token Lifetime (seconds)"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="accessTokenLifetime" editorType="dxNumberBox" [editorOptions]="{ min: 0 }">
+              <dxo-label text="Access Token Lifetime (seconds)"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="authorizationCodeLifetime" editorType="dxNumberBox" [editorOptions]="{ min: 0 }">
+              <dxo-label text="Authorization Code Lifetime (seconds)"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="deviceCodeLifetime" editorType="dxNumberBox" [editorOptions]="{ min: 0 }">
+              <dxo-label text="Device Code Lifetime (seconds)"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="absoluteRefreshTokenLifetime" editorType="dxNumberBox" [editorOptions]="{ min: 0 }">
+              <dxo-label text="Absolute Refresh Token Lifetime (seconds)"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="slidingRefreshTokenLifetime" editorType="dxNumberBox" [editorOptions]="{ min: 0 }">
+              <dxo-label text="Sliding Refresh Token Lifetime (seconds)"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="consentLifetime" editorType="dxNumberBox" [editorOptions]="{ min: 0 }">
+              <dxo-label text="Consent Lifetime (seconds)"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="userSsoLifetime" editorType="dxNumberBox" [editorOptions]="{ min: 0 }">
+              <dxo-label text="User SSO Lifetime (seconds)"></dxo-label>
+            </dxi-item>
+
+            <dxi-item
+              dataField="refreshTokenUsage"
+              editorType="dxSelectBox"
+              [editorOptions]="refreshTokenUsageEditorOptions">
+              <dxo-label text="Refresh Token Usage"></dxo-label>
+            </dxi-item>
+
+            <dxi-item
+              dataField="refreshTokenExpiration"
+              editorType="dxSelectBox"
+              [editorOptions]="refreshTokenExpirationEditorOptions">
+              <dxo-label text="Refresh Token Expiration"></dxo-label>
+            </dxi-item>
+
+            <dxi-item
+              dataField="accessTokenType"
+              editorType="dxSelectBox"
+              [editorOptions]="accessTokenTypeEditorOptions">
+              <dxo-label text="Access Token Type"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="updateAccessTokenClaimsOnRefresh" editorType="dxCheckBox">
+              <dxo-label text="Update Access Token Claims on Refresh"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="includeJwtId" editorType="dxCheckBox">
+              <dxo-label text="Include JWT ID"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="alwaysSendClientClaims" editorType="dxCheckBox">
+              <dxo-label text="Always Send Client Claims"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="alwaysIncludeUserClaimsInIdToken" editorType="dxCheckBox" [colSpan]="2">
+              <dxo-label text="Always Include User Claims in ID Token"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="clientClaimsPrefix">
+              <dxo-label text="Client Claims Prefix"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="pairWiseSubjectSalt">
+              <dxo-label text="Pair Wise Subject Salt"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </dxi-item>
+
+      <!-- URIs Tab -->
+      <dxi-item title="URIs" icon="link">
+        <div class="tab-content">
+          <div class="uri-section">
+            <h3>Redirect URIs</h3>
+            <dx-list
+              [items]="redirectUris"
+              [allowItemDeleting]="true"
+              (onItemDeleted)="onRemoveRedirectUri($event.itemData)">
+              <div *dxTemplate="let item of 'item'">
+                <div class="uri-item">{{ item }}</div>
+              </div>
+            </dx-list>
+            <div class="uri-input-group">
+              <dx-text-box
+                #redirectUriInput
+                placeholder="Enter redirect URI..."
+                (onEnterKey)="onAddRedirectUri(redirectUriInput.value); redirectUriInput.value = ''">
+              </dx-text-box>
+              <dx-button
+                text="Add"
+                icon="add"
+                (onClick)="onAddRedirectUri(redirectUriInput.value); redirectUriInput.value = ''">
+              </dx-button>
+            </div>
+          </div>
+
+          <div class="uri-section">
+            <h3>Post Logout Redirect URIs</h3>
+            <dx-list
+              [items]="postLogoutRedirectUris"
+              [allowItemDeleting]="true"
+              (onItemDeleted)="onRemovePostLogoutUri($event.itemData)">
+              <div *dxTemplate="let item of 'item'">
+                <div class="uri-item">{{ item }}</div>
+              </div>
+            </dx-list>
+            <div class="uri-input-group">
+              <dx-text-box
+                #postLogoutUriInput
+                placeholder="Enter post logout redirect URI..."
+                (onEnterKey)="onAddPostLogoutUri(postLogoutUriInput.value); postLogoutUriInput.value = ''">
+              </dx-text-box>
+              <dx-button
+                text="Add"
+                icon="add"
+                (onClick)="onAddPostLogoutUri(postLogoutUriInput.value); postLogoutUriInput.value = ''">
+              </dx-button>
+            </div>
+          </div>
+
+          <div class="uri-section">
+            <h3>Allowed CORS Origins</h3>
+            <dx-list
+              [items]="allowedCorsOrigins"
+              [allowItemDeleting]="true"
+              (onItemDeleted)="onRemoveCorsOrigin($event.itemData)">
+              <div *dxTemplate="let item of 'item'">
+                <div class="uri-item">{{ item }}</div>
+              </div>
+            </dx-list>
+            <div class="uri-input-group">
+              <dx-text-box
+                #corsOriginInput
+                placeholder="Enter CORS origin..."
+                (onEnterKey)="onAddCorsOrigin(corsOriginInput.value); corsOriginInput.value = ''">
+              </dx-text-box>
+              <dx-button
+                text="Add"
+                icon="add"
+                (onClick)="onAddCorsOrigin(corsOriginInput.value); corsOriginInput.value = ''">
+              </dx-button>
+            </div>
+          </div>
+
+          <dx-form
+            [formData]="client"
+            [colCount]="2"
+            [labelLocation]="'top'"
+            [showColonAfterLabel]="false">
+
+            <dxi-item dataField="frontChannelLogoutUri" [colSpan]="2">
+              <dxo-label text="Front Channel Logout URI"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="frontChannelLogoutSessionRequired" editorType="dxCheckBox">
+              <dxo-label text="Front Channel Logout Session Required"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="backChannelLogoutUri" [colSpan]="2">
+              <dxo-label text="Back Channel Logout URI"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="backChannelLogoutSessionRequired" editorType="dxCheckBox">
+              <dxo-label text="Back Channel Logout Session Required"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </dxi-item>
+
+      <!-- Advanced Settings Tab -->
+      <dxi-item title="Advanced" icon="preferences">
+        <div class="tab-content">
+          <dx-form
+            [formData]="client"
+            [colCount]="2"
+            [labelLocation]="'top'"
+            [showColonAfterLabel]="false">
+
+            <dxi-item dataField="requireConsent" editorType="dxCheckBox">
+              <dxo-label text="Require Consent"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="allowRememberConsent" editorType="dxCheckBox">
+              <dxo-label text="Allow Remember Consent"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="userCodeType">
+              <dxo-label text="User Code Type"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="nonEditable" editorType="dxCheckBox">
+              <dxo-label text="Non Editable"></dxo-label>
+            </dxi-item>
+
+            <dxi-item [colSpan]="2">
+              <dxo-label text="Identity Provider Restrictions"></dxo-label>
+              <div *dxTemplate>
+                <dx-tag-box
+                  [(value)]="identityProviderRestrictions"
+                  [acceptCustomValue]="true"
+                  [searchEnabled]="true"
+                  placeholder="Enter identity providers...">
+                </dx-tag-box>
+              </div>
+            </dxi-item>
+
+            <dxi-item [colSpan]="2" *ngIf="isEditMode">
+              <div class="metadata-section">
+                <h3>Metadata</h3>
+                <div class="metadata-row">
+                  <strong>Created:</strong> {{ client.created | date:'medium' }}
+                </div>
+                <div class="metadata-row" *ngIf="client.updated">
+                  <strong>Updated:</strong> {{ client.updated | date:'medium' }}
+                </div>
+                <div class="metadata-row" *ngIf="client.lastAccessed">
+                  <strong>Last Accessed:</strong> {{ client.lastAccessed | date:'medium' }}
+                </div>
+              </div>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </dxi-item>
+    </dx-tab-panel>
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <dx-button
+        text="Save"
+        icon="save"
+        type="success"
+        [disabled]="isSaving"
+        (onClick)="onSave()">
+      </dx-button>
+      <dx-button
+        text="Cancel"
+        icon="close"
+        type="normal"
+        [disabled]="isSaving"
+        (onClick)="onCancel()">
+      </dx-button>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div class="loading-container" *ngIf="isLoading">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
+    <p>Loading client data...</p>
+  </div>
+</div>

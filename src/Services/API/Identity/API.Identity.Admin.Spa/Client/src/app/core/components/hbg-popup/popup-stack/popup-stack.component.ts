@@ -27,7 +27,7 @@ export class PopupStackComponent extends BaseComponent implements OnInit {
         this.trigger.detectChanges();
         return this.removeOnClosed$(context);
       }),
-      takeUntil(this.destroyed$)
+      takeUntil(this.destroy$)
     ).subscribe();
   }
 

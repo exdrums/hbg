@@ -23,15 +23,5 @@
     </div>
   </div>
 
-  <div *ngIf="true" class="h-line"></div>
-
-  <dxi-toolbar-item *ngFor="let i of context.toolbar"
-    [widget]="i.widget"
-    [disabled]="i.disabled$ ? (i.disabled$ | async) : false"
-    [location]="i.location"
-    [options]="i.options"
-    [template]="i.template"
-    [toolbar]="i.toolbar || 'bottom'"
-    [visible]="i.visible$ ? (i.visible$ | async) : true">
-  </dxi-toolbar-item>
+  <!-- TODO: Implement popup toolbar functionality -->
 </dx-popup>

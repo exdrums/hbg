@@ -10,7 +10,7 @@ import { StorageService } from './services/storage.service';
 import { ScreenService } from './services/screen.service';
 import { AuthGuard } from './guards/auth.guard';
 import { NoAuthGuard } from './guards/no-auth.guard';
-import { DxLoadPanelModule, DxPopupModule } from 'devextreme-angular';
+import { DxLoadPanelModule, DxPopupModule, DxToolbarModule } from 'devextreme-angular';
 import { PopupStackComponent } from './components/hbg-popup/popup-stack/popup-stack.component';
 import { PopupContentComponent } from './components/hbg-popup/popup-content/popup-content.component';
 import { MainHttpInterceptorProvider } from './errors/http.interceptor';
@@ -33,7 +33,8 @@ import { ScreenLockerService } from './services/screen-locker.service';
       }
     }),
     DxPopupModule,
-    DxLoadPanelModule
+    DxLoadPanelModule,
+    DxToolbarModule
   ],
   providers: [
     ConfigService,

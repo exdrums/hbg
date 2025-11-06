@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { AuthService } from '@app/core/services/auth.service';
 import { Router } from '@angular/router';
 
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   @Output() menuToggle = new EventEmitter<void>();
   @Input() menuToggleEnabled = false;
 
@@ -43,8 +43,11 @@ export class HeaderComponent {
     this.router.navigate(['/auth/login']);
   }
 
-  get userName(): string {
-    const profile = this.authService.userProfile$.value;
-    return profile?.name || profile?.email || 'User';
+  userName = 'User';
+
+  ngOnInit() {
+    this.authService.userProfile$.subscribe(profile => {
+      this.userName = profile?.name || profile?.email || 'User';
+    });
   }
 }

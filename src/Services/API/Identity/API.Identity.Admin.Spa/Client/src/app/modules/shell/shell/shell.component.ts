@@ -11,8 +11,8 @@ import { filter } from 'rxjs/operators';
 })
 export class ShellComponent implements OnInit {
   menuOpened: boolean = true;
-  menuMode: string = 'shrink';
-  menuRevealMode: string = 'expand';
+  menuMode: 'overlap' | 'shrink' | 'push' = 'shrink';
+  menuRevealMode: 'slide' | 'expand' = 'expand';
   minMenuSize: number = 60;
   shaderEnabled: boolean = false;
 
@@ -30,7 +30,7 @@ export class ShellComponent implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
-      if (this.menuMode === 'overlap' || this.menuMode === 'temporary') {
+      if (this.menuMode === 'overlap') {
         this.menuOpened = false;
       }
     });
@@ -64,7 +64,7 @@ export class ShellComponent implements OnInit {
   };
 
   get hideMenuAfterNavigation() {
-    return this.menuMode === 'overlap' || this.menuMode === 'temporary';
+    return this.menuMode === 'overlap';
   }
 
   get showMenuAfterClick() {

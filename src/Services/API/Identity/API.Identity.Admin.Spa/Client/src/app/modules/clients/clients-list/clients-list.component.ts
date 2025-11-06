@@ -52,12 +52,12 @@ export class ClientsListComponent implements OnInit {
   }
 
   onAddClick() {
-    // Navigate to create form (to be implemented)
-    notify('Create client functionality coming soon', 'info', 2000);
+    this.router.navigate(['/clients/new']);
   }
 
   onEditClick(e: any) {
-    notify('Edit client functionality coming soon', 'info', 2000);
+    const clientId = e.row.data.id;
+    this.router.navigate(['/clients', clientId]);
   }
 
   async onDeleteClick(e: any) {

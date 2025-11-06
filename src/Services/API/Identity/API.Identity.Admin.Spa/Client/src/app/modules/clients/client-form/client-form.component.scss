@@ -1,0 +1,166 @@
+.client-form-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 30px;
+
+  h1 {
+    margin: 0 0 10px 0;
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.form-container {
+  background: var(--background-color);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tab-content {
+  padding: 20px;
+  min-height: 400px;
+}
+
+.uri-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--content-background);
+
+  h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .uri-item {
+    padding: 8px 0;
+    word-break: break-all;
+  }
+
+  .uri-input-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+
+    dx-text-box {
+      flex: 1;
+    }
+
+    dx-button {
+      min-width: 80px;
+    }
+  }
+
+  dx-list {
+    margin-bottom: 10px;
+    min-height: 50px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+}
+
+.metadata-section {
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--content-background);
+
+  h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .metadata-row {
+    padding: 8px 0;
+    font-size: 14px;
+
+    strong {
+      display: inline-block;
+      width: 120px;
+      color: #666;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+
+  dx-button {
+    min-width: 120px;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+
+  p {
+    margin-top: 20px;
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+// Dark mode adjustments
+:host-context(.dark-theme) {
+  .page-header p {
+    color: #aaa;
+  }
+
+  .metadata-section .metadata-row strong {
+    color: #aaa;
+  }
+
+  .loading-container p {
+    color: #aaa;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .client-form-container {
+    padding: 10px;
+  }
+
+  .form-container {
+    padding: 10px;
+  }
+
+  .tab-content {
+    padding: 10px;
+  }
+
+  .uri-section {
+    padding: 10px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+
+    dx-button {
+      width: 100%;
+    }
+  }
+}

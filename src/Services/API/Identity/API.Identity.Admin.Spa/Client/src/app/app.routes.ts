@@ -31,31 +31,32 @@ export const routes: Routes = [
       {
         path: 'clients',
         loadChildren: () => import('./modules/clients/clients.module').then(m => m.ClientsModule)
-      },
-      {
-        path: 'users',
-        loadChildren: () => import('./modules/users/users.module').then(m => m.UsersModule)
-      },
-      {
-        path: 'roles',
-        loadChildren: () => import('./modules/roles/roles.module').then(m => m.RolesModule)
-      },
-      {
-        path: 'api-resources',
-        loadChildren: () => import('./modules/api-resources/api-resources.module').then(m => m.ApiResourcesModule)
-      },
-      {
-        path: 'api-scopes',
-        loadChildren: () => import('./modules/api-scopes/api-scopes.module').then(m => m.ApiScopesModule)
-      },
-      {
-        path: 'identity-resources',
-        loadChildren: () => import('./modules/identity-resources/identity-resources.module').then(m => m.IdentityResourcesModule)
-      },
-      {
-        path: 'grants',
-        loadChildren: () => import('./modules/grants/grants.module').then(m => m.GrantsModule)
       }
+      // TODO: Uncomment as modules are implemented
+      // {
+      //   path: 'users',
+      //   loadChildren: () => import('./modules/users/users.module').then(m => m.UsersModule)
+      // },
+      // {
+      //   path: 'roles',
+      //   loadChildren: () => import('./modules/roles/roles.module').then(m => m.RolesModule)
+      // },
+      // {
+      //   path: 'api-resources',
+      //   loadChildren: () => import('./modules/api-resources/api-resources.module').then(m => m.ApiResourcesModule)
+      // },
+      // {
+      //   path: 'api-scopes',
+      //   loadChildren: () => import('./modules/api-scopes/api-scopes.module').then(m => m.ApiScopesModule)
+      // },
+      // {
+      //   path: 'identity-resources',
+      //   loadChildren: () => import('./modules/identity-resources/identity-resources.module').then(m => m.IdentityResourcesModule)
+      // },
+      // {
+      //   path: 'grants',
+      //   loadChildren: () => import('./modules/grants/grants.module').then(m => m.GrantsModule)
+      // }
     ]
   },
   {

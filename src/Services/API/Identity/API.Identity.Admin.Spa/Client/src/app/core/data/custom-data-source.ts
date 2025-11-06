@@ -7,14 +7,14 @@ import { DeepPartial } from "devextreme/core";
  * Custom DataSource wrapper for DevExtreme components
  * Provides reactive observables for state management
  */
-export class CustomDataSource<T = any> extends DataSource<T> {
+export class CustomDataSource<T = any, TKey = any> extends DataSource<T> {
 
   private _selectedItem$ = new BehaviorSubject<T | null>(null);
   private _isLoading$ = new BehaviorSubject<boolean>(false);
   private _error$ = new BehaviorSubject<string | null>(null);
   private _items$ = new BehaviorSubject<T[]>([]);
 
-  constructor(public customStore: CustomDataStore<T>) {
+  constructor(public customStore: CustomDataStore<T, TKey>) {
     super({
       store: customStore,
       paginate: false,
