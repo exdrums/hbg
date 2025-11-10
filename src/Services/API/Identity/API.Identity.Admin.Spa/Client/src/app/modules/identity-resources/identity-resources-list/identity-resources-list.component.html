@@ -1,0 +1,126 @@
+<div class="identity-resources-container">
+  <div class="page-header">
+    <h1>Identity Resources</h1>
+    <p>Manage OpenID Connect identity resources (user profile data)</p>
+  </div>
+
+  <div class="data-grid-container">
+    <dx-data-grid
+      [dataSource]="identityResourcesService.dataSource"
+      [showBorders]="true"
+      [showRowLines]="true"
+      [showColumnLines]="true"
+      [rowAlternationEnabled]="true"
+      [columnAutoWidth]="true"
+      [allowColumnReordering]="true"
+      [allowColumnResizing]="true"
+      [columnResizingMode]="'widget'"
+      (onToolbarPreparing)="onToolbarPreparing($event)"
+      (onRowDblClick)="onRowDblClick($event)">
+
+      <!-- Columns -->
+      <dxi-column
+        dataField="name"
+        caption="Name"
+        [width]="200">
+      </dxi-column>
+
+      <dxi-column
+        dataField="displayName"
+        caption="Display Name"
+        [width]="250">
+      </dxi-column>
+
+      <dxi-column
+        dataField="description"
+        caption="Description">
+      </dxi-column>
+
+      <dxi-column
+        dataField="enabled"
+        caption="Enabled"
+        dataType="boolean"
+        [width]="100">
+      </dxi-column>
+
+      <dxi-column
+        dataField="required"
+        caption="Required"
+        dataType="boolean"
+        [width]="100">
+      </dxi-column>
+
+      <dxi-column
+        dataField="emphasize"
+        caption="Emphasize"
+        dataType="boolean"
+        [width]="110">
+      </dxi-column>
+
+      <dxi-column
+        dataField="showInDiscoveryDocument"
+        caption="Show in Discovery"
+        dataType="boolean"
+        [width]="160">
+      </dxi-column>
+
+      <dxi-column
+        type="buttons"
+        [width]="110"
+        caption="Actions">
+        <dxi-button
+          name="edit"
+          icon="edit"
+          hint="Edit"
+          (onClick)="onEditClick($event)">
+        </dxi-button>
+        <dxi-button
+          name="delete"
+          icon="trash"
+          hint="Delete"
+          (onClick)="onDeleteClick($event)">
+        </dxi-button>
+      </dxi-column>
+
+      <!-- Paging -->
+      <dxo-paging [pageSize]="20"></dxo-paging>
+      <dxo-pager
+        [visible]="true"
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[10, 20, 50, 100]"
+        [showInfo]="true"
+        [showNavigationButtons]="true">
+      </dxo-pager>
+
+      <!-- Search Panel -->
+      <dxo-search-panel
+        [visible]="true"
+        [width]="240"
+        placeholder="Search identity resources...">
+      </dxo-search-panel>
+
+      <!-- Filter Row -->
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+      <!-- Header Filter -->
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
+
+      <!-- Column Chooser -->
+      <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+
+      <!-- Export -->
+      <dxo-export
+        [enabled]="true"
+        [fileName]="'identity-resources'"
+        [allowExportSelectedData]="true">
+      </dxo-export>
+
+      <!-- State Storing -->
+      <dxo-state-storing
+        [enabled]="true"
+        type="localStorage"
+        storageKey="identityResourcesGrid">
+      </dxo-state-storing>
+    </dx-data-grid>
+  </div>
+</div>
