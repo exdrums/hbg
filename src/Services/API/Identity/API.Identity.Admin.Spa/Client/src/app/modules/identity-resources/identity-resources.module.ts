@@ -1,24 +1,17 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { DxDataGridModule, DxButtonModule } from 'devextreme-angular';
-
+import { SharedModule } from '@app/shared/shared.module';
+import { IdentityResourcesRoutingModule } from './identity-resources-routing.module';
 import { IdentityResourcesListComponent } from './identity-resources-list/identity-resources-list.component';
+import { IdentityResourceFormComponent } from './identity-resource-form/identity-resource-form.component';
 
 @NgModule({
   declarations: [
-    IdentityResourcesListComponent
+    IdentityResourcesListComponent,
+    IdentityResourceFormComponent
   ],
   imports: [
-    CommonModule,
-    DxDataGridModule,
-    DxButtonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: IdentityResourcesListComponent
-      }
-    ])
+    SharedModule,
+    IdentityResourcesRoutingModule
   ]
 })
 export class IdentityResourcesModule { }

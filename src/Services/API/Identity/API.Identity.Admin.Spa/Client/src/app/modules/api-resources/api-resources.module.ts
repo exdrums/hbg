@@ -1,24 +1,17 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { DxDataGridModule, DxButtonModule } from 'devextreme-angular';
-
+import { SharedModule } from '@app/shared/shared.module';
+import { ApiResourcesRoutingModule } from './api-resources-routing.module';
 import { ApiResourcesListComponent } from './api-resources-list/api-resources-list.component';
+import { ApiResourceFormComponent } from './api-resource-form/api-resource-form.component';
 
 @NgModule({
   declarations: [
-    ApiResourcesListComponent
+    ApiResourcesListComponent,
+    ApiResourceFormComponent
   ],
   imports: [
-    CommonModule,
-    DxDataGridModule,
-    DxButtonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: ApiResourcesListComponent
-      }
-    ])
+    SharedModule,
+    ApiResourcesRoutingModule
   ]
 })
 export class ApiResourcesModule { }
