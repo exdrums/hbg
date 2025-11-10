@@ -1,0 +1,72 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Angular: Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4201",
+      "webRoot": "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa/Client",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:/./*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/src/*",
+        "webpack:///./*": "${webRoot}/*",
+        "webpack://*": "*"
+      }
+    },
+    {
+      "name": ".NET: Launch Admin SPA",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-admin-spa",
+      "program": "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa/bin/Debug/net9.0/API.Identity.Admin.Spa.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      }
+    },
+    {
+      "name": "Angular: Test (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:9876/debug.html",
+      "webRoot": "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa/Client",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:/./*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/src/*"
+      }
+    },
+    {
+      "name": ".NET: Attach to Process",
+      "type": "coreclr",
+      "request": "attach"
+    },
+    {
+      "name": "Full Stack: Angular + .NET",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4201",
+      "webRoot": "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa/Client",
+      "preLaunchTask": "start-all",
+      "sourceMaps": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack Debug",
+      "configurations": [".NET: Launch Admin SPA", "Angular: Chrome"],
+      "stopAll": true
+    }
+  ]
+}
