@@ -6,6 +6,7 @@
     "start": "ng serve --configuration development --port 4201",
     "build": "ng b --configuration production",
     "test": "ng test",
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint"
   },
   "private": true,
