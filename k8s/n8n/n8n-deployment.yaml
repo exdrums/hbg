@@ -1,0 +1,213 @@
+# n8n-deployment.yaml
+# Deploys n8n workflow automation platform
+# Configured with PostgreSQL backend and comprehensive environment settings
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: n8n-deployment
+  labels:
+    app: n8n
+    component: application
+    version: "1.0"
+  annotations:
+    description: "N8N workflow automation platform deployment"
+    deployment.kubernetes.io/revision: "1"
+spec:
+  # Number of n8n replicas
+  # Start with 1 for development, can scale horizontally for production
+  replicas: 1
+
+  # Deployment strategy for updates
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # Maximum number of pods that can be unavailable during update
+      maxUnavailable: 1
+      # Maximum number of pods that can be created above desired replica count
+      maxSurge: 1
+
+  # Selector matches the pod template labels
+  selector:
+    matchLabels:
+      app: n8n
+      component: application
+
+  # Pod template specification
+  template:
+    metadata:
+      labels:
+        app: n8n
+        component: application
+        version: "1.0"
+      annotations:
+        description: "N8N application pod for workflow automation"
+
+    spec:
+      # Security context for the pod
+      securityContext:
+        # Run as non-root user for security
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+
+      # Container specification
+      containers:
+      - name: n8n
+        # Official n8n Docker image
+        # Use latest stable version or pin to specific version for production
+        image: n8nio/n8n:latest
+
+        # Image pull policy ensures latest image is used
+        imagePullPolicy: Always
+
+        # Resource limits prevent runaway resource consumption
+        # Adjust based on workflow complexity and system capacity
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+
+        # Container ports
+        ports:
+        - name: http
+          containerPort: 443
+          protocol: TCP
+        # Environment variables for n8n configuration
+        env:
+        # Basic authentication settings
+        # Enables login protection for the n8n interface
+        - name: N8N_BASIC_AUTH_ACTIVE
+          value: "true"
+
+        - name: N8N_BASIC_AUTH_USER
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: n8n-user
+
+        - name: N8N_BASIC_AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: n8n-password
+
+        # Database configuration for PostgreSQL backend
+        # Provides reliable data persistence compared to SQLite
+        - name: DB_TYPE
+          value: "postgresdb"
+
+        - name: DB_POSTGRESDB_HOST
+          value: "hbg-db"
+
+        - name: DB_POSTGRESDB_PORT
+          value: "5432"
+
+        - name: DB_POSTGRESDB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: postgres-db
+
+        - name: DB_POSTGRESDB_USER
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: postgres-user
+
+        - name: DB_POSTGRESDB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: postgres-password
+
+        # SSL configuration for database connection
+        - name: DB_POSTGRESDB_SSL_ENABLED
+          value: "false"
+
+        # Data persistence and storage settings
+        # Enables binary data storage in filesystem
+        - name: N8N_PERSIST_BINARY_DATA_TTL
+          value: "1440" # 24 hours in minutes
+
+        - name: N8N_DEFAULT_BINARY_DATA_MODE
+          value: "filesystem"
+
+        # Encryption key for sensitive workflow data
+        # Critical for securing credentials and sensitive information
+        - name: N8N_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: n8n-encryption-key
+
+        # Maximum number of executions to keep in database
+        # Prevents database growth from consuming excessive storage
+        - name: EXECUTIONS_DATA_SAVE_ON_SUCCESS
+          value: "all"
+
+        - name: EXECUTIONS_DATA_SAVE_ON_ERROR
+          value: "all"
+
+        - name: EXECUTIONS_DATA_PRUNE
+          value: "true"
+
+        - name: EXECUTIONS_DATA_MAX_AGE
+          value: "168" # 7 days
+
+        # Timezone configuration
+        # Set to your local timezone or UTC for consistency
+        - name: GENERIC_TIMEZONE
+          value: "UTC"
+
+        # Security settings
+        # Prevents execution of arbitrary code in expressions
+        - name: N8N_SECURE_COOKIE
+          value: "false" # Set to true if using HTTPS
+
+        # Webhook and external access configuration
+        # Adjust these URLs based on your ingress configuration
+        - name: N8N_PROTOCOL
+          value: "https"
+
+        - name: N8N_HOST
+          value: "n8n.hbg.local"
+
+        - name: N8N_PORT
+          value: "80"
+
+        - name: N8N_EDITOR_BASE_URL
+          value: "https://n8n.hbg.local"
+
+        # Logging configuration
+        # Adjust log level based on debugging needs
+        - name: N8N_LOG_LEVEL
+          value: "info"
+
+        - name: N8N_LOG_OUTPUT
+          value: "console"
+        # Volume mounts for persistent data
+        volumeMounts:
+        - name: n8n-data
+          mountPath: /home/node/.n8n
+          # Mount point for n8n configuration and workflow data
+
+        - name: n8n-files
+          mountPath: /files
+          # Mount point for file operations and binary data
+          # Volume definitions for persistent storage
+      volumes:
+      - name: n8n-data
+        persistentVolumeClaim:
+          claimName: n8n-data-pvc
+
+      - name: n8n-files
+        emptyDir: {} # Temporary storage for file operations
+      # Restart policy ensures n8n recovers from failures
+      restartPolicy: Always
+
+      # DNS policy for proper service resolution
+      dnsPolicy: ClusterFirst

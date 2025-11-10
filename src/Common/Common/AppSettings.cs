@@ -9,8 +9,11 @@ namespace API.Common
 
         public string HBGSPA { get; set; } = "";
         public string HBGSPADEV { get; set; } = "";
+        public string HBGADMIN { get; set; } = "";
+        public string HBGADMINDEV { get; set; } = "";
         public string HBGIDENTITY { get; set; } = "";
         public string HBGIDENTITYADMIN { get; set; } = "";
+        public string HBGIDENTITYADMINAPI { get; set; } = "";
         public string HBGFILES { get; set; } = "";
         public string HBGPROJECTS { get; set; } = "";
         public string HBGEMAILER { get; set; } = "";

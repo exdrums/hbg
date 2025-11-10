@@ -1,0 +1,36 @@
+# n8n-service.yaml
+# Exposes n8n application for external access
+# Provides load balancing and service discovery for n8n pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: n8n-service
+  labels:
+    app: n8n
+    component: application
+    service-type: external
+  annotations:
+    description: "Service for n8n web interface and API access"
+    service.kubernetes.io/topology-aware-routing: "enabled"
+spec:
+  # Service type determines how the service is exposed
+  # ClusterIP: Internal access only (use with port-forward or ingress)
+  # LoadBalancer: External access (requires external load balancer support)
+  # NodePort: Access via node IP and specific port
+  type: ClusterIP
+
+  # Selector matches n8n application pod labels
+  # Routes traffic to healthy n8n pods
+  selector:
+    app: n8n
+    component: application
+
+  # Port configuration for web interface access
+  ports:
+  - name: http
+    # Service port (accessible by clients)
+    port: 80
+    # Target port on the n8n container
+    targetPort: 80
+    # Protocol for web traffic
+    protocol: TCP

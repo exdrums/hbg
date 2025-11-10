@@ -109,5 +109,5 @@ spec:
     #       targetPort: 80
 
     # this service must be accessible under the original domain name within cluster
-    # add "rewrite name sts.houbirg.local hbg-sts-service.default.svc.cluster.local"
+    # add "rewrite name sts.hbg.local hbg-sts-service.default.svc.cluster.local"
     # to "kube-system" namespace => "coredns" ConfigMap => .:53  { ...}

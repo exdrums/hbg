@@ -1,0 +1,14 @@
+# n8n-namespace.yaml
+# Creates a dedicated namespace for n8n application and its dependencies
+# This provides logical separation and easier resource management
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: n8n
+  labels:
+    app: n8n
+    environment: local
+    version: "1.0"
+  annotations:
+    description: "Namespace for n8n workflow automation platform"
+    created-by: "kubernetes-deployment"

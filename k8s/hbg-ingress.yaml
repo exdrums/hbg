@@ -9,12 +9,31 @@ metadata:
     # kubernetes.io/ingress.class: traefik
     # traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
     # traefik.ingress.kubernetes.io/router.middlewares: nginx1-redirecttohttps@kubernetescrd
+
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header X-Frame-Options "SAMEORIGIN" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header X-XSS-Protection "1; mode=block" always;
+      add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # Request size limit for file uploads
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+
+    # Timeout settings for long-running workflows
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+
+    # Rate limiting to prevent abuse
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
 spec:
   tls:
   - hosts:
     - sts.hbg.local
     - admin.hbg.local
     - spa.hbg.local
+    - n8n.hbg.local
     secretName: hbg-tls-secret
   ingressClassName: nginx
   rules:
@@ -46,6 +65,16 @@ spec:
         backend:
           service:
             name: hbg-spa-service
+            port:
+              number: 80
+  - host: n8n.hbg.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: n8n-service
             port:
               number: 80
 
