@@ -1,0 +1,210 @@
+{
+  "version": "1.0.0",
+  "description": "Uptime Kuma Monitor Configuration for HBG Services",
+  "monitors": [
+    {
+      "name": "API.Identity (STS)",
+      "type": "http",
+      "url": "https://sts.hbg.local/health",
+      "method": "GET",
+      "interval": 60,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["api", "identity", "critical"],
+      "description": "Identity Server health check endpoint"
+    },
+    {
+      "name": "API.Identity (STS) - Readiness",
+      "type": "http",
+      "url": "https://sts.hbg.local/health/ready",
+      "method": "GET",
+      "interval": 60,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["api", "identity", "readiness"],
+      "description": "Identity Server readiness probe"
+    },
+    {
+      "name": "Web.SPA",
+      "type": "http",
+      "url": "https://spa.hbg.local/health",
+      "method": "GET",
+      "interval": 60,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["frontend", "spa", "critical"],
+      "description": "SPA health check endpoint"
+    },
+    {
+      "name": "API.Identity.Admin.UI",
+      "type": "http",
+      "url": "https://admin.hbg.local/health",
+      "method": "GET",
+      "interval": 60,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["api", "admin", "identity"],
+      "description": "Identity Admin UI health check"
+    },
+    {
+      "name": "N8N Workflow Engine",
+      "type": "http",
+      "url": "https://n8n.hbg.local",
+      "method": "GET",
+      "interval": 60,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["automation", "n8n"],
+      "description": "N8N workflow automation platform"
+    },
+    {
+      "name": "PostgreSQL Database",
+      "type": "port",
+      "hostname": "hbg-db.default.svc.cluster.local",
+      "port": 5432,
+      "interval": 60,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 10,
+      "tags": ["database", "postgresql", "critical"],
+      "description": "PostgreSQL database port check"
+    },
+    {
+      "name": "API.Files - Health",
+      "type": "http",
+      "url": "http://hbg-files-service.default.svc.cluster.local/health",
+      "method": "GET",
+      "interval": 60,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["api", "files"],
+      "description": "Files microservice health check (internal)",
+      "note": "Note: This service may not have external ingress yet"
+    },
+    {
+      "name": "API.Projects - Health",
+      "type": "http",
+      "url": "http://hbg-projects-service.default.svc.cluster.local/health",
+      "method": "GET",
+      "interval": 60,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["api", "projects"],
+      "description": "Projects microservice health check (internal)",
+      "note": "Note: This service may not have external ingress yet"
+    },
+    {
+      "name": "API.Contacts - Health",
+      "type": "http",
+      "url": "http://hbg-contacts-service.default.svc.cluster.local/health",
+      "method": "GET",
+      "interval": 60,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["api", "contacts", "chat"],
+      "description": "Contacts microservice health check (internal)",
+      "note": "Note: This service may not have external ingress yet"
+    },
+    {
+      "name": "API.Emailer - Health",
+      "type": "http",
+      "url": "http://hbg-emailer-service.default.svc.cluster.local/health",
+      "method": "GET",
+      "interval": 60,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["api", "emailer", "smtp"],
+      "description": "Emailer microservice health check (internal)",
+      "note": "Note: This service may not have external ingress yet"
+    },
+    {
+      "name": "Web.SPA - Health Check UI",
+      "type": "http",
+      "url": "https://spa.hbg.local/hc",
+      "method": "GET",
+      "interval": 120,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["frontend", "health-ui"],
+      "description": "SPA Health Check UI Dashboard"
+    },
+    {
+      "name": "Uptime Kuma - Self Monitor",
+      "type": "http",
+      "url": "http://uptime-kuma-service.monitoring.svc.cluster.local:3001",
+      "method": "GET",
+      "interval": 300,
+      "maxretries": 3,
+      "retryInterval": 60,
+      "resendInterval": 0,
+      "timeout": 30,
+      "tags": ["monitoring", "self"],
+      "description": "Uptime Kuma self-monitoring"
+    }
+  ],
+  "notifications": {
+    "example_email": {
+      "type": "email",
+      "smtpHost": "smtp.example.com",
+      "smtpPort": 587,
+      "smtpSecure": true,
+      "smtpUsername": "alerts@example.com",
+      "smtpFrom": "uptime-kuma@hbg.local",
+      "smtpTo": "admin@example.com",
+      "description": "Example email notification - configure via UI"
+    },
+    "example_slack": {
+      "type": "slack",
+      "webhookUrl": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+      "description": "Example Slack notification - configure via UI"
+    },
+    "example_discord": {
+      "type": "discord",
+      "webhookUrl": "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL",
+      "description": "Example Discord notification - configure via UI"
+    }
+  },
+  "status_pages": [
+    {
+      "name": "HBG Services Status",
+      "slug": "hbg-status",
+      "description": "Public status page for all HBG services",
+      "monitors": [
+        "API.Identity (STS)",
+        "Web.SPA",
+        "API.Identity.Admin.UI",
+        "N8N Workflow Engine",
+        "PostgreSQL Database"
+      ]
+    }
+  ],
+  "notes": [
+    "This is a reference configuration file for manual setup",
+    "Uptime Kuma does not currently support automated configuration via config files",
+    "Use this file as a guide for manually creating monitors in the Uptime Kuma UI",
+    "Alternatively, use the Uptime Kuma API to programmatically create monitors",
+    "Remember to configure TLS certificate verification for internal services",
+    "Services without external ingress can only be monitored internally via cluster DNS"
+  ]
+}

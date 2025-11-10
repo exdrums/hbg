@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uptime-kuma
+  namespace: monitoring
+  labels:
+    app: uptime-kuma
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate  # Required for PVC with ReadWriteOnce
+  selector:
+    matchLabels:
+      app: uptime-kuma
+  template:
+    metadata:
+      labels:
+        app: uptime-kuma
+      annotations:
+        # CA certificate injection for internal TLS verification
+        trust-manager/inject: "true"
+    spec:
+      containers:
+      - name: uptime-kuma
+        image: louislam/uptime-kuma:1
+        ports:
+        - name: http
+          containerPort: 3001
+          protocol: TCP
+        env:
+        - name: UPTIME_KUMA_PORT
+          value: "3001"
+        - name: NODE_ENV
+          value: "production"
+        # Optional: Disable IPv6 if not needed
+        - name: UPTIME_KUMA_DISABLE_IPV6
+          value: "false"
+        volumeMounts:
+        - name: uptime-kuma-data
+          mountPath: /app/data
+        # Health checks for Uptime Kuma
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3001
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3001
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /
+            port: 3001
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        securityContext:
+          runAsNonRoot: false  # Uptime Kuma needs root for certain operations
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: false
+      volumes:
+      - name: uptime-kuma-data
+        persistentVolumeClaim:
+          claimName: uptime-kuma-pvc
+      # Security context for the pod
+      securityContext:
+        fsGroup: 1000
+      restartPolicy: Always
