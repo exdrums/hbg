@@ -1,0 +1,100 @@
+<div class="roles-container">
+  <div class="page-header">
+    <h1>Roles</h1>
+    <p>Manage application roles and permissions</p>
+  </div>
+
+  <div class="data-grid-container">
+    <dx-data-grid
+      [dataSource]="rolesService.dataSource"
+      [showBorders]="true"
+      [showRowLines]="true"
+      [showColumnLines]="true"
+      [rowAlternationEnabled]="true"
+      [columnAutoWidth]="true"
+      [allowColumnReordering]="true"
+      [allowColumnResizing]="true"
+      [columnResizingMode]="'widget'"
+      (onToolbarPreparing)="onToolbarPreparing($event)"
+      (onRowDblClick)="onRowDblClick($event)">
+
+      <!-- Columns -->
+      <dxi-column
+        dataField="name"
+        caption="Role Name"
+        [width]="250">
+      </dxi-column>
+
+      <dxi-column
+        dataField="description"
+        caption="Description">
+      </dxi-column>
+
+      <dxi-column
+        dataField="created"
+        caption="Created"
+        dataType="datetime"
+        format="dd/MM/yyyy HH:mm"
+        [width]="150">
+      </dxi-column>
+
+      <dxi-column
+        type="buttons"
+        [width]="110"
+        caption="Actions">
+        <dxi-button
+          name="edit"
+          icon="edit"
+          hint="Edit"
+          (onClick)="onEditClick($event)">
+        </dxi-button>
+        <dxi-button
+          name="delete"
+          icon="trash"
+          hint="Delete"
+          (onClick)="onDeleteClick($event)">
+        </dxi-button>
+      </dxi-column>
+
+      <!-- Paging -->
+      <dxo-paging [pageSize]="20"></dxo-paging>
+      <dxo-pager
+        [visible]="true"
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[10, 20, 50, 100]"
+        [showInfo]="true"
+        [showNavigationButtons]="true">
+      </dxo-pager>
+
+      <!-- Search Panel -->
+      <dxo-search-panel
+        [visible]="true"
+        [width]="240"
+        placeholder="Search roles...">
+      </dxo-search-panel>
+
+      <!-- Filter Row -->
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+      <!-- Header Filter -->
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
+
+      <!-- Column Chooser -->
+      <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+
+      <!-- Export -->
+      <dxo-export
+        [enabled]="true"
+        [fileName]="'roles'"
+        [allowExportSelectedData]="true">
+      </dxo-export>
+
+      <!-- State Storing -->
+      <dxo-state-storing
+        [enabled]="true"
+        type="localStorage"
+        storageKey="rolesGrid">
+      </dxo-state-storing>
+    </dx-data-grid>
+  </div>
+</div>

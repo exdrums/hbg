@@ -43,20 +43,19 @@ export const routes: Routes = [
       {
         path: 'identity-resources',
         loadChildren: () => import('./modules/identity-resources/identity-resources.module').then(m => m.IdentityResourcesModule)
+      },
+      {
+        path: 'users',
+        loadChildren: () => import('./modules/users/users.module').then(m => m.UsersModule)
+      },
+      {
+        path: 'roles',
+        loadChildren: () => import('./modules/roles/roles.module').then(m => m.RolesModule)
+      },
+      {
+        path: 'grants',
+        loadChildren: () => import('./modules/grants/grants.module').then(m => m.GrantsModule)
       }
-      // TODO: Uncomment as modules are implemented
-      // {
-      //   path: 'users',
-      //   loadChildren: () => import('./modules/users/users.module').then(m => m.UsersModule)
-      // },
-      // {
-      //   path: 'roles',
-      //   loadChildren: () => import('./modules/roles/roles.module').then(m => m.RolesModule)
-      // },
-      // {
-      //   path: 'grants',
-      //   loadChildren: () => import('./modules/grants/grants.module').then(m => m.GrantsModule)
-      // }
     ]
   },
   {

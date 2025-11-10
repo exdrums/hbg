@@ -4,7 +4,7 @@
     <p>Welcome to Identity Server Administration</p>
   </div>
 
-  <div class="stats-grid">
+  <div class="stats-grid" *ngIf="!isLoading">
     <div *ngFor="let stat of stats" class="stat-card" [routerLink]="stat.link">
       <div class="stat-icon" [style.background-color]="stat.color">
         <i class="dx-icon dx-icon-{{stat.icon}}"></i>
@@ -14,6 +14,11 @@
         <div class="stat-title">{{stat.title}}</div>
       </div>
     </div>
+  </div>
+
+  <div class="loading-indicator" *ngIf="isLoading">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
+    <p>Loading dashboard statistics...</p>
   </div>
 
   <div class="dashboard-content">

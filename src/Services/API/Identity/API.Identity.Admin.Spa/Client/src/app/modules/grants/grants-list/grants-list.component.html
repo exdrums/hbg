@@ -1,0 +1,119 @@
+<div class="grants-container">
+  <div class="page-header">
+    <h1>Persisted Grants</h1>
+    <p>View and manage authorization grants, tokens, and codes</p>
+  </div>
+
+  <div class="data-grid-container">
+    <dx-data-grid
+      [dataSource]="grantsService.dataSource"
+      [showBorders]="true"
+      [showRowLines]="true"
+      [showColumnLines]="true"
+      [rowAlternationEnabled]="true"
+      [columnAutoWidth]="true"
+      [allowColumnReordering]="true"
+      [allowColumnResizing]="true"
+      [columnResizingMode]="'widget'"
+      (onToolbarPreparing)="onToolbarPreparing($event)">
+
+      <!-- Columns -->
+      <dxi-column
+        dataField="key"
+        caption="Grant Key"
+        [width]="200"
+        [visible]="false">
+      </dxi-column>
+
+      <dxi-column
+        dataField="type"
+        caption="Grant Type"
+        [width]="150">
+      </dxi-column>
+
+      <dxi-column
+        dataField="subjectId"
+        caption="Subject ID"
+        [width]="200">
+      </dxi-column>
+
+      <dxi-column
+        dataField="clientId"
+        caption="Client ID"
+        [width]="200">
+      </dxi-column>
+
+      <dxi-column
+        dataField="description"
+        caption="Description">
+      </dxi-column>
+
+      <dxi-column
+        dataField="creationTime"
+        caption="Created"
+        dataType="datetime"
+        format="dd/MM/yyyy HH:mm:ss"
+        [width]="160">
+      </dxi-column>
+
+      <dxi-column
+        dataField="expiration"
+        caption="Expires"
+        dataType="datetime"
+        format="dd/MM/yyyy HH:mm:ss"
+        [width]="160">
+      </dxi-column>
+
+      <dxi-column
+        type="buttons"
+        [width]="80"
+        caption="Actions">
+        <dxi-button
+          icon="trash"
+          hint="Revoke Grant"
+          (onClick)="onRevokeClick($event)">
+        </dxi-button>
+      </dxi-column>
+
+      <!-- Paging -->
+      <dxo-paging [pageSize]="20"></dxo-paging>
+      <dxo-pager
+        [visible]="true"
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[10, 20, 50, 100]"
+        [showInfo]="true"
+        [showNavigationButtons]="true">
+      </dxo-pager>
+
+      <!-- Search Panel -->
+      <dxo-search-panel
+        [visible]="true"
+        [width]="240"
+        placeholder="Search grants...">
+      </dxo-search-panel>
+
+      <!-- Filter Row -->
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+      <!-- Header Filter -->
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
+
+      <!-- Column Chooser -->
+      <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+
+      <!-- Export -->
+      <dxo-export
+        [enabled]="true"
+        [fileName]="'persisted-grants'"
+        [allowExportSelectedData]="true">
+      </dxo-export>
+
+      <!-- State Storing -->
+      <dxo-state-storing
+        [enabled]="true"
+        type="localStorage"
+        storageKey="grantsGrid">
+      </dxo-state-storing>
+    </dx-data-grid>
+  </div>
+</div>
