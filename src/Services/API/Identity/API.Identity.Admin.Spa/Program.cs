@@ -31,13 +31,13 @@ namespace API.Identity.Admin.Spa
                     builder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     builder.AddConsole();
                     builder.AddDebug();
-                })
-                .UseSerilog((builderContext, config) =>
-                {
-                    config
-                        .MinimumLevel.Information()
-                        .Enrich.FromLogContext()
-                        .WriteTo.Console();
+                // })
+                // .UseSerilog((builderContext, config) =>
+                // {
+                //     config
+                //         .MinimumLevel.Information()
+                //         .Enrich.FromLogContext()
+                //         .WriteTo.Console();
                 });
     }
 }

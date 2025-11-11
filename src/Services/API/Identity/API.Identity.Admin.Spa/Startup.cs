@@ -87,10 +87,11 @@ namespace API.Identity.Admin.Spa
             // Configure UI, add all endpoints created in the cluster
             services.AddHealthChecksUI(opts =>
             {
-                opts.AddHealthCheckEndpoint("Self", "http://localhost:80/health");
-                var identityInternal = settings.HBGIDENTITY.Replace("https", "http");
+                var spaInternal = settings.HBGIDENTITYADMINSPA;
+                opts.AddHealthCheckEndpoint("Self", spaInternal + "/health");
+                var identityInternal = settings.HBGIDENTITY;//.Replace("https", "http");
                 opts.AddHealthCheckEndpoint("API.Identity: " + identityInternal, identityInternal + "/health");
-                var adminApiInternal = settings.HBGIDENTITYADMINAPI.Replace("https", "http");
+                var adminApiInternal = settings.HBGIDENTITYADMINAPI;//.Replace("https", "http");
                 opts.AddHealthCheckEndpoint("API.Identity.Admin.Api: " + adminApiInternal, adminApiInternal + "/health");
             }).AddInMemoryStorage();
         }

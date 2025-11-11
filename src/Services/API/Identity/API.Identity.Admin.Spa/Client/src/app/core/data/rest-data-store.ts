@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { isNotEmpty } from "@app/core/utils/string-utils";
 import DevExpress from "devextreme";
-import { firstValueFrom, of } from "rxjs";
+import { firstValueFrom, map, of } from "rxjs";
 import { DataStoreError } from "./errors";
 import { LoadedData, RestDataStoreUrls } from "./options";
 import { CustomDataStore } from "./custom-data-store";
@@ -11,7 +11,7 @@ import { CustomDataStore } from "./custom-data-store";
  * Provides CRUD operations against Admin REST API
  */
 export class RestDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomDataStore<TGET, TKEY> {
-  constructor(private readonly http: HttpClient, protected urls: RestDataStoreUrls) {
+  constructor(private readonly http: HttpClient, protected urls: RestDataStoreUrls, protected dataField: string = "data") {
     super({
       key: urls.key,
       load: (loadOpts) => this.loadAction(loadOpts, urls.loadUrl),
@@ -34,7 +34,9 @@ export class RestDataStore<TGET, TKEY = number, TPOST = TGET> extends CustomData
         params = params.set(arg.key, arg.value);
       });
     }
-    return firstValueFrom(this.http.get<LoadedData<TGET[]>>(url, { params: params }))
+    return firstValueFrom(this.http.get<LoadedData<TGET[]>>(url, { params: params }).pipe(
+      map(response => response.data = response[this.dataField])
+    ));
   }
 
   /**

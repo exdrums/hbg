@@ -1,23 +1,28 @@
 import { Injectable } from '@angular/core';
 import { ConfigService } from '@app/core/services/config.service';
 import DataSource from 'devextreme/data/data_source';
-import { RestDataStore } from '@app/core/services/rest.data.store';
+import { RestDataStore } from '@app/core/data/rest-data-store';
+import { HttpClient } from '@angular/common/http';
+import { IdentityResource } from '../models/identity-resource.model';
 
 @Injectable()
 export class IdentityResourcesService {
   dataSource: DataSource;
-  private dataStore: RestDataStore;
+  private dataStore: RestDataStore<IdentityResource, string>;
 
-  constructor(private config: ConfigService) {
+  constructor(
+    private http: HttpClient,
+    private config: ConfigService
+  ) {
     const baseUrl = `${this.config.hbgidentityadminapi}/api/identityresources`;
 
-    this.dataStore = new RestDataStore({
+    this.dataStore = new RestDataStore(this.http, {
       key: 'id',
       loadUrl: baseUrl,
       insertUrl: baseUrl,
       updateUrl: baseUrl,
-      deleteUrl: baseUrl
-    });
+      removeUrl: baseUrl
+    }, "identityResources");
 
     this.dataSource = new DataSource({
       store: this.dataStore,

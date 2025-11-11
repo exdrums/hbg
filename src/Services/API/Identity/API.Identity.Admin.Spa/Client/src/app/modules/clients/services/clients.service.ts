@@ -22,7 +22,7 @@ export class ClientsService {
       insertUrl: `${apiUrl}/api/clients`,
       updateUrl: `${apiUrl}/api/clients/`,
       removeUrl: `${apiUrl}/api/clients`
-    });
+    }, "clients");
 
     this.dataSource = new CustomDataSource<Client>(this.dataStore);
   }
