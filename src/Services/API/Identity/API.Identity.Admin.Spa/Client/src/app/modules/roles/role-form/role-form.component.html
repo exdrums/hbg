@@ -1,0 +1,47 @@
+<div class="role-form-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Edit Role' : 'Create New Role' }}</h1>
+    <p>{{ isEditMode ? 'Modify role configuration' : 'Configure a new role for access control' }}</p>
+  </div>
+
+  <div class="form-container" *ngIf="!isLoading">
+    <dx-form
+      [formData]="role"
+      [colCount]="1"
+      [labelLocation]="'top'"
+      [showColonAfterLabel]="false">
+
+      <dxi-item dataField="name" [isRequired]="true">
+        <dxo-label text="Role Name"></dxo-label>
+        <dxi-validation-rule type="required" message="Role Name is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item dataField="description" editorType="dxTextArea" [editorOptions]="{ height: 100 }">
+        <dxo-label text="Description"></dxo-label>
+      </dxi-item>
+
+    </dx-form>
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <dx-button
+        text="Save"
+        type="success"
+        icon="check"
+        [disabled]="isSaving"
+        (onClick)="onSave()">
+      </dx-button>
+      <dx-button
+        text="Cancel"
+        type="normal"
+        icon="close"
+        [disabled]="isSaving"
+        (onClick)="onCancel()">
+      </dx-button>
+    </div>
+  </div>
+
+  <div class="loading-indicator" *ngIf="isLoading">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
+  </div>
+</div>

@@ -50,6 +50,11 @@ public static class ConfigureServices {
             options.EnableDetailedErrors = true;
         }).AddJsonProtocol();
 
+        // Add health checks
+        services.AddHealthChecks()
+            .AddDbContextCheck<ProjectsDbContext>("database")
+            .AddCheck("signalr", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy("SignalR is ready"));
+
         services.AddControllers();
 
         return appSettings;

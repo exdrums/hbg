@@ -1,0 +1,141 @@
+.user-form-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--divider-color, #e0e0e0);
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-primary, #212121);
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-secondary, #757575);
+  }
+}
+
+.form-container {
+  flex: 1;
+  background: var(--background-color, #ffffff);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  overflow: auto;
+}
+
+.tab-content {
+  padding: 24px 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 24px;
+  border-top: 1px solid var(--divider-color, #e0e0e0);
+  margin-top: 24px;
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px;
+}
+
+.help-text {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-secondary, #757575);
+  font-style: italic;
+}
+
+.info-panel {
+  padding: 16px;
+  background-color: rgba(25, 118, 210, 0.08);
+  border-left: 4px solid #1976d2;
+  border-radius: 4px;
+  margin-top: 8px;
+
+  .info-text {
+    strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-primary, #333);
+    }
+
+    p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-secondary, #666);
+      line-height: 1.5;
+    }
+  }
+}
+
+::ng-deep {
+  .dx-tab-panel {
+    .dx-tab {
+      padding: 12px 24px;
+    }
+
+    .dx-tab-text {
+      font-weight: 500;
+    }
+
+    .dx-state-focused {
+      box-shadow: none;
+    }
+  }
+
+  .dx-form {
+    .dx-field-item-label-text {
+      font-weight: 500;
+      color: var(--text-primary, #333);
+    }
+
+    .dx-texteditor {
+      border-radius: 4px;
+    }
+  }
+
+  .dx-button {
+    border-radius: 4px;
+    padding: 8px 20px;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    h1 {
+      font-size: 24px;
+    }
+
+    p {
+      font-size: 13px;
+    }
+  }
+
+  .form-container {
+    padding: 16px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+
+    ::ng-deep .dx-button {
+      width: 100%;
+    }
+  }
+}

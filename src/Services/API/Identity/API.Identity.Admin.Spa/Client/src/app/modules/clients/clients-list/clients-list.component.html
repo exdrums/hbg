@@ -1,0 +1,125 @@
+<div class="clients-container">
+  <div class="page-header">
+    <h1>OIDC Clients</h1>
+    <p>Manage OAuth2/OpenID Connect client applications</p>
+  </div>
+
+  <div class="data-grid-container">
+    <dx-data-grid
+      [dataSource]="clientsService.dataSource"
+      [showBorders]="true"
+      [showRowLines]="true"
+      [showColumnLines]="true"
+      [rowAlternationEnabled]="true"
+      [columnAutoWidth]="true"
+      [allowColumnReordering]="true"
+      [allowColumnResizing]="true"
+      [columnResizingMode]="'widget'"
+      (onToolbarPreparing)="onToolbarPreparing($event)"
+      (onRowDblClick)="onRowDblClick($event)">
+
+      <!-- Columns -->
+      <dxi-column
+        dataField="clientId"
+        caption="Client ID"
+        [width]="200">
+      </dxi-column>
+
+      <dxi-column
+        dataField="clientName"
+        caption="Client Name"
+        [width]="250">
+      </dxi-column>
+
+      <dxi-column
+        dataField="description"
+        caption="Description">
+      </dxi-column>
+
+      <dxi-column
+        dataField="enabled"
+        caption="Enabled"
+        dataType="boolean"
+        [width]="100">
+      </dxi-column>
+
+      <dxi-column
+        dataField="protocolType"
+        caption="Protocol"
+        [width]="120">
+      </dxi-column>
+
+      <dxi-column
+        dataField="requireConsent"
+        caption="Require Consent"
+        dataType="boolean"
+        [width]="140">
+      </dxi-column>
+
+      <dxi-column
+        dataField="allowOfflineAccess"
+        caption="Offline Access"
+        dataType="boolean"
+        [width]="140">
+      </dxi-column>
+
+      <dxi-column
+        type="buttons"
+        [width]="110"
+        caption="Actions">
+        <dxi-button
+          name="edit"
+          icon="edit"
+          hint="Edit"
+          (onClick)="onEditClick($event)">
+        </dxi-button>
+        <dxi-button
+          name="delete"
+          icon="trash"
+          hint="Delete"
+          (onClick)="onDeleteClick($event)">
+        </dxi-button>
+      </dxi-column>
+
+      <!-- Paging -->
+      <dxo-paging [pageSize]="20"></dxo-paging>
+      <dxo-pager
+        [visible]="true"
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[10, 20, 50, 100]"
+        [showInfo]="true"
+        [showNavigationButtons]="true">
+      </dxo-pager>
+
+      <!-- Search Panel -->
+      <dxo-search-panel
+        [visible]="true"
+        [width]="240"
+        placeholder="Search clients...">
+      </dxo-search-panel>
+
+      <!-- Filter Row -->
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+      <!-- Header Filter -->
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
+
+      <!-- Column Chooser -->
+      <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+
+      <!-- Export -->
+      <dxo-export
+        [enabled]="true"
+        [fileName]="'clients'"
+        [allowExportSelectedData]="true">
+      </dxo-export>
+
+      <!-- State Storing -->
+      <dxo-state-storing
+        [enabled]="true"
+        type="localStorage"
+        storageKey="clientsGrid">
+      </dxo-state-storing>
+    </dx-data-grid>
+  </div>
+</div>

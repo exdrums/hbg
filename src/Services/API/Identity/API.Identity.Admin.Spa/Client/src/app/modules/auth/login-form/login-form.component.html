@@ -1,0 +1,65 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h2>Identity Admin</h2>
+      <p>Sign in to manage your Identity Server</p>
+    </div>
+
+    <form (submit)="onSubmit($event)">
+      <dx-form
+        id="login-form"
+        [formData]="formData"
+        [disabled]="loading">
+
+        <dxi-item
+          dataField="username"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            placeholder: 'Username or Email',
+            mode: 'text'
+          }">
+          <dxi-validation-rule
+            type="required"
+            message="Username is required">
+          </dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          dataField="password"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            placeholder: 'Password',
+            mode: 'password'
+          }">
+          <dxi-validation-rule
+            type="required"
+            message="Password is required">
+          </dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          itemType="button"
+          [buttonOptions]="{
+            text: 'Sign In',
+            type: 'default',
+            useSubmitBehavior: true,
+            width: '100%',
+            disabled: loading
+          }">
+        </dxi-item>
+      </dx-form>
+
+      <dx-load-indicator
+        *ngIf="loading"
+        [visible]="loading"
+        class="login-loader">
+      </dx-load-indicator>
+    </form>
+
+    <div class="login-footer">
+      <p class="text-muted">Identity Server Administration v1.0</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+::ng-deep {
+  .app-drawer {
+    height: 100vh;
+    width: 100%;
+
+    .dx-drawer-panel-content {
+      background-color: var(--surface-color, #f5f5f5);
+      border-right: 1px solid var(--divider-color, #e0e0e0);
+    }
+
+    .dx-drawer-content {
+      background-color: var(--background-color, #fff);
+    }
+
+    .dx-drawer-wrapper {
+      height: 100%;
+    }
+  }
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-color: var(--background-color, #ffffff);
+}
+
+.app-content {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+  background-color: var(--surface-color, #f8f9fa);
+  min-height: 0; // Prevents flex overflow issues
+
+  // Ensure proper scrolling
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--surface-color, #f1f1f1);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--divider-color, #888);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--text-secondary, #555);
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .app-content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .app-content {
+    padding: 12px;
+  }
+}

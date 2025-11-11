@@ -1,0 +1,149 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-admin-spa",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa/API.Identity.Admin.Spa.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "watch-admin-spa",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "run",
+        "--project",
+        "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa/API.Identity.Admin.Spa.csproj"
+      ],
+      "problemMatcher": "$msCompile",
+      "isBackground": true
+    },
+    {
+      "label": "test-dotnet",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "test",
+        "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa.Tests/API.Identity.Admin.Spa.Tests.csproj",
+        "--verbosity",
+        "normal"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "npm-install",
+      "type": "shell",
+      "command": "npm install",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa/Client"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "npm-start",
+      "type": "shell",
+      "command": "npm start",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa/Client"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Compiling",
+          "endsPattern": "Compiled successfully"
+        }
+      }
+    },
+    {
+      "label": "npm-test",
+      "type": "shell",
+      "command": "npm test",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa/Client"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "npm-build",
+      "type": "shell",
+      "command": "npm run build",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa/Client"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "docker-build-m1",
+      "type": "shell",
+      "command": "docker build --platform linux/arm64 -f src/Services/API/Identity/API.Identity.Admin.Spa/Dockerfile -t exdrums/hbg-admin-spa:latest .",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "k8s-deploy",
+      "type": "shell",
+      "command": "kubectl apply -f k8s/hbg-admin-spa.yaml",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "k8s-delete",
+      "type": "shell",
+      "command": "kubectl delete -f k8s/hbg-admin-spa.yaml",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "k8s-logs",
+      "type": "shell",
+      "command": "kubectl logs -l app=hbg-admin-spa -f",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
+      "label": "start-all",
+      "dependsOn": [
+        "npm-start",
+        "watch-admin-spa"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "run-all-tests",
+      "type": "shell",
+      "command": "./run-tests.sh all",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Services/API/Identity/API.Identity.Admin.Spa"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

@@ -251,6 +251,47 @@
                 ]
             },
             {
+                "ClientId": "client_admin_spa",
+                "ClientName": "Identity Admin SPA",
+                "ClientUri": "https://localhost:5796",
+                "Description": "Angular SPA for Identity Server Administration",
+                "AllowOfflineAccess": true,
+                "RequirePkce": false,
+                "RequireConsent": false,
+                "AllowedGrantTypes": [
+                    "password",
+                    "client_credentials"
+                ],
+                "ClientSecrets": [
+                    {
+                        "Value": "admin_spa_secret"
+                    }
+                ],
+                "RedirectUris": [
+                    "http://localhost:4201/",
+                    "https://localhost:5796/",
+                    "https://adminspa.houbirg.local/"
+                ],
+                "PostLogoutRedirectUris": [
+                    "http://localhost:4201/",
+                    "https://localhost:5796/",
+                    "https://adminspa.houbirg.local/"
+                ],
+                "AllowedCorsOrigins": [
+                    "http://localhost:4201",
+                    "https://localhost:5796",
+                    "https://adminspa.houbirg.local"
+                ],
+                "AllowedScopes": [
+                    "openid",
+                    "profile",
+                    "email",
+                    "roles",
+                    "offline_access",
+                    "api_admin"
+                ]
+            },
+            {
                 "ClientId": "client_files_swaggerui",
                 "ClientName": "Fils Swagger UI",
                 "AllowedGrantTypes": [ "authorization_code" ],

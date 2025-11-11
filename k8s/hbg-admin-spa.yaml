@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hbg-admin-spa
+  labels:
+    app: hbg-admin-spa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hbg-admin-spa
+  template:
+    metadata:
+      labels:
+        app: hbg-admin-spa
+      annotations:
+        # This annotation tells trust-manager to inject the CA from /etc/trusted-cas into the container's trust store.
+        trust-manager/inject: "true"
+    spec:
+      containers:
+      - name: hbg-admin-spa
+        imagePullPolicy: Never # never pull local images from docker, always use local
+        image: exdrums/hbg-admin-spa
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: ASPNETCORE_URLS
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: asp_hosting_urls
+        - name: 'HBGIDENTITY'
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-sts-url
+        - name: 'HBGIDENTITYADMINSPA'
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-admin-spa-url
+        - name: 'HBGIDENTITYADMINSPADEV'
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-admin-spa-dev-url
+        - name: 'HBGIDENTITYADMINAPI'
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-adminapi-url
+        - name: DockerConfiguration__UpdateCaCertificate
+          value: "true"
+        # Optionally, if your trust-manager requires a volume mount:
+        volumeMounts:
+        - name: trusted-ca
+          mountPath: /etc/ssl/certs/trusted
+        # Health checks
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: trusted-ca
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hbg-admin-spa-service
+  labels:
+    app: hbg-admin-spa
+spec:
+  # type: NodePort
+  selector:
+    app: hbg-admin-spa
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    # nodePort: 30796

@@ -24,6 +24,10 @@ public static class ConfigureServices {
         services.AddTransient<FilesRepo>();
         services.AddTransient<ProjectPermissionsService>();
 
+        // Add health checks
+        services.AddHealthChecks()
+            .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy("Files service is ready"));
+
         services.AddControllers();
     }
 

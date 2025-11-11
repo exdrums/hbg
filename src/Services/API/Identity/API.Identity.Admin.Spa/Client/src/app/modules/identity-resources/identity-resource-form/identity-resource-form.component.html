@@ -1,0 +1,106 @@
+<div class="identity-resource-form-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Edit Identity Resource' : 'Create New Identity Resource' }}</h1>
+    <p>{{ isEditMode ? 'Modify identity resource configuration' : 'Configure a new OpenID Connect identity resource' }}</p>
+  </div>
+
+  <div class="form-container" *ngIf="!isLoading">
+    <dx-tab-panel
+      [height]="'auto'"
+      [swipeEnabled]="false"
+      [animationEnabled]="true">
+
+      <!-- Basic Settings Tab -->
+      <dxi-item title="Basic Settings" icon="info">
+        <div class="tab-content">
+          <dx-form
+            [formData]="resource"
+            [colCount]="2"
+            [labelLocation]="'top'"
+            [showColonAfterLabel]="false">
+
+            <dxi-item dataField="name" [isRequired]="true">
+              <dxo-label text="Resource Name"></dxo-label>
+              <dxi-validation-rule type="required" message="Name is required"></dxi-validation-rule>
+            </dxi-item>
+
+            <dxi-item dataField="displayName">
+              <dxo-label text="Display Name"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="description" editorType="dxTextArea" [colSpan]="2" [editorOptions]="{ height: 80 }">
+              <dxo-label text="Description"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="enabled" editorType="dxCheckBox">
+              <dxo-label text="Enabled"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="required" editorType="dxCheckBox">
+              <dxo-label text="Required"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="emphasize" editorType="dxCheckBox">
+              <dxo-label text="Emphasize"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="showInDiscoveryDocument" editorType="dxCheckBox">
+              <dxo-label text="Show in Discovery Document"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </dxi-item>
+
+      <!-- User Claims Tab -->
+      <dxi-item title="User Claims" icon="tags">
+        <div class="tab-content">
+          <dx-form
+            [colCount]="1"
+            [labelLocation]="'top'"
+            [showColonAfterLabel]="false">
+
+            <dxi-item [colSpan]="1">
+              <dxo-label text="Associated User Claims"></dxo-label>
+              <div *dxTemplate>
+                <dx-tag-box
+                  [(value)]="selectedUserClaims"
+                  [items]="availableUserClaims"
+                  [searchEnabled]="true"
+                  [showSelectionControls]="true"
+                  [acceptCustomValue]="true"
+                  placeholder="Select user claims...">
+                </dx-tag-box>
+                <div class="help-text">
+                  Select which user claims should be included when this identity resource is requested.
+                </div>
+              </div>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </dxi-item>
+
+    </dx-tab-panel>
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <dx-button
+        text="Save"
+        type="success"
+        icon="check"
+        [disabled]="isSaving"
+        (onClick)="onSave()">
+      </dx-button>
+      <dx-button
+        text="Cancel"
+        type="normal"
+        icon="close"
+        [disabled]="isSaving"
+        (onClick)="onCancel()">
+      </dx-button>
+    </div>
+  </div>
+
+  <div class="loading-indicator" *ngIf="isLoading">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
+  </div>
+</div>

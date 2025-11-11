@@ -1,0 +1,19 @@
+<div *ngIf="data$ | async as data">
+  <div *ngIf="data.data.serverError as serv">
+    <h3>Server Error:</h3>
+    <p><strong>Status:</strong> {{serv.status}} {{serv.statusText}}</p>
+    <p><strong>Message:</strong> {{serv.message}}</p>
+    <div *ngIf="serv.error">
+      <h4>Details:</h4>
+      <pre>{{serv.error | json}}</pre>
+    </div>
+  </div>
+  <div *ngIf="data.data.clientError as clint">
+    <h3>Client Error:</h3>
+    <p><strong>Message:</strong> {{clint.message}}</p>
+    <div *ngIf="clint.stack">
+      <h4>Stack Trace:</h4>
+      <pre>{{clint.stack}}</pre>
+    </div>
+  </div>
+</div>

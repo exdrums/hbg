@@ -13,6 +13,8 @@ namespace API.Common
         public string HBGADMINDEV { get; set; } = "";
         public string HBGIDENTITY { get; set; } = "";
         public string HBGIDENTITYADMIN { get; set; } = "";
+        public string HBGIDENTITYADMINSPA { get; set; } = "";
+        public string HBGIDENTITYADMINSPADEV { get; set; } = "";
         public string HBGIDENTITYADMINAPI { get; set; } = "";
         public string HBGFILES { get; set; } = "";
         public string HBGPROJECTS { get; set; } = "";

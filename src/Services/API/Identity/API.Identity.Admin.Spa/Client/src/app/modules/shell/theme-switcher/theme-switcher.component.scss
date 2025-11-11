@@ -1,0 +1,32 @@
+:host {
+  display: inline-block;
+}
+
+::ng-deep {
+  .dx-button {
+    .dx-icon {
+      font-size: 22px;
+      color: var(--text-primary, #333);
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    &:hover .dx-icon {
+      transform: rotate(15deg) scale(1.1);
+      color: var(--primary-color, #1976d2);
+    }
+
+    &:active .dx-icon {
+      transform: rotate(0deg) scale(0.95);
+    }
+
+    .dx-button-content {
+      padding: 8px;
+      border-radius: 8px;
+      transition: background-color 0.2s ease;
+    }
+
+    &:hover .dx-button-content {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+}

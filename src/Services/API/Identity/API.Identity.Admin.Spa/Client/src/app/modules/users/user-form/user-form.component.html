@@ -1,0 +1,159 @@
+<div class="user-form-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Edit User' : 'Create New User' }}</h1>
+    <p>{{ isEditMode ? 'Modify user account configuration' : 'Configure a new user account' }}</p>
+  </div>
+
+  <div class="form-container" *ngIf="!isLoading">
+    <dx-tab-panel
+      [height]="'auto'"
+      [swipeEnabled]="false"
+      [animationEnabled]="true">
+
+      <!-- Basic Information Tab -->
+      <dxi-item title="Basic Information" icon="user">
+        <div class="tab-content">
+          <dx-form
+            [formData]="user"
+            [colCount]="2"
+            [labelLocation]="'top'"
+            [showColonAfterLabel]="false">
+
+            <dxi-item dataField="username" [isRequired]="true">
+              <dxo-label text="Username"></dxo-label>
+              <dxi-validation-rule type="required" message="Username is required"></dxi-validation-rule>
+            </dxi-item>
+
+            <dxi-item dataField="email" [isRequired]="true" editorType="dxTextBox" [editorOptions]="{ mode: 'email' }">
+              <dxo-label text="Email"></dxo-label>
+              <dxi-validation-rule type="required" message="Email is required"></dxi-validation-rule>
+              <dxi-validation-rule type="email" message="Invalid email format"></dxi-validation-rule>
+            </dxi-item>
+
+            <dxi-item dataField="firstName">
+              <dxo-label text="First Name"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="lastName">
+              <dxo-label text="Last Name"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="displayName" [colSpan]="2">
+              <dxo-label text="Display Name"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="phoneNumber">
+              <dxo-label text="Phone Number"></dxo-label>
+            </dxi-item>
+
+            <dxi-item></dxi-item>
+
+            <dxi-item dataField="isActive" editorType="dxCheckBox">
+              <dxo-label text="Account Active"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="emailConfirmed" editorType="dxCheckBox">
+              <dxo-label text="Email Confirmed"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="phoneNumberConfirmed" editorType="dxCheckBox">
+              <dxo-label text="Phone Number Confirmed"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="twoFactorEnabled" editorType="dxCheckBox">
+              <dxo-label text="Two-Factor Authentication"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </dxi-item>
+
+      <!-- Roles & Permissions Tab -->
+      <dxi-item title="Roles & Permissions" icon="key">
+        <div class="tab-content">
+          <dx-form
+            [colCount]="1"
+            [labelLocation]="'top'"
+            [showColonAfterLabel]="false">
+
+            <dxi-item [colSpan]="1">
+              <dxo-label text="Assigned Roles"></dxo-label>
+              <div *dxTemplate>
+                <dx-tag-box
+                  [(value)]="selectedRoles"
+                  [items]="availableRoles"
+                  [searchEnabled]="true"
+                  [showSelectionControls]="true"
+                  [acceptCustomValue]="true"
+                  placeholder="Select user roles...">
+                </dx-tag-box>
+                <div class="help-text">
+                  Assign roles to this user. Roles determine the user's permissions and access levels.
+                </div>
+              </div>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </dxi-item>
+
+      <!-- Security Settings Tab -->
+      <dxi-item title="Security Settings" icon="lock">
+        <div class="tab-content">
+          <dx-form
+            [formData]="user"
+            [colCount]="2"
+            [labelLocation]="'top'"
+            [showColonAfterLabel]="false">
+
+            <dxi-item dataField="lockoutEnabled" editorType="dxCheckBox">
+              <dxo-label text="Lockout Enabled"></dxo-label>
+            </dxi-item>
+
+            <dxi-item dataField="accessFailedCount" editorType="dxNumberBox" [editorOptions]="{ min: 0, showSpinButtons: true }">
+              <dxo-label text="Failed Access Attempts"></dxo-label>
+            </dxi-item>
+
+            <dxi-item [colSpan]="2">
+              <div *dxTemplate class="info-panel">
+                <dx-box direction="row" width="100%">
+                  <dxi-item [ratio]="0" baseSize="auto">
+                    <i class="dx-icon dx-icon-info" style="font-size: 24px; color: #1976d2; margin-right: 12px;"></i>
+                  </dxi-item>
+                  <dxi-item [ratio]="1">
+                    <div class="info-text">
+                      <strong>Security Information:</strong>
+                      <p>Lockout is automatically enabled when a user fails to log in multiple times.
+                      Two-factor authentication provides an additional layer of security.</p>
+                    </div>
+                  </dxi-item>
+                </dx-box>
+              </div>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </dxi-item>
+
+    </dx-tab-panel>
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <dx-button
+        text="Save"
+        type="success"
+        icon="check"
+        [disabled]="isSaving"
+        (onClick)="onSave()">
+      </dx-button>
+      <dx-button
+        text="Cancel"
+        type="normal"
+        icon="close"
+        [disabled]="isSaving"
+        (onClick)="onCancel()">
+      </dx-button>
+    </div>
+  </div>
+
+  <div class="loading-indicator" *ngIf="isLoading">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
+  </div>
+</div>
