@@ -1,0 +1,32 @@
+# n8n-storage.yaml
+# Defines persistent storage for n8n application data
+# Stores workflow files, credentials, and temporary data
+---
+# Persistent Volume Claim for n8n application data
+# Ensures workflow persistence across pod restarts
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: n8n-data-pvc
+  labels:
+    app: n8n
+    component: application
+    storage-type: application-data
+  annotations:
+    description: "Persistent storage for n8n workflows and application data"
+    volume.beta.kubernetes.io/storage-class: "hostpath"
+spec:
+  # Access mode allows single pod read/write access
+  # n8n requires exclusive access to its data directory
+  accessModes:
+  - ReadWriteOnce
+  # Storage capacity for n8n application data
+  # Includes workflow definitions, logs, and temporary files
+  # Adjust based on expected workflow complexity and volume
+  resources:
+    requests:
+      storage: 10Gi
+
+  # Storage class for Docker Desktop environment
+  # Uses local host path storage for development
+  storageClassName: docker-sc

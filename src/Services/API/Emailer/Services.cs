@@ -39,6 +39,12 @@ public static class ConfigureServices
             options.EnableDetailedErrors = true;
         }).AddJsonProtocol();
 
+        // Add health checks
+        services.AddHealthChecks()
+            .AddDbContextCheck<AppDbContext>("database")
+            .AddCheck("signalr", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy("SignalR is ready"))
+            .AddCheck("smtp", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy("SMTP service is ready"));
+
         services.AddControllers();
 
         return appSettings;

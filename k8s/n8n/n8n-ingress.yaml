@@ -1,0 +1,97 @@
+# n8n-ingress.yaml
+# Optional: Provides external HTTP/HTTPS access to n8n
+# Requires an ingress controller (e.g., nginx-ingress, traefik)
+# For Docker Desktop, enable ingress controller or use port-forward instead
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: n8n-ingress
+  namespace: n8n
+  labels:
+    app: n8n
+    component: ingress
+  annotations:
+    description: "Ingress for external n8n web interface access"
+
+    # Nginx ingress controller annotations
+    # Uncomment and adjust based on your ingress controller
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+
+    # Additional security headers for production deployment
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header X-Frame-Options "SAMEORIGIN" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header X-XSS-Protection "1; mode=block" always;
+      add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # Request size limit for file uploads
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+
+    # Timeout settings for long-running workflows
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+
+    # Rate limiting to prevent abuse
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+spec:
+  # Ingress class determines which controller handles this ingress
+  # Common values: nginx, traefik, istio
+  ingressClassName: nginx
+
+  # TLS configuration for HTTPS access
+  # Uncomment and configure for production deployment
+  # tls:
+  # - hosts:
+  #   - n8n.yourdomain.com
+  #   secretName: n8n-tls-secret
+
+  # Routing rules for incoming requests
+  rules:
+  # Rule for localhost access (Docker Desktop development)
+  - host: n8n.localhost
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: n8n-service
+            port:
+              number: 5678
+  # Alternative rule for production domain
+  # Uncomment and replace with your actual domain
+  # - host: n8n.yourdomain.com
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: n8n-service
+  #           port:
+  #             number: 5678
+
+---
+
+# TLS Secret template for HTTPS configuration
+# Uncomment and configure for production deployment with SSL certificates
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: n8n-tls-secret
+#   namespace: n8n
+#   labels:
+#     app: n8n
+#     component: tls
+#   annotations:
+#     description: "TLS certificate for n8n HTTPS access"
+# type: kubernetes.io/tls
+# data:
+#   # Base64 encoded certificate and private key
+#   # Generate using cert-manager or provide your own certificates
+#   tls.crt: LS0tLS1CRUdJTi... # Your certificate here
+#   tls.key: LS0tLS1CRUdJTi... # Your private key here

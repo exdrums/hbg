@@ -9,6 +9,6 @@ spec:
     name: hbg-clusterissuer
     kind: ClusterIssuer
   dnsNames:
-    - sts.houbirg.local
-    - admin.houbirg.local
-    - spa.houbirg.local
+  - sts.hbg.local
+  - admin.hbg.local
+  - spa.hbg.local
