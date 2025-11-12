@@ -1,0 +1,180 @@
+.project-list-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 500;
+      color: #333;
+    }
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+
+    .project-card {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+
+        h3 {
+          margin: 0;
+          font-size: 18px;
+          font-weight: 500;
+          color: #333;
+          flex: 1;
+        }
+
+        ::ng-deep .dx-button {
+          min-width: auto;
+        }
+      }
+
+      .card-body {
+        .description {
+          margin: 0 0 12px 0;
+          font-size: 14px;
+          color: #666;
+          line-height: 1.5;
+          max-height: 60px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .meta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 13px;
+
+          .jewelry-type {
+            padding: 4px 12px;
+            background-color: #e3f2fd;
+            color: #1976d2;
+            border-radius: 12px;
+            font-weight: 500;
+          }
+
+          .date {
+            color: #999;
+          }
+        }
+      }
+
+      &.new-project-card {
+        border: 2px dashed #ccc;
+        background-color: #fafafa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 180px;
+
+        .new-project-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          color: #666;
+
+          i {
+            font-size: 48px;
+            color: #999;
+          }
+
+          span {
+            font-size: 16px;
+            font-weight: 500;
+          }
+        }
+
+        &:hover {
+          border-color: #1976d2;
+          background-color: #f5f5f5;
+
+          .new-project-content {
+            color: #1976d2;
+
+            i {
+              color: #1976d2;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    text-align: center;
+
+    .empty-icon {
+      font-size: 80px;
+      margin-bottom: 24px;
+    }
+
+    .empty-text {
+      font-size: 24px;
+      font-weight: 500;
+      color: #333;
+      margin: 0 0 8px 0;
+    }
+
+    .empty-subtext {
+      font-size: 16px;
+      color: #999;
+      margin: 0 0 24px 0;
+    }
+  }
+
+  .popup-content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-list-container {
+    padding: 16px;
+
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+
+      ::ng-deep .dx-button {
+        width: 100%;
+      }
+    }
+
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

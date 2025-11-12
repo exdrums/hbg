@@ -1,0 +1,91 @@
+<div class="configuration-form">
+  <dx-form
+    [(formData)]="formData"
+    [colCount]="1"
+    labelLocation="top"
+    (onFieldDataChanged)="onFieldChanged()">
+
+    <!-- Material -->
+    <dxi-item
+      dataField="material"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: materials,
+        searchEnabled: true,
+        placeholder: 'Select material'
+      }">
+      <dxo-label text="Material"></dxo-label>
+    </dxi-item>
+
+    <!-- Gemstone -->
+    <dxi-item
+      dataField="gemstone"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: gemstones,
+        searchEnabled: true,
+        placeholder: 'Select gemstone'
+      }">
+      <dxo-label text="Gemstone"></dxo-label>
+    </dxi-item>
+
+    <!-- Style -->
+    <dxi-item
+      dataField="style"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: styles,
+        placeholder: 'Select style'
+      }">
+      <dxo-label text="Style"></dxo-label>
+    </dxi-item>
+
+    <!-- Finish -->
+    <dxi-item
+      dataField="finish"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: finishes,
+        placeholder: 'Select finish'
+      }">
+      <dxo-label text="Finish"></dxo-label>
+    </dxi-item>
+
+    <!-- Aspect Ratio -->
+    <dxi-item
+      dataField="aspectRatio"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: aspectRatios,
+        displayExpr: 'text',
+        valueExpr: 'value',
+        placeholder: 'Select aspect ratio'
+      }">
+      <dxo-label text="Image Size"></dxo-label>
+    </dxi-item>
+
+    <!-- Additional Notes -->
+    <dxi-item
+      dataField="notes"
+      editorType="dxTextArea"
+      [editorOptions]="{
+        height: 80,
+        maxLength: 500,
+        placeholder: 'Add any additional details...'
+      }">
+      <dxo-label text="Additional Details"></dxo-label>
+    </dxi-item>
+
+    <!-- Generate Button -->
+    <dxi-item
+      itemType="button"
+      [buttonOptions]="{
+        text: 'Generate Image',
+        type: 'default',
+        icon: 'image',
+        width: '100%',
+        onClick: onGenerateClick.bind(this)
+      }">
+    </dxi-item>
+  </dx-form>
+</div>

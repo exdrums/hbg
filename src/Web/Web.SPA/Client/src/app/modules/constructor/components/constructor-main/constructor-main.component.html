@@ -1,0 +1,107 @@
+<div class="constructor-container">
+  <div class="header">
+    <dx-button
+      icon="back"
+      type="normal"
+      [routerLink]="['/constructor']">
+    </dx-button>
+    <h2>{{ currentProject?.name || 'Jewelry Constructor' }}</h2>
+  </div>
+
+  <div class="content-layout">
+    <!-- Mobile: Tab Panel for all content -->
+    <div class="mobile-layout">
+      <dx-tab-panel
+        [dataSource]="[
+          { title: 'Configuration', icon: 'preferences' },
+          { title: 'AI Chat', icon: 'comment' },
+          { title: 'Gallery', icon: 'image' }
+        ]"
+        [selectedIndex]="selectedTabIndex"
+        [animationEnabled]="true"
+        [swipeEnabled]="true"
+        itemTitleTemplate="title">
+
+        <!-- Configuration Tab -->
+        <div *dxTemplate="let item of 'item'; index: i">
+          <div *ngIf="i === 0" class="tab-content">
+            <app-configuration-form
+              [projectId]="currentProject?.projectId"
+              [jewelryType]="currentProject?.jewelryType"
+              (onConfigurationChanged)="handleConfigurationChange($event)"
+              (onGenerateImage)="generateImage($event)">
+            </app-configuration-form>
+          </div>
+
+          <!-- Chat Tab -->
+          <div *ngIf="i === 1" class="tab-content">
+            <app-chat-assistant
+              [projectId]="currentProject?.projectId"
+              (onMessageSent)="handleChatMessage($event)">
+            </app-chat-assistant>
+          </div>
+
+          <!-- Gallery Tab -->
+          <div *ngIf="i === 2" class="tab-content">
+            <app-image-gallery
+              [projectId]="currentProject?.projectId"
+              [images]="generatedImages"
+              [loading]="isGenerating">
+            </app-image-gallery>
+          </div>
+        </div>
+
+        <div *dxTemplate="let item of 'title'">
+          <span><i [class]="'dx-icon-' + item.icon"></i> {{ item.title }}</span>
+        </div>
+      </dx-tab-panel>
+    </div>
+
+    <!-- Desktop: Side by side layout -->
+    <div class="desktop-layout">
+      <div class="control-panel">
+        <dx-tab-panel
+          [dataSource]="[
+            { title: 'Configuration', icon: 'preferences' },
+            { title: 'AI Chat', icon: 'comment' }
+          ]"
+          [selectedIndex]="selectedTabIndex"
+          [animationEnabled]="true"
+          itemTitleTemplate="title">
+
+          <!-- Configuration Tab -->
+          <div *dxTemplate="let item of 'item'; index: i">
+            <div *ngIf="i === 0" class="tab-content">
+              <app-configuration-form
+                [projectId]="currentProject?.projectId"
+                [jewelryType]="currentProject?.jewelryType"
+                (onConfigurationChanged)="handleConfigurationChange($event)"
+                (onGenerateImage)="generateImage($event)">
+              </app-configuration-form>
+            </div>
+
+            <!-- Chat Tab -->
+            <div *ngIf="i === 1" class="tab-content">
+              <app-chat-assistant
+                [projectId]="currentProject?.projectId"
+                (onMessageSent)="handleChatMessage($event)">
+              </app-chat-assistant>
+            </div>
+          </div>
+
+          <div *dxTemplate="let item of 'title'">
+            <span><i [class]="'dx-icon-' + item.icon"></i> {{ item.title }}</span>
+          </div>
+        </dx-tab-panel>
+      </div>
+
+      <div class="gallery-panel">
+        <app-image-gallery
+          [projectId]="currentProject?.projectId"
+          [images]="generatedImages"
+          [loading]="isGenerating">
+        </app-image-gallery>
+      </div>
+    </div>
+  </div>
+</div>
