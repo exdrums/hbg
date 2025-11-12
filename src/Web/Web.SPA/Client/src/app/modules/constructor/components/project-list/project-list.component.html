@@ -1,0 +1,117 @@
+<div class="project-list-container">
+  <div class="header">
+    <h2>Jewelry Constructor</h2>
+    <dx-button
+      text="New Project"
+      icon="add"
+      type="default"
+      (onClick)="showNewProjectPopup = true">
+    </dx-button>
+  </div>
+
+  <dx-load-panel
+    [visible]="loading"
+    [showIndicator]="true"
+    [showPane]="true"
+    message="Loading projects...">
+  </dx-load-panel>
+
+  <div class="projects-grid" *ngIf="!loading">
+    <div
+      *ngFor="let project of projects"
+      class="project-card"
+      (click)="openProject(project)">
+      <div class="card-header">
+        <h3>{{ project.name }}</h3>
+        <dx-button
+          icon="trash"
+          type="danger"
+          stylingMode="text"
+          (onClick)="deleteProject(project, $event)">
+        </dx-button>
+      </div>
+      <div class="card-body">
+        <p class="description">{{ project.description || 'No description' }}</p>
+        <div class="meta">
+          <span class="jewelry-type">{{ getJewelryTypeLabel(project.jewelryType) }}</span>
+          <span class="date">{{ formatDate(project.updatedAt) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="project-card new-project-card"
+      (click)="showNewProjectPopup = true">
+      <div class="new-project-content">
+        <i class="dx-icon-add"></i>
+        <span>Create New Project</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && projects.length === 0" class="empty-state">
+    <div class="empty-icon">💎</div>
+    <p class="empty-text">No projects yet</p>
+    <p class="empty-subtext">Create your first jewelry design project</p>
+    <dx-button
+      text="Create Project"
+      icon="add"
+      type="default"
+      (onClick)="showNewProjectPopup = true">
+    </dx-button>
+  </div>
+
+  <!-- New Project Popup -->
+  <dx-popup
+    [(visible)]="showNewProjectPopup"
+    [showTitle]="true"
+    title="New Jewelry Project"
+    [width]="400"
+    [height]="'auto'"
+    [dragEnabled]="false"
+    [showCloseButton]="true"
+    (onHidden)="onNewProjectPopupHidden()">
+    <div class="popup-content">
+      <dx-form
+        [(formData)]="newProject"
+        [colCount]="1"
+        labelLocation="top">
+
+        <dxi-item
+          dataField="name"
+          [editorOptions]="{ placeholder: 'Enter project name' }">
+          <dxo-label text="Project Name"></dxo-label>
+          <dxi-validation-rule type="required" message="Name is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          dataField="description"
+          editorType="dxTextArea"
+          [editorOptions]="{ height: 80, placeholder: 'Enter description...' }">
+          <dxo-label text="Description"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="jewelryType"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: jewelryTypes,
+            displayExpr: 'text',
+            valueExpr: 'value',
+            placeholder: 'Select jewelry type'
+          }">
+          <dxo-label text="Jewelry Type"></dxo-label>
+        </dxi-item>
+
+        <dxi-item itemType="button">
+          <dxo-button-options
+            text="Create Project"
+            type="default"
+            [width]="'100%'"
+            (onClick)="createProject()">
+          </dxo-button-options>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </dx-popup>
+</div>

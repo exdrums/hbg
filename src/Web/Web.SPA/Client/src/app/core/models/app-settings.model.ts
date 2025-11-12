@@ -7,6 +7,7 @@ export interface IClientAppSettings {
     hbgprojects: string;
     hbgemailer: string;
     hbgcontacts: string;
+    hbgconstructor: string;
 
     // audience: string;
 }
@@ -25,6 +26,7 @@ export const defaultSettings: IClientAppSettings = {
     hbgprojects: "http://localhost:5702",
     hbgemailer: "http://localhost:5703",
     hbgcontacts: "http://localhost:5704",
+    hbgconstructor: "http://localhost:5705",
 
     // audience: null
 };

@@ -69,6 +69,10 @@ export const routes: Routes = [
       {
         path: "chat",
         component: MainChatComponent
+      },
+      {
+        path: "constructor",
+        loadChildren: () => import('./modules/constructor/constructor.module').then(m => m.ConstructorModule)
       }
       // {
       //   path: 'scheduler',

@@ -23,6 +23,7 @@ public static class ConfigureServices {
         services.AddTransient<AuthService>();
         services.AddTransient<FilesRepo>();
         services.AddTransient<ProjectPermissionsService>();
+        services.AddScoped<IImageStorageService, ImageStorageService>();
 
         // Add health checks
         services.AddHealthChecks()
