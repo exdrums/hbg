@@ -106,6 +106,15 @@
                     "role",
                     "name"
                 ]
+            },
+            {
+                "Name": "api_constructor",
+                "DisplayName": "api_constructor",
+                "Required": true,
+                "UserClaims": [
+                    "role",
+                    "name"
+                ]
             }
         ],
         "ApiResources": [
@@ -137,6 +146,12 @@
                 "Name": "api_contacts",
                 "Scopes": [
                     "api_contacts"
+                ]
+            },
+            {
+                "Name": "api_constructor",
+                "Scopes": [
+                    "api_constructor"
                 ]
             }
         ],
@@ -247,6 +262,7 @@
                     "api_projects",
                     "api_emailer",
                     "api_contacts",
+                    "api_constructor",
                     "svcs"
                 ]
             },
@@ -338,6 +354,18 @@
                 "AllowedScopes": [ "api_contacts" ],
                 "AllowedCorsOrigins": [ "http://localhost:5704"],
                 "PostLogoutRedirectUris":[ "http://localhost:5704/swagger/" ]
+            },
+            {
+                "ClientId": "client_constructor_swaggerui",
+                "ClientName": "Constructor Swagger UI",
+                "AllowedGrantTypes": [ "authorization_code" ],
+                "AllowAccessTokensViaBrowser": true,
+                "RequireClientSecret": false,
+                "RequirePkce": true,
+                "RedirectUris": [ "http://localhost:5705/swagger/oauth2-redirect.html" ],
+                "AllowedScopes": [ "api_constructor" ],
+                "AllowedCorsOrigins": [ "http://localhost:5705"],
+                "PostLogoutRedirectUris":[ "http://localhost:5705/swagger/" ]
             },
             {
                 "ClientId": "admin_spa_client",
