@@ -18,6 +18,9 @@ data:
 
   hbg-adminapi-url: https://adminapi.hbg.local
   hbg-adminapi-url-swagger: https://adminapi.hbg.local/swagger/oauth2-redirect.html
+
+  hbg-constructor-url: https://constructor.hbg.local
+
   # database_url: hbg-db-service                                 # url of database service
   # identity_origin: http://kubernetes.docker.internal:30700    # exernal url for identity.api service
   # identity_url: hbg-identityapi               # internal url for identity.api service
