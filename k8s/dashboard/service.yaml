@@ -1,0 +1,48 @@
+# service.yaml
+# Service definitions for Kubernetes Dashboard
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+  labels:
+    app: kubernetes-dashboard
+    component: dashboard-service
+  annotations:
+    description: "Service for Kubernetes Dashboard web interface"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 443
+    targetPort: 8443
+    protocol: TCP
+    name: https
+  - port: 80
+    targetPort: 9090
+    protocol: TCP
+    name: http
+  selector:
+    app: kubernetes-dashboard
+    component: dashboard
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard-metrics-scraper
+  namespace: kubernetes-dashboard
+  labels:
+    app: kubernetes-dashboard
+    component: metrics-scraper-service
+  annotations:
+    description: "Service for Kubernetes Dashboard metrics scraper"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+  selector:
+    app: kubernetes-dashboard
+    component: metrics-scraper

@@ -1,0 +1,11 @@
+# namespace.yaml
+# Namespace for Kubernetes Dashboard
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kubernetes-dashboard
+  labels:
+    app: kubernetes-dashboard
+    component: namespace
+  annotations:
+    description: "Namespace for Kubernetes Dashboard and related resources"
