@@ -159,7 +159,7 @@
             {
                 "ClientId": "client_admin",
                 "ClientName": "client_admin",
-                "ClientUri": "https://admin.hbg.local",
+                "ClientUri": "https://admin.hbg.lol",
                 "AllowedGrantTypes": [
                     "authorization_code"
                 ],
@@ -172,21 +172,21 @@
                 "RedirectUris": [
                     "http://localhost:5798/signin-oidc",
                     "https://localhost:5798/signin-oidc",
-                    "https://admin.hbg.local/signin-oidc",
-                    "https://admin.hbg.local/signin-oidc"
+                    "https://admin.hbg.lol/signin-oidc",
+                    "https://admin.hbg.lol/signin-oidc"
                 ],
-                "FrontChannelLogoutUri": "https://admin.hbg.local/signout-oidc",
+                "FrontChannelLogoutUri": "https://admin.hbg.lol/signout-oidc",
                 "PostLogoutRedirectUris": [
                     "http://localhost:5798/signout-callback-oidc",
                     "https://localhost:5798/signout-callback-oidc",
-                    "http://admin.hbg.local/signout-callback-oidc",
-                    "https://admin.hbg.local/signout-callback-oidc"
+                    "http://admin.hbg.lol/signout-callback-oidc",
+                    "https://admin.hbg.lol/signout-callback-oidc"
                 ],
                 "AllowedCorsOrigins": [
                     "http://localhost:5798",
                     "https://localhost:5798",
-                    "http://admin.hbg.local",
-                    "https://admin.hbg.local"
+                    "http://admin.hbg.lol",
+                    "https://admin.hbg.lol"
                 ],
                 "AllowedScopes": [
                     "openid",
@@ -216,7 +216,7 @@
             {
                 "ClientId": "js",
                 "ClientName": "Houbirg SPA OpenId Client",
-                "ClientUri": "https://spa.hbg.local",
+                "ClientUri": "https://spa.hbg.lol",
                 "AllowOfflineAccess": true,
                 "RequirePkce": true,
                 "RequireConsent": false,
@@ -233,24 +233,24 @@
                     "http://localhost:4200/",
                     "http://localhost:5799/",
                     "https://localhost:5799/",
-                    "http://spa.hbg.local/",
-                    "https://spa.hbg.local/"
+                    "http://spa.hbg.lol/",
+                    "https://spa.hbg.lol/"
                 ],
                 "FrontChannelLogoutUri": "http//localhost:5799/",
                 "PostLogoutRedirectUris": [
                     "http://localhost:4300/", 
                     "http://localhost:5799/",
                     "https://localhost:5799/",
-                    "http://spa.hbg.local/",
-                    "https://spa.hbg.local/"
+                    "http://spa.hbg.lol/",
+                    "https://spa.hbg.lol/"
 
                 ],
                 "AllowedCorsOrigins": [
                     "http://localhost:4300", 
                     "http://localhost:5799", 
                     "https://localhost:5799",
-                    "http://spa.hbg.local/",
-                    "https://spa.hbg.local"
+                    "http://spa.hbg.lol/",
+                    "https://spa.hbg.lol"
                 ],
                 "AllowedScopes": [
                     "openid",
@@ -370,7 +370,7 @@
             {
                 "ClientId": "admin_spa_client",
                 "ClientName": "HBG Admin SPA Client",
-                "ClientUri": "https://admin.hbg.local",
+                "ClientUri": "https://admin.hbg.lol",
                 "AllowOfflineAccess": true,
                 "RequirePkce": true,
                 "RequireConsent": false,
@@ -382,20 +382,20 @@
                     "http://localhost:4300/",
                     "http://localhost:5800/",
                     "https://localhost:5800/",
-                    "https://admin.hbg.local/"
+                    "https://admin.hbg.lol/"
                 ],
-                "FrontChannelLogoutUri": "https://admin.hbg.local/",
+                "FrontChannelLogoutUri": "https://admin.hbg.lol/",
                 "PostLogoutRedirectUris": [
                     "http://localhost:4300/", 
                     "http://localhost:5800/",
                     "https://localhost:5800/",
-                    "https://admin.hbg.local/"
+                    "https://admin.hbg.lol/"
                 ],
                 "AllowedCorsOrigins": [
                     "http://localhost:4300", 
                     "http://localhost:5800", 
                     "https://localhost:5800",
-                    "https://admin.hbg.local"
+                    "https://admin.hbg.lol"
                 ],
                 "AllowedScopes": [
                     "openid",

@@ -19,17 +19,19 @@ spec:
     spec:
       containers:
       - name: hbg-constructor
-        imagePullPolicy: Never # never pull local images from docker, always use local
+        # Updated for Docker Hub: pull from Docker Hub
+        # Replace DOCKER_HUB_USERNAME with your Docker Hub username (e.g., myname)
+        imagePullPolicy: Always
         image: exdrums/hbg-constructor
         ports:
         - containerPort: 80
-        resources:
-          limits:
-            memory: "512Mi"
-            cpu: "1000m"
-          requests:
-            memory: "256Mi"
-            cpu: "500m"
+        # resources:
+        #   limits:
+        #     memory: "512Mi"
+        #     cpu: "1000m"
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "500m"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Development
@@ -38,18 +40,63 @@ spec:
             configMapKeyRef:
               name: hbg-configmap
               key: asp_hosting_urls
-        - name: 'HBGIDENTITY'
+        - name: HBGCONSTRUCTORDB
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: hbgdb-constructor_string
+        - name: HBGIDENTITY
           valueFrom:
             configMapKeyRef:
               name: hbg-configmap
               key: hbg-sts-url
-        - name: 'HBGCONSTRUCTOR'
+        - name: HBGFILES
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-files-url
+        - name: HBGSPA
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-spa-url
+        - name: HBGSPADEV
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-spa-dev-url
+        - name: HBGCONSTRUCTOR
           valueFrom:
             configMapKeyRef:
               name: hbg-configmap
               key: hbg-constructor-url
-        - name: 'AUDIENCE'
+        - name: AUDIENCE
           value: api_constructor
+        - name: EnableSeeding
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: enable-seeding
+        - name: GeminiSettings__ApiKey
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: gemini-settings-apikey
+        - name: GeminiSettings__Model
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: gemini-settings-model
+        - name: GeminiSettings__MaxRetries
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: gemini-settings-max-retries
+        - name: GeminiSettings__TimeoutSeconds
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: gemini-settings-timeout-seconds
         - name: DockerConfiguration__UpdateCaCertificate
           value: "true"
         # Optionally, if your trust-manager requires a volume mount:
