@@ -1,0 +1,186 @@
+name: Docker Build
+
+# Manual trigger or on version tags
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: 'Service to build (all, files, constructor, spa)'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - files
+          - constructor
+          - spa
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME || 'exdrums' }}
+
+jobs:
+  # Build Docker image for API.Files service
+  build-files:
+    name: Build API.Files Docker Image
+    runs-on: ubuntu-latest
+    if: github.event.inputs.service == 'all' || github.event.inputs.service == 'files' || startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        if: secrets.DOCKER_PASSWORD != ''
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract version tag
+        id: meta
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION=latest
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: src/Services/API/Files/Dockerfile
+          push: ${{ secrets.DOCKER_PASSWORD != '' }}
+          tags: |
+            ${{ env.DOCKER_USERNAME }}/hbg-files:${{ steps.meta.outputs.VERSION }}
+            ${{ env.DOCKER_USERNAME }}/hbg-files:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build summary
+        run: |
+          echo "🐳 Docker image built: ${{ env.DOCKER_USERNAME }}/hbg-files:${{ steps.meta.outputs.VERSION }}"
+
+  # Build Docker image for API.Constructor service
+  build-constructor:
+    name: Build API.Constructor Docker Image
+    runs-on: ubuntu-latest
+    if: github.event.inputs.service == 'all' || github.event.inputs.service == 'constructor' || startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        if: secrets.DOCKER_PASSWORD != ''
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract version tag
+        id: meta
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION=latest
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: src/Services/API/Constructor/Dockerfile
+          push: ${{ secrets.DOCKER_PASSWORD != '' }}
+          tags: |
+            ${{ env.DOCKER_USERNAME }}/hbg-constructor:${{ steps.meta.outputs.VERSION }}
+            ${{ env.DOCKER_USERNAME }}/hbg-constructor:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build summary
+        run: |
+          echo "🐳 Docker image built: ${{ env.DOCKER_USERNAME }}/hbg-constructor:${{ steps.meta.outputs.VERSION }}"
+
+  # Build Docker image for Web.SPA frontend
+  build-spa:
+    name: Build Web.SPA Docker Image
+    runs-on: ubuntu-latest
+    if: github.event.inputs.service == 'all' || github.event.inputs.service == 'spa' || startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        if: secrets.DOCKER_PASSWORD != ''
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract version tag
+        id: meta
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION=latest
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: src/Web/Web.SPA/Dockerfile
+          push: ${{ secrets.DOCKER_PASSWORD != '' }}
+          tags: |
+            ${{ env.DOCKER_USERNAME }}/hbg-spa:${{ steps.meta.outputs.VERSION }}
+            ${{ env.DOCKER_USERNAME }}/hbg-spa:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build summary
+        run: |
+          echo "🐳 Docker image built: ${{ env.DOCKER_USERNAME }}/hbg-spa:${{ steps.meta.outputs.VERSION }}"
+
+  # Summary job
+  build-complete:
+    name: Docker Build Complete
+    runs-on: ubuntu-latest
+    needs: [build-files, build-constructor, build-spa]
+    if: always()
+
+    steps:
+      - name: Check build status
+        run: |
+          echo "🐳 Docker build workflow completed!"
+          echo ""
+          echo "Built images:"
+          if [[ "${{ needs.build-files.result }}" == "success" ]]; then
+            echo "  ✅ hbg-files"
+          fi
+          if [[ "${{ needs.build-constructor.result }}" == "success" ]]; then
+            echo "  ✅ hbg-constructor"
+          fi
+          if [[ "${{ needs.build-spa.result }}" == "success" ]]; then
+            echo "  ✅ hbg-spa"
+          fi
+          echo ""
+          echo "Images are ready for deployment! 🚀"

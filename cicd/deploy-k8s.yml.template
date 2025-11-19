@@ -1,0 +1,120 @@
+name: Deploy to Kubernetes
+
+# This is a TEMPLATE file - rename to deploy-k8s.yml when ready to use
+# Manual deployment workflow for Kubernetes
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      service:
+        description: 'Service to deploy'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - files
+          - constructor
+          - spa
+
+jobs:
+  deploy:
+    name: Deploy to ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      # Configure kubectl with your cluster credentials
+      # Option 1: Using kubeconfig secret
+      - name: Configure kubectl
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+        # You'll need to add KUBE_CONFIG secret in GitHub Settings
+
+      # Option 2: Using cloud provider CLI (AWS, GCP, Azure)
+      # Uncomment and configure based on your cloud provider
+
+      # # For AWS EKS:
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-1
+      #
+      # - name: Update kubeconfig for EKS
+      #   run: aws eks update-kubeconfig --name your-cluster-name --region us-east-1
+
+      # Deploy services based on selection
+      - name: Deploy API.Files
+        if: github.event.inputs.service == 'all' || github.event.inputs.service == 'files'
+        run: |
+          kubectl apply -f k8s/hbg-files-deployment.yaml
+          kubectl apply -f k8s/hbg-files-service.yaml
+          kubectl rollout status deployment/hbg-files -n default --timeout=5m
+
+      - name: Deploy API.Constructor
+        if: github.event.inputs.service == 'all' || github.event.inputs.service == 'constructor'
+        run: |
+          kubectl apply -f k8s/hbg-constructor-deployment.yaml
+          kubectl apply -f k8s/hbg-constructor-service.yaml
+          kubectl rollout status deployment/hbg-constructor -n default --timeout=5m
+
+      - name: Deploy Web.SPA
+        if: github.event.inputs.service == 'all' || github.event.inputs.service == 'spa'
+        run: |
+          kubectl apply -f k8s/hbg-spa-deployment.yaml
+          kubectl apply -f k8s/hbg-spa-service.yaml
+          kubectl rollout status deployment/hbg-spa -n default --timeout=5m
+
+      - name: Deployment summary
+        run: |
+          echo "🚀 Deployment to ${{ github.event.inputs.environment }} completed!"
+          echo ""
+          echo "Deployed services:"
+          if [[ "${{ github.event.inputs.service }}" == "all" ]] || [[ "${{ github.event.inputs.service }}" == "files" ]]; then
+            echo "  ✅ API.Files"
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" ]] || [[ "${{ github.event.inputs.service }}" == "constructor" ]]; then
+            echo "  ✅ API.Constructor"
+          fi
+          if [[ "${{ github.event.inputs.service }}" == "all" ]] || [[ "${{ github.event.inputs.service }}" == "spa" ]]; then
+            echo "  ✅ Web.SPA"
+          fi
+          echo ""
+          echo "Verify deployment:"
+          kubectl get pods -n default
+          kubectl get services -n default
+
+      # Optional: Run smoke tests after deployment
+      - name: Run smoke tests
+        run: |
+          echo "⚠️ Add your smoke tests here"
+          # Example:
+          # curl -f https://your-app.com/health || exit 1
+
+# Setup Instructions:
+# 1. Rename this file to deploy-k8s.yml
+# 2. Add KUBE_CONFIG secret to GitHub Settings → Secrets → Actions
+#    - Get your kubeconfig: cat ~/.kube/config | base64
+#    - Add as secret named KUBE_CONFIG
+# 3. Update the namespace if not using 'default'
+# 4. Update deployment and service file names to match your k8s/*.yaml files
+# 5. Test with staging environment first
+# 6. Add smoke tests for verification
