@@ -32,7 +32,7 @@ spec:
   #           name: test    # name is necessary
   #           port:         # set 'number' or 'name'
   #             number: 8080
-  - host: "sts.hbg.local"
+  - host: "sts.hbg.lol"
     http:
       paths:
       - path: /
@@ -42,7 +42,7 @@ spec:
             name: hbg-sts-service
             port:
               number: 80
-  - host: "admin.hbg.local"
+  - host: "admin.hbg.lol"
     http:
       paths:
       - path: /

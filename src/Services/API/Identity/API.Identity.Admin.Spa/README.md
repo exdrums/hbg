@@ -389,8 +389,8 @@ docker build -f Dockerfile -t exdrums/hbg-admin-spa:latest .
 
 # Run container
 docker run -d -p 5796:80 \
-  -e HBGIDENTITY=https://sts.hbg.local \
-  -e HBGIDENTITYADMINAPI=https://adminapi.hbg.local \
+  -e HBGIDENTITY=https://sts.hbg.lol \
+  -e HBGIDENTITYADMINAPI=https://adminapi.hbg.lol \
   --name hbg-admin-spa \
   exdrums/hbg-admin-spa:latest
 ```
@@ -416,16 +416,16 @@ kubectl get service hbg-admin-spa-service
 
 **Via Ingress (add to /etc/hosts):**
 ```
-127.0.0.1 adminspa.hbg.local
+127.0.0.1 adminspa.hbg.lol
 ```
 
-Then browse to: `https://adminspa.hbg.local`
+Then browse to: `https://adminspa.hbg.lol`
 
 ### Health Monitoring
 
-- **Health Check**: `https://adminspa.hbg.local/health`
-- **Health UI**: `https://adminspa.hbg.local/hc`
-- **Configuration**: `https://adminspa.hbg.local/configuration`
+- **Health Check**: `https://adminspa.hbg.lol/health`
+- **Health UI**: `https://adminspa.hbg.lol/hc`
+- **Configuration**: `https://adminspa.hbg.lol/configuration`
 
 ### Detailed Documentation
 

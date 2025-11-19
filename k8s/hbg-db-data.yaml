@@ -1,39 +1,17 @@
 # Describes a volumes storage for postgres pod
+# Updated for Azure Kubernetes Service - uses Azure-managed storage
 
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: docker-sc
-provisioner: docker.io/hostpath
-reclaimPolicy: Retain
-volumeBindingMode: Immediate
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: hbg-db-pv
-  labels:
-    type: local
-    app: postgres
-spec:
-  storageClassName: docker-sc
-  persistentVolumeReclaimPolicy: Retain
-  capacity:
-    storage: 5Gi
-  accessModes:
-  - ReadWriteOnce
-  hostPath:
-    path: "/Volumes/cluster-data/database-files"
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: hbg-db-pvc
   labels:
-    type: local
+    type: azure-managed
     app: postgres
 spec:
-  storageClassName: docker-sc
+  # Use Azure's default managed storage class (managed-csi)
+  # Azure AKS provides this automatically - no need to specify storageClassName
+  # If you need Standard SSD instead of Premium, uncomment and use: storageClassName: managed-csi
   accessModes:
   - ReadWriteOnce
   resources:

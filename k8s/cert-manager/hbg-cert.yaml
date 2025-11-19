@@ -1,3 +1,10 @@
+# Certificate resource for HBG services
+# Note: Certificates are typically managed automatically by cert-manager via ingress annotations
+# This file is optional - cert-manager will create certificates automatically when ingress is created
+#
+# Updated for Azure: Uses Let's Encrypt issuer and new domain names
+# Replace hbg.lol with your actual Porkbun domain (e.g., example.com)
+
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -6,11 +13,18 @@ metadata:
 spec:
   secretName: hbg-tls-secret # This secret will contain your TLS certificate and key
   issuerRef:
-    name: hbg-ca-issuer
+    name: letsencrypt-prod # Updated: Use Let's Encrypt instead of self-signed CA
     kind: ClusterIssuer
-  commonName: sts.hbg.local
+  # Updated for Azure: Replace hbg.lol with your actual domain
+  commonName: sts.hbg.lol
   dnsNames:
-  - "sts.hbg.local"
-  - "admin.hbg.local"
-  - "spa.hbg.local"
-  duration: 2160h # 90 days validity (adjust if needed)
+  - "sts.hbg.lol"
+  - "admin.hbg.lol"
+  - "adminspa.hbg.lol"
+  - "spa.hbg.lol"
+  - "adminapi.hbg.lol"
+  - "n8n.hbg.lol"
+  - "constructor.hbg.lol"
+  - "filesapi.hbg.lol"
+  # Let's Encrypt certificates are valid for 90 days and auto-renew
+  # duration field is not used with Let's Encrypt

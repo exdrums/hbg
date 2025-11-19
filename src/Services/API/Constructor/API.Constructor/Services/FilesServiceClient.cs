@@ -4,8 +4,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Common;
+using API.Common;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace API.Constructor.Services
 {
@@ -17,12 +18,12 @@ namespace API.Constructor.Services
 
         public FilesServiceClient(
             IHttpClientFactory httpClientFactory,
-            AppSettings appSettings,
+            IOptionsSnapshot<AppSettings> appSettings,
             ILogger<FilesServiceClient> logger)
         {
             _httpClient = httpClientFactory.CreateClient("FilesService");
-            _httpClient.BaseAddress = new Uri(appSettings.HBGFILES);
-            _appSettings = appSettings;
+            _httpClient.BaseAddress = new Uri(appSettings.Value.HBGFILES);
+            _appSettings = appSettings.Value;
             _logger = logger;
         }
 

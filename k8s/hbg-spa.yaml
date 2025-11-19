@@ -14,19 +14,24 @@ spec:
       labels:
         app: hbg-spa
       annotations:
-        # This annotation tells trust-manager to inject the CA from /etc/trusted-cas into the container’s trust store.
+        # This annotation tells trust-manager to inject the CA from /etc/trusted-cas into the container's trust store.
         trust-manager/inject: "true"
     spec:
       containers:
       - name: hbg-spa
-        imagePullPolicy: Never # never pull local images from docker, always use local
-        image: exdrums/hbg-spa
+        # Updated for Docker Hub: pull from Docker Hub
+        # Replace DOCKER_HUB_USERNAME with your Docker Hub username (e.g., myname)
+        imagePullPolicy: Always
+        image: exdrums/hbg-spa:latest
         ports:
         - containerPort: 80
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+        # resources:
+        #   limits:
+        #     memory: "256Mi"
+        #     cpu: "500m"
+        #   requests:
+        #     memory: "128Mi"
+        #     cpu: "250m"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Development

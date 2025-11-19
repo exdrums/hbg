@@ -76,9 +76,12 @@
 				"label": "DOCKER hbg-files",
 				"command": "docker",
 				"args": [
+					"buildx",
 					"build",
+					"--platform",
+					"linux/amd64,linux/arm64",
 					"-t",
-					"exdrums/hbg-files",
+					"exdrums/hbg-files-api",
 					"-f",
 					"src/Services/API/Files/Dockerfile",
 					"."
@@ -127,12 +130,117 @@
 				"label": "DOCKER hbg-spa",
 				"command": "docker",
 				"args": [
+					"buildx",
 					"build",
+					"--platform",
+					"linux/amd64,linux/arm64",
 					"-t",
 					"exdrums/hbg-spa",
 					"-f",
 					"src/Web/Web.SPA/Dockerfile",
+					"--push",
 					"."
+				],
+				"group": "build",
+				"presentation": {
+					"group": "docker"
+				}
+			},
+			{
+				"label": "DOCKER hbg-sts",
+				"command": "docker",
+				"args": [
+					"buildx",
+					"build",
+					"--platform",
+					"linux/amd64,linux/arm64",
+					"-t",
+					"exdrums/hbg-sts",
+					"-f",
+					"src/Services/API/Identity/API.Identity/Dockerfile",
+					"--push",
+					"src/Services/API/Identity"
+				],
+				"group": "build",
+				"presentation": {
+					"group": "docker"
+				}
+			},
+			{
+				"label": "DOCKER hbg-admin",
+				"command": "docker",
+				"args": [
+					"buildx",
+					"build",
+					"--platform",
+					"linux/amd64,linux/arm64",
+					"-t",
+					"exdrums/hbg-admin",
+					"-f",
+					"src/Services/API/Identity/API.Identity.Admin/Dockerfile",
+					"--push",
+					"src/Services/API/Identity"
+				],
+				"group": "build",
+				"presentation": {
+					"group": "docker"
+				}
+			},
+			{
+				"label": "DOCKER hbg-admin-api",
+				"command": "docker",
+				"args": [
+					"buildx",
+					"build",
+					"--platform",
+					"linux/amd64,linux/arm64",
+					"-t",
+					"exdrums/hbg-admin-api",
+					"-f",
+					"src/Services/API/Identity/API.Identity.Admin.Api/Dockerfile",
+					"--push",
+					"src/Services/API/Identity"
+				],
+				"group": "build",
+				"presentation": {
+					"group": "docker"
+				}
+			},
+						{
+				"label": "DOCKER hbg-admin-spa",
+				"command": "docker",
+				"args": [
+					"buildx",
+					"build",
+					"--platform",
+					"linux/amd64,linux/arm64",
+					"-t",
+					"exdrums/hbg-admin-spa",
+					"-f",
+					"src/Services/API/Identity/API.Identity.Admin.Spa/Dockerfile",
+					"--push",
+					"."
+				],
+				"group": "build",
+				"presentation": {
+					"group": "docker"
+				}
+			},
+			{
+				"path": "./src/",
+				"label": "DOCKER hbg-constructor",
+				"command": "docker",
+				"args": [
+					"buildx",
+					"build",
+					"--platform",
+					"linux/amd64,linux/arm64",
+					"-t",
+					"exdrums/hbg-constructor",
+					"-f",
+					"src/Services/API/Constructor/API.Constructor/Dockerfile",
+					".",
+					"--push"
 				],
 				"group": "build",
 				"presentation": {

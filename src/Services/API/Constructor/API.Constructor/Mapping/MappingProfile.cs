@@ -18,15 +18,15 @@ namespace API.Constructor.Mapping
             // ProjectConfiguration mappings
             CreateMap<ProjectConfiguration, ConfigurationDto>()
                 .ForMember(dest => dest.FormData,
-                    opt => opt.MapFrom(src => JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, object>>(src.FormDataJson)));
+                    opt => opt.MapFrom(src => JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, object>>(src.FormDataJson, (JsonSerializerOptions)null)));
 
             CreateMap<CreateConfigurationDto, ProjectConfiguration>()
                 .ForMember(dest => dest.FormDataJson,
-                    opt => opt.MapFrom(src => JsonSerializer.Serialize(src.FormData)));
+                    opt => opt.MapFrom(src => JsonSerializer.Serialize(src.FormData, (JsonSerializerOptions)null)));
 
             CreateMap<UpdateConfigurationDto, ProjectConfiguration>()
                 .ForMember(dest => dest.FormDataJson,
-                    opt => opt.MapFrom(src => JsonSerializer.Serialize(src.FormData)))
+                    opt => opt.MapFrom(src => JsonSerializer.Serialize(src.FormData, (JsonSerializerOptions)null)))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // GeneratedImage mappings

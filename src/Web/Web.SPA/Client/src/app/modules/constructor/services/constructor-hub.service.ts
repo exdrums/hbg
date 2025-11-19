@@ -31,8 +31,8 @@ export class ConstructorHubService {
       return;
     }
 
-    const token = this.auth.getAccessToken();
-    const hubUrl = `${this.config.appSettings.HBGCONSTRUCTOR}/hubs/constructor`;
+    const token = this.auth.getToken();
+    const hubUrl = `${this.config.hbgconstructor}/hubs/constructor`;
 
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(hubUrl, {

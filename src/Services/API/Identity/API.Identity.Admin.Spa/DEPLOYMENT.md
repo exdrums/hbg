@@ -58,10 +58,10 @@ Create `appsettings.Development.json`:
 
 ```json
 {
-  "HBGIDENTITY": "https://sts.hbg.local",
-  "HBGIDENTITYADMINSPA": "https://adminspa.hbg.local",
+  "HBGIDENTITY": "https://sts.hbg.lol",
+  "HBGIDENTITYADMINSPA": "https://adminspa.hbg.lol",
   "HBGIDENTITYADMINSPADEV": "http://localhost:4201",
-  "HBGIDENTITYADMINAPI": "https://adminapi.hbg.local",
+  "HBGIDENTITYADMINAPI": "https://adminapi.hbg.lol",
   "ASPNETCORE_URLS": "http://localhost:5000"
 }
 ```
@@ -88,9 +88,9 @@ docker run -d \
   --name hbg-admin-spa \
   -p 5796:80 \
   -e ASPNETCORE_ENVIRONMENT=Development \
-  -e HBGIDENTITY=https://sts.hbg.local \
-  -e HBGIDENTITYADMINSPA=https://adminspa.hbg.local \
-  -e HBGIDENTITYADMINAPI=https://adminapi.hbg.local \
+  -e HBGIDENTITY=https://sts.hbg.lol \
+  -e HBGIDENTITYADMINSPA=https://adminspa.hbg.lol \
+  -e HBGIDENTITYADMINAPI=https://adminapi.hbg.lol \
   exdrums/hbg-admin-spa:latest
 ```
 
@@ -151,7 +151,7 @@ kubectl config set-context --current --namespace=hbg-system
 
 **Add domain to /etc/hosts:**
 ```bash
-echo "127.0.0.1 adminspa.hbg.local" | sudo tee -a /etc/hosts
+echo "127.0.0.1 adminspa.hbg.lol" | sudo tee -a /etc/hosts
 ```
 
 **Apply ConfigMap:**
@@ -231,8 +231,8 @@ curl http://localhost:8080/configuration
 
 **Access via browser:**
 ```
-https://adminspa.hbg.local/
-https://adminspa.hbg.local/hc  (Health Checks UI)
+https://adminspa.hbg.lol/
+https://adminspa.hbg.lol/hc  (Health Checks UI)
 ```
 
 ## Production Deployment
@@ -310,7 +310,7 @@ spec:
     name: hbg-ca-issuer
     kind: ClusterIssuer
   dnsNames:
-  - adminspa.hbg.local
+  - adminspa.hbg.lol
 ```
 
 ### Environment-Specific Configurations
@@ -361,7 +361,7 @@ readinessProbe:
 
 **From Health Checks UI:**
 ```
-https://adminspa.hbg.local/hc
+https://adminspa.hbg.lol/hc
 ```
 
 **Check status:**

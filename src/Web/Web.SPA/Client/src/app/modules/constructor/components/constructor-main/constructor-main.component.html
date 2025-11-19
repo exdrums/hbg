@@ -13,18 +13,18 @@
     <div class="mobile-layout">
       <dx-tab-panel
         [dataSource]="[
-          { title: 'Configuration', icon: 'preferences' },
-          { title: 'AI Chat', icon: 'comment' },
-          { title: 'Gallery', icon: 'image' }
+          { id: 'Configuration', title: 'Configuration', icon: 'preferences' },
+          { id: 'Chat', title: 'AI Chat', icon: 'comment' },
+          { id: 'Gallery', title: 'Gallery', icon: 'image' }
         ]"
         [selectedIndex]="selectedTabIndex"
         [animationEnabled]="true"
         [swipeEnabled]="true"
         itemTitleTemplate="title">
 
-        <!-- Configuration Tab -->
-        <div *dxTemplate="let item of 'item'; index: i">
-          <div *ngIf="i === 0" class="tab-content">
+        <!-- Tab Content -->
+        <div *dxTemplate="let item of 'item'" [ngSwitch]="item.id">
+          <div *ngSwitchCase="'Configuration'" class="tab-content">
             <app-configuration-form
               [projectId]="currentProject?.projectId"
               [jewelryType]="currentProject?.jewelryType"
@@ -33,18 +33,15 @@
             </app-configuration-form>
           </div>
 
-          <!-- Chat Tab -->
-          <div *ngIf="i === 1" class="tab-content">
+          <div *ngSwitchCase="'Chat'" class="tab-content">
             <app-chat-assistant
               [projectId]="currentProject?.projectId"
               (onMessageSent)="handleChatMessage($event)">
             </app-chat-assistant>
           </div>
 
-          <!-- Gallery Tab -->
-          <div *ngIf="i === 2" class="tab-content">
+          <div *ngSwitchCase="'Gallery'" class="tab-content">
             <app-image-gallery
-              [projectId]="currentProject?.projectId"
               [images]="generatedImages"
               [loading]="isGenerating">
             </app-image-gallery>
@@ -62,16 +59,16 @@
       <div class="control-panel">
         <dx-tab-panel
           [dataSource]="[
-            { title: 'Configuration', icon: 'preferences' },
-            { title: 'AI Chat', icon: 'comment' }
+            { id: 'Configuration', title: 'Configuration', icon: 'preferences' },
+            { id: 'Chat', title: 'AI Chat', icon: 'comment' }
           ]"
           [selectedIndex]="selectedTabIndex"
           [animationEnabled]="true"
           itemTitleTemplate="title">
 
-          <!-- Configuration Tab -->
-          <div *dxTemplate="let item of 'item'; index: i">
-            <div *ngIf="i === 0" class="tab-content">
+          <!-- Tab Content -->
+          <div *dxTemplate="let item of 'item'" [ngSwitch]="item.id">
+            <div *ngSwitchCase="'Configuration'" class="tab-content">
               <app-configuration-form
                 [projectId]="currentProject?.projectId"
                 [jewelryType]="currentProject?.jewelryType"
@@ -80,8 +77,7 @@
               </app-configuration-form>
             </div>
 
-            <!-- Chat Tab -->
-            <div *ngIf="i === 1" class="tab-content">
+            <div *ngSwitchCase="'Chat'" class="tab-content">
               <app-chat-assistant
                 [projectId]="currentProject?.projectId"
                 (onMessageSent)="handleChatMessage($event)">
@@ -97,7 +93,6 @@
 
       <div class="gallery-panel">
         <app-image-gallery
-          [projectId]="currentProject?.projectId"
           [images]="generatedImages"
           [loading]="isGenerating">
         </app-image-gallery>

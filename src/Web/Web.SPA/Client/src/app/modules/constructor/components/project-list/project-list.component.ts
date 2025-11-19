@@ -4,6 +4,7 @@ import notify from 'devextreme/ui/notify';
 import { confirm } from 'devextreme/ui/dialog';
 import { ConstructorService } from '../../services/constructor.service';
 import { Project, JewelryType, JewelryTypeLabels } from '../../models';
+import { ClickEvent } from 'devextreme/ui/button';
 
 @Component({
   selector: 'app-project-list',
@@ -70,8 +71,8 @@ export class ProjectListComponent implements OnInit {
     }
   }
 
-  async deleteProject(project: Project, event: Event) {
-    event.stopPropagation();
+  async deleteProject(project: Project, event: ClickEvent) {
+    // event.stopPropagation();
 
     const result = await confirm(
       `Are you sure you want to delete "${project.name}"?`,

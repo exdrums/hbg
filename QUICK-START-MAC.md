@@ -199,7 +199,7 @@ kubectl wait --namespace ingress-nginx \
 kubectl apply -f k8s/hbg-ingress.yaml
 
 # Add to /etc/hosts
-echo "127.0.0.1 adminspa.hbg.local" | sudo tee -a /etc/hosts
+echo "127.0.0.1 adminspa.hbg.lol" | sudo tee -a /etc/hosts
 
 # Port forward
 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 80:80 443:443
@@ -207,7 +207,7 @@ kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 
 
 ### Access Application
 
-Open browser: **https://adminspa.hbg.local**
+Open browser: **https://adminspa.hbg.lol**
 
 ## Common Commands
 

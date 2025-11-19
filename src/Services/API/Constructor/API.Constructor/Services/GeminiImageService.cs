@@ -3,13 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Google_GenerativeAI;
+using GenerativeAI;
 
 namespace API.Constructor.Services
 {
     public class GeminiImageService : IGeminiImageService
     {
-        private readonly GoogleAI _googleAi;
+        private readonly GoogleAi _googleAi;
         private readonly ILogger<GeminiImageService> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _model;
@@ -29,7 +29,7 @@ namespace API.Constructor.Services
                 throw new InvalidOperationException("Gemini API key not configured");
             }
 
-            _googleAi = new GoogleAI(apiKey);
+            _googleAi = new GoogleAi(apiKey);
             _model = _configuration["GeminiSettings:Model"] ?? "imagen-3.0-generate-002";
             _maxRetries = int.Parse(_configuration["GeminiSettings:MaxRetries"] ?? "3");
             _timeoutSeconds = int.Parse(_configuration["GeminiSettings:TimeoutSeconds"] ?? "30");
@@ -68,16 +68,19 @@ namespace API.Constructor.Services
 
                     var response = await imageModel.GenerateImagesAsync(
                         prompt: prompt,
-                        numberOfImages: 1,
-                        aspectRatio: aspectRatio
+                        parameters: new GenerativeAI.Types.ImageGenerationParameters
+                        {
+                            SampleCount = 1,
+                            AspectRatio = aspectRatio
+                        }
                     );
 
-                    if (response == null || response.Images == null || !response.Images.Any())
+                    if (response == null || response.Predictions == null || !response.Predictions.Any())
                     {
                         throw new InvalidOperationException("Image generation returned no results");
                     }
 
-                    var firstImage = response.Images.First();
+                    var firstImage = response.Predictions.First();
                     var imageBytes = Convert.FromBase64String(firstImage.BytesBase64Encoded);
 
                     _logger.LogInformation("Image generated successfully. Size: {Size} bytes", imageBytes.Length);

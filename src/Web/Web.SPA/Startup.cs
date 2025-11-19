@@ -66,13 +66,13 @@ namespace Web.SPA
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse //nuget: AspNetCore.HealthChecks.UI.Client
                 });
                     
-                endpoints.MapHealthChecksUI(options =>
-                {
-                    options.PageTitle = "Cluster Health Checks";
-                    options.AsideMenuOpened = false;
-                    options.UIPath = "/hc";
-                    options.ApiPath = "/hc-api";
-                });
+                // endpoints.MapHealthChecksUI(options =>
+                // {
+                //     options.PageTitle = "Cluster Health Checks";
+                //     options.AsideMenuOpened = false;
+                //     options.UIPath = "/hc";
+                //     options.ApiPath = "/hc-api";
+                // });
             });
             app.UseSpa(o => o.Options.SourcePath = "Client/dist");
         }
@@ -85,16 +85,16 @@ namespace Web.SPA
                 .AddCheck("Listening on", () => HealthCheckResult.Healthy(this.Configuration["ASPNETCORE_URLS"]));
 
             // Configure UI, add all endpoinds created in the cluster
-            services.AddHealthChecksUI(opts =>
-            {
-                opts.AddHealthCheckEndpoint("Self", "http://localhost:80/health");
-                var stsInternal = settings.HBGIDENTITY.Replace("https", "http");
-                opts.AddHealthCheckEndpoint("API.Identity: " + stsInternal, stsInternal + "/health");
-                var spaInternal = settings.HBGSPA.Replace("https", "http");
-                opts.AddHealthCheckEndpoint("Web.SPA: " + spaInternal, spaInternal + "/health");
-                var adminInternal = settings.HBGIDENTITYADMIN.Replace("https", "http");
-                opts.AddHealthCheckEndpoint("API.Identity.Admin: " + adminInternal, adminInternal + "/health");
-            }).AddInMemoryStorage();
+            // services.AddHealthChecksUI(opts =>
+            // {
+            //     opts.AddHealthCheckEndpoint("Self", "http://localhost:80/health");
+            //     var stsInternal = settings.HBGIDENTITY.Replace("https", "http");
+            //     opts.AddHealthCheckEndpoint("API.Identity: " + stsInternal, stsInternal + "/health");
+            //     var spaInternal = settings.HBGSPA.Replace("https", "http");
+            //     opts.AddHealthCheckEndpoint("Web.SPA: " + spaInternal, spaInternal + "/health");
+            //     var adminInternal = settings.HBGIDENTITYADMIN.Replace("https", "http");
+            //     opts.AddHealthCheckEndpoint("API.Identity.Admin: " + adminInternal, adminInternal + "/health");
+            // }).AddInMemoryStorage();
         }
     }
 }

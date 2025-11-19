@@ -724,10 +724,10 @@ kubectl get ingress hbg-ingress
 
 ```bash
 # Add to /etc/hosts
-echo "127.0.0.1 adminspa.hbg.local" | sudo tee -a /etc/hosts
-echo "127.0.0.1 sts.hbg.local" | sudo tee -a /etc/hosts
-echo "127.0.0.1 admin.hbg.local" | sudo tee -a /etc/hosts
-echo "127.0.0.1 spa.hbg.local" | sudo tee -a /etc/hosts
+echo "127.0.0.1 adminspa.hbg.lol" | sudo tee -a /etc/hosts
+echo "127.0.0.1 sts.hbg.lol" | sudo tee -a /etc/hosts
+echo "127.0.0.1 admin.hbg.lol" | sudo tee -a /etc/hosts
+echo "127.0.0.1 spa.hbg.lol" | sudo tee -a /etc/hosts
 ```
 
 ### Step 10: Access Application
@@ -738,9 +738,9 @@ kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 
 ```
 
 Then open in browser:
-- **Application:** https://adminspa.hbg.local
-- **Health Check:** https://adminspa.hbg.local/health
-- **Health UI:** https://adminspa.hbg.local/hc
+- **Application:** https://adminspa.hbg.lol
+- **Health Check:** https://adminspa.hbg.lol/health
+- **Health UI:** https://adminspa.hbg.lol/hc
 
 ### Step 11: View Logs and Debug
 
@@ -950,13 +950,13 @@ kubectl get events --sort-by='.lastTimestamp'
 kubectl describe pod -l app=hbg-admin-spa
 ```
 
-**Problem: "Cannot access https://adminspa.hbg.local"**
+**Problem: "Cannot access https://adminspa.hbg.lol"**
 ```bash
 # Check /etc/hosts
-cat /etc/hosts | grep hbg.local
+cat /etc/hosts | grep hbg.lol
 
 # If missing, add it:
-echo "127.0.0.1 adminspa.hbg.local" | sudo tee -a /etc/hosts
+echo "127.0.0.1 adminspa.hbg.lol" | sudo tee -a /etc/hosts
 
 # Check ingress
 kubectl get ingress

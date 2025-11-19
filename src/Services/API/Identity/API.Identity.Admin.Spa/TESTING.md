@@ -180,9 +180,9 @@ docker build -f src/Services/API/Identity/API.Identity.Admin.Spa/Dockerfile \
 ```bash
 docker run -d -p 5796:80 \
     -e ASPNETCORE_ENVIRONMENT=Development \
-    -e HBGIDENTITY=https://sts.hbg.local \
-    -e HBGIDENTITYADMINSPA=https://adminspa.hbg.local \
-    -e HBGIDENTITYADMINAPI=https://adminapi.hbg.local \
+    -e HBGIDENTITY=https://sts.hbg.lol \
+    -e HBGIDENTITYADMINSPA=https://adminspa.hbg.lol \
+    -e HBGIDENTITYADMINAPI=https://adminapi.hbg.lol \
     --name hbg-admin-spa-test \
     exdrums/hbg-admin-spa:latest
 ```
@@ -286,7 +286,7 @@ curl http://localhost:8080/hc
 
 **Add to /etc/hosts:**
 ```
-127.0.0.1 adminspa.hbg.local
+127.0.0.1 adminspa.hbg.lol
 ```
 
 **Access the application:**
@@ -295,7 +295,7 @@ curl http://localhost:8080/hc
 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 80:80 443:443
 
 # Then browse to:
-https://adminspa.hbg.local
+https://adminspa.hbg.lol
 ```
 
 ### Troubleshooting

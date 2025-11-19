@@ -22,7 +22,7 @@ export class ConstructorService {
     private http: HttpClient,
     private config: ConfigService
   ) {
-    this.baseUrl = this.config.appSettings.HBGCONSTRUCTOR;
+    this.baseUrl = this.config.hbgconstructor;
   }
 
   // Projects

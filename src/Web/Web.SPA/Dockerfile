@@ -1,13 +1,14 @@
 # Created to build from VS Code Workspace Root (see workspace file)
 
-ARG NODE_IMAGE=node:18.15-alpine
+ARG NODE_IMAGE=node:20-trixie
+# ARG NODE_IMAGE=node:trixie
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 WORKDIR "/src"
 COPY ["src/Web/Web.SPA/Web.SPA.csproj", "Web/Web.SPA/"]
 COPY ["src/Common/Common/Common.csproj", "Common/Common/"]
@@ -21,7 +22,7 @@ RUN dotnet build "Web.SPA.csproj" -c Release -o /app
 FROM ${NODE_IMAGE} as node-build
 WORKDIR /src
 COPY ["src/Web/Web.SPA/Client/", "."]
-RUN npm install
+RUN npm ci
 RUN npm run build
 
 FROM build AS publish

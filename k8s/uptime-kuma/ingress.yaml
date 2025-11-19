@@ -11,8 +11,8 @@ metadata:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 
     # TLS configuration with cert-manager
-    cert-manager.io/issuer: "hbg-ca-issuer"
-    cert-manager.io/issuer-kind: "Issuer"
+    # Updated for Azure: Use Let's Encrypt ClusterIssuer
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
     # Security headers
     nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -36,10 +36,11 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - monitoring.hbg.local
+    # Updated for Azure: Replace hbg.lol with your actual Porkbun domain (e.g., example.com)
+    - monitoring.hbg.lol
     secretName: uptime-kuma-tls-secret
   rules:
-  - host: monitoring.hbg.local
+  - host: monitoring.hbg.lol
     http:
       paths:
       - path: /

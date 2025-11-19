@@ -63,13 +63,13 @@ spec:
 
         # Resource limits prevent runaway resource consumption
         # Adjust based on workflow complexity and system capacity
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-          limits:
-            memory: "2Gi"
-            cpu: "2000m"
+        # resources:
+        #   requests:
+        #     memory: "512Mi"
+        #     cpu: "500m"
+        #   limits:
+        #     memory: "2Gi"
+        #     cpu: "2000m"
 
         # Container ports
         ports:
@@ -174,13 +174,13 @@ spec:
           value: "https"
 
         - name: N8N_HOST
-          value: "n8n.hbg.local"
+          value: "n8n.hbg.lol"
 
         - name: N8N_PORT
           value: "80"
 
         - name: N8N_EDITOR_BASE_URL
-          value: "https://n8n.hbg.local"
+          value: "https://n8n.hbg.lol"
 
         # Logging configuration
         # Adjust log level based on debugging needs

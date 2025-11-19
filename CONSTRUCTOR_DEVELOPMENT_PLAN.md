@@ -1494,7 +1494,7 @@ spec:
 **File:** `k8s/hbg-ingress.yaml` (add this rule)
 
 ```yaml
-- host: constructor.hbg.local
+- host: constructor.hbg.lol
   http:
     paths:
     - path: /
@@ -1517,7 +1517,7 @@ metadata:
   name: hbg-configmap
 data:
   # ... existing entries ...
-  hbg-constructor-url: http://constructor.hbg.local
+  hbg-constructor-url: http://constructor.hbg.lol
 ```
 
 **Secret additions:**

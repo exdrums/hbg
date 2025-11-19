@@ -84,7 +84,7 @@ Uptime Kuma is a fancy self-hosted monitoring tool that provides:
 │  ┌────────────────┐         │  └──────────────────┘   │    │
 │  │     Ingress    │◄────────┤                         │    │
 │  │  monitoring.   │         │  ┌──────────────────┐   │    │
-│  │  hbg.local     │         │  │  API.Contacts    │   │    │
+│  │  hbg.lol     │         │  │  API.Contacts    │   │    │
 │  └────────────────┘         │  └──────────────────┘   │    │
 │                             │                         │    │
 │                             │  ┌──────────────────┐   │    │
@@ -127,7 +127,7 @@ Before deploying Uptime Kuma, ensure you have:
    - CA Issuer: `hbg-ca-issuer` (already configured)
 
 5. **DNS Configuration**
-   - Ability to add `monitoring.hbg.local` to your DNS or `/etc/hosts`
+   - Ability to add `monitoring.hbg.lol` to your DNS or `/etc/hosts`
 
 6. **Tools**
    - `kubectl` CLI tool
@@ -246,14 +246,14 @@ Add the following entry to your `/etc/hosts` file (or your DNS server):
 kubectl get ingress -n monitoring uptime-kuma-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 
 # Add to /etc/hosts
-sudo sh -c 'echo "<CLUSTER_IP> monitoring.hbg.local" >> /etc/hosts'
+sudo sh -c 'echo "<CLUSTER_IP> monitoring.hbg.lol" >> /etc/hosts'
 ```
 
 ### Step 8: Access Uptime Kuma
 
 Open your browser and navigate to:
 ```
-https://monitoring.hbg.local
+https://monitoring.hbg.lol
 ```
 
 **First-time setup:**
@@ -307,7 +307,7 @@ Key configuration:
 
 ### ingress.yaml
 
-- **Host**: monitoring.hbg.local
+- **Host**: monitoring.hbg.lol
 - **TLS**: Enabled with cert-manager
 - **Annotations**:
   - WebSocket support
@@ -323,11 +323,11 @@ Uptime Kuma can monitor the following HBG services:
 
 | Service | Health Endpoint | Type | Priority |
 |---------|----------------|------|----------|
-| API.Identity (STS) | `https://sts.hbg.local/health` | HTTP | Critical |
-| API.Identity (STS) Ready | `https://sts.hbg.local/health/ready` | HTTP | High |
-| Web.SPA | `https://spa.hbg.local/health` | HTTP | Critical |
-| API.Identity.Admin.UI | `https://admin.hbg.local/health` | HTTP | Medium |
-| N8N Workflow | `https://n8n.hbg.local` | HTTP | Medium |
+| API.Identity (STS) | `https://sts.hbg.lol/health` | HTTP | Critical |
+| API.Identity (STS) Ready | `https://sts.hbg.lol/health/ready` | HTTP | High |
+| Web.SPA | `https://spa.hbg.lol/health` | HTTP | Critical |
+| API.Identity.Admin.UI | `https://admin.hbg.lol/health` | HTTP | Medium |
+| N8N Workflow | `https://n8n.hbg.lol` | HTTP | Medium |
 
 ### Internal Services (via Cluster DNS)
 
@@ -394,7 +394,7 @@ All HBG services now implement standardized health check endpoints:
 ### Option 1: Via Ingress (Recommended)
 
 ```
-https://monitoring.hbg.local
+https://monitoring.hbg.lol
 ```
 
 Requirements:
@@ -432,7 +432,7 @@ You can modify the service to use NodePort if needed, but this is not recommende
 ```
 Name: API.Identity (STS)
 Monitor Type: HTTP(s)
-URL: https://sts.hbg.local/health
+URL: https://sts.hbg.lol/health
 Heartbeat Interval: 60 seconds
 Max Retries: 3
 Retry Interval: 60 seconds
@@ -459,13 +459,13 @@ Uptime Kuma exposes an API for automation. Example:
 API_TOKEN="your-api-token-here"
 
 # Create a monitor via API
-curl -X POST https://monitoring.hbg.local/api/monitor \
+curl -X POST https://monitoring.hbg.lol/api/monitor \
   -H "Authorization: Bearer $API_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
     "type": "http",
     "name": "API.Identity",
-    "url": "https://sts.hbg.local/health",
+    "url": "https://sts.hbg.lol/health",
     "interval": 60,
     "maxretries": 3
   }'
@@ -488,7 +488,7 @@ Uptime Kuma supports 90+ notification services. Common ones for HBG:
    - Secure: Enable TLS
    - Username: `alerts@example.com`
    - Password: `your-password`
-   - From Email: `uptime-kuma@hbg.local`
+   - From Email: `uptime-kuma@hbg.lol`
    - To Email: `admin@example.com`
 
 ### Slack Notifications
@@ -886,7 +886,7 @@ You now have a fully functional Uptime Kuma deployment monitoring all HBG servic
 
 ✅ **Deployed** Uptime Kuma to `monitoring` namespace
 ✅ **Configured** health checks for all services
-✅ **Exposed** via Ingress at `monitoring.hbg.local`
+✅ **Exposed** via Ingress at `monitoring.hbg.lol`
 ✅ **Persistent** storage for data retention
 ✅ **Ready** to configure monitors and notifications
 

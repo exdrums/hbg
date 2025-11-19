@@ -5,11 +5,27 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: hbg-ca-issuer #hbg-clusterissuer
-    # kubernetes.io/ingress.class: traefik
-    # traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
-    # traefik.ingress.kubernetes.io/router.middlewares: nginx1-redirecttohttps@kubernetescrd
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 
+    # ENHANCED BUFFER CONFIGURATION for OAuth/OIDC
+    # Large tokens and auth responses require bigger buffers
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "256k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "256k"
+    nginx.ingress.kubernetes.io/client-body-buffer-size: "256k"
+    nginx.ingress.kubernetes.io/client-header-buffer-size: "64k"
+
+    # ENHANCED TIMEOUT CONFIGURATION
+    # OAuth/OIDC flows may take longer, especially with database operations
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+
+    # Keep-alive configuration
+    nginx.ingress.kubernetes.io/upstream-keepalive-connections: "100"
+    nginx.ingress.kubernetes.io/upstream-keepalive-timeout: "60"
+
+    # Security headers
     nginx.ingress.kubernetes.io/configuration-snippet: |
       add_header X-Frame-Options "SAMEORIGIN" always;
       add_header X-Content-Type-Options "nosniff" always;
@@ -19,24 +35,32 @@ metadata:
     # Request size limit for file uploads
     nginx.ingress.kubernetes.io/proxy-body-size: "100m"
 
-    # Timeout settings for long-running workflows
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-
-    # Rate limiting to prevent abuse
+    # Rate limiting (adjust as needed for your load)
     nginx.ingress.kubernetes.io/rate-limit: "100"
     nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+
+    # Backend protocol (explicitly specify HTTP for clarity)
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   tls:
   - hosts:
-    - sts.hbg.local
-    - admin.hbg.local
-    - adminspa.hbg.local
-    - spa.hbg.local
-    - constructor.hbg.local
-    - n8n.hbg.local
-    secretName: hbg-tls-secret
+    - sts.hbg.lol
+    secretName: hbg-sts-tls-secret
+  - hosts:
+    - admin.hbg.lol
+    secretName: hbg-admin-tls-secret
+  - hosts:
+    - adminspa.hbg.lol
+    secretName: hbg-adminspa-tls-secret
+  - hosts:
+    - adminapi.hbg.lol
+    secretName: hbg-adminapi-tls-secret
+  - hosts:
+    - spa.hbg.lol
+    secretName: hbg-spa-tls-secret
+  - hosts:
+    - n8n.hbg.lol
+    secretName: hbg-n8n-tls-secret
   ingressClassName: nginx
   rules:
   - host: sts.hbg.local

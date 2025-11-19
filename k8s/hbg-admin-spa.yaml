@@ -13,26 +13,16 @@ spec:
     metadata:
       labels:
         app: hbg-admin-spa
-      annotations:
-        # This annotation tells trust-manager to inject the CA from /etc/trusted-cas into the container's trust store.
-        trust-manager/inject: "true"
     spec:
       containers:
       - name: hbg-admin-spa
-        imagePullPolicy: Never # never pull local images from docker, always use local
-        image: exdrums/hbg-admin-spa
+        imagePullPolicy: Always
+        image: exdrums/hbg-admin-spa:latest
         ports:
         - containerPort: 80
-        resources:
-          limits:
-            memory: "256Mi"
-            cpu: "500m"
-          requests:
-            memory: "128Mi"
-            cpu: "250m"
         env:
         - name: ASPNETCORE_ENVIRONMENT
-          value: Development
+          value: Production
         - name: ASPNETCORE_URLS
           valueFrom:
             configMapKeyRef:
@@ -58,12 +48,6 @@ spec:
             configMapKeyRef:
               name: hbg-configmap
               key: hbg-adminapi-url
-        - name: DockerConfiguration__UpdateCaCertificate
-          value: "true"
-        # Optionally, if your trust-manager requires a volume mount:
-        volumeMounts:
-        - name: trusted-ca
-          mountPath: /etc/ssl/certs/trusted
         # Health checks
         livenessProbe:
           httpGet:
@@ -81,9 +65,6 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 3
           failureThreshold: 3
-      volumes:
-      - name: trusted-ca
-        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

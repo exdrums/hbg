@@ -25,7 +25,7 @@ spec:
   # Adjust based on expected workflow complexity and volume
   resources:
     requests:
-      storage: 10Gi
+      storage: 2Gi
 
   # Storage class for Docker Desktop environment
   # Uses local host path storage for development

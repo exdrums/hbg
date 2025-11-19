@@ -8,14 +8,14 @@ This document analyzes the communication patterns between the OIDC Authorization
 ### 1. OIDC Authorization Server (API.Identity)
 - **Location**: `/src/Services/API/Identity/API.Identity`
 - **K8s Service**: `hbg-sts-service`
-- **Domain**: `sts.hbg.local`
+- **Domain**: `sts.hbg.lol`
 - **Port**: 80 (internal), HTTPS via ingress
 - **Function**: OAuth2/OIDC authorization server using IdentityServer4
 
 ### 2. Admin Service (API.Identity.Admin)
 - **Location**: `/src/Services/API/Identity/API.Identity.Admin`
 - **K8s Service**: `hbg-admin-service`
-- **Domain**: `admin.hbg.local`
+- **Domain**: `admin.hbg.lol`
 - **Port**: 80 (internal), HTTPS via ingress
 - **Function**: Administrative UI for managing OIDC server
 
@@ -26,10 +26,10 @@ The Admin Service communicates with OIDC Server via direct HTTP requests:
 
 **Configuration Sources (K8s ConfigMap)**:
 ```yaml
-hbg-sts-url: https://sts.hbg.local
-hbg-admin-url: https://admin.hbg.local
-hbg-admin-url-login: https://admin.hbg.local/signin-oidc
-hbg-admin-url-logout: https://admin.hbg.local/signout-callback-oidc
+hbg-sts-url: https://sts.hbg.lol
+hbg-admin-url: https://admin.hbg.lol
+hbg-admin-url-login: https://admin.hbg.lol/signin-oidc
+hbg-admin-url-logout: https://admin.hbg.lol/signout-callback-oidc
 ```
 
 **Admin Service Environment Variables**:
@@ -80,9 +80,9 @@ The system uses cert-manager to create a self-signed CA for local development:
    - Algorithm: ECDSA 256-bit
 3. **CA ClusterIssuer**: `hbg-ca-issuer` uses the CA secret
 4. **Service Certificate**: `hbg-cert` covers all domains:
-   - `sts.hbg.local`
-   - `admin.hbg.local`  
-   - `spa.hbg.local`
+   - `sts.hbg.lol`
+   - `admin.hbg.lol`  
+   - `spa.hbg.lol`
 
 ### TLS Configuration
 **Ingress Configuration**:
@@ -90,9 +90,9 @@ The system uses cert-manager to create a self-signed CA for local development:
 spec:
   tls:
   - hosts:
-    - sts.hbg.local
-    - admin.hbg.local
-    - spa.hbg.local
+    - sts.hbg.lol
+    - admin.hbg.lol
+    - spa.hbg.lol
     secretName: hbg-tls-secret
 ```
 
@@ -109,7 +109,7 @@ spec:
 3. **NGINX Ingress**: For routing HTTPS traffic
 4. **Hosts File**: `/etc/hosts` entries:
    ```
-   127.0.0.1   sts.hbg.local admin.hbg.local spa.hbg.local
+   127.0.0.1   sts.hbg.lol admin.hbg.lol spa.hbg.lol
    ```
 5. **CA Trust**: Import `hbg-selfsigned-ca.crt` into macOS Keychain as trusted
 
@@ -135,7 +135,7 @@ ConnectionStrings__DataProtectionDbConnection: (from secret)
 
 ### Domain Mismatches
 **Problem**: Configuration files contain mixed domain references:
-- K8s ConfigMap uses: `*.hbg.local`
+- K8s ConfigMap uses: `*.hbg.lol`
 - JSON configs use: `*.houbirg.local`
 - Some redirect URIs reference localhost ports
 
@@ -145,7 +145,7 @@ ConnectionStrings__DataProtectionDbConnection: (from secret)
 "RedirectUris": [
   "http://localhost:5798/signin-oidc",
   "https://localhost:5798/signin-oidc",
-  "https://admin.houbirg.local/signin-oidc"  // Should be admin.hbg.local
+  "https://admin.houbirg.local/signin-oidc"  // Should be admin.hbg.lol
 ]
 ```
 
@@ -161,7 +161,7 @@ ConnectionStrings__DataProtectionDbConnection: (from secret)
 ## Recommendations for Local Development
 
 ### 1. Standardize Domain Names
-- Use consistent domain pattern: `*.hbg.local`
+- Use consistent domain pattern: `*.hbg.lol`
 - Update all configuration files to match K8s ConfigMap
 - Remove references to `houbirg.local`
 
@@ -193,7 +193,7 @@ Both services configure CORS for cross-origin requests:
 "AllowedCorsOrigins": [
   "http://localhost:5798",
   "https://localhost:5798", 
-  "https://admin.hbg.local"
+  "https://admin.hbg.lol"
 ]
 ```
 

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Common;
+using API.Common;
 using Common.Exceptions;
 using Common.WebSocket;
 using API.Constructor.Data;

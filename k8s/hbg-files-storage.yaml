@@ -1,0 +1,22 @@
+# Describes persistent storage for Files API pod
+# Updated for Azure Kubernetes Service - uses Azure-managed storage
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hbg-files-storage-pvc
+  labels:
+    type: azure-managed
+    app: hbg-files-api
+spec:
+  # Use Azure's default managed storage class (managed-csi)
+  # Azure AKS provides this automatically - no need to specify storageClassName
+  storageClassName: managed-csi
+  # For file storage, we use ReadWriteMany to allow multiple pods if needed in the future
+  # Note: Azure-managed disks only support ReadWriteOnce, so if you need ReadWriteMany,
+  # you'll need to use Azure Files (AzureFile) storage class instead
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi # Adjust size based on expected file storage needs

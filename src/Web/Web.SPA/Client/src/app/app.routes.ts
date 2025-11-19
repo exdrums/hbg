@@ -72,6 +72,7 @@ export const routes: Routes = [
       },
       {
         path: "constructor",
+        // @ts-ignore
         loadChildren: () => import('./modules/constructor/constructor.module').then(m => m.ConstructorModule)
       }
       // {

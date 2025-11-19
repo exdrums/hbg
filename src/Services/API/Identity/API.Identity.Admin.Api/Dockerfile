@@ -7,7 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["API.Identity.Shared/API.Identity.Shared.csproj", "API.Identity.Shared/"]
 COPY ["API.Identity.Shared.Configuration/API.Identity.Shared.Configuration.csproj", "API.Identity.Shared.Configuration/"]
-COPY ["API.Identity.Admin/API.Identity.Admin.csproj", "API.Identity.Admin/"]
+COPY ["API.Identity.Admin.Api/API.Identity.Admin.Api.csproj", "API.Identity.Admin.Api/"]
 COPY ["API.Identity.Admin.EntityFramework/API.Identity.Admin.EntityFramework.csproj", "API.Identity.Admin.EntityFramework/"]
 COPY ["API.Identity.Admin.EntityFramework.Shared/API.Identity.Admin.EntityFramework.Shared.csproj", "API.Identity.Admin.EntityFramework.Shared/"]
 COPY ["API.Identity.Admin.EntityFramework.Configuration/API.Identity.Admin.EntityFramework.Configuration.csproj", "API.Identity.Admin.EntityFramework.Configuration/"]
@@ -22,7 +22,7 @@ COPY ["API.Identity.Admin.BusinessLogic/API.Identity.Admin.BusinessLogic.csproj"
 COPY ["API.Identity.Admin.BusinessLogic.Shared/API.Identity.Admin.BusinessLogic.Shared.csproj", "API.Identity.Admin.BusinessLogic.Shared/"]
 COPY ["API.Identity.AuditLogging.EntityFramework/API.Identity.AuditLogging.EntityFramework.csproj", "API.Identity.AuditLogging.EntityFramework/"]
 COPY ["API.Identity.AuditLogging/API.Identity.AuditLogging.csproj", "API.Identity.AuditLogging/"]
-RUN dotnet restore "src/API.Identity.Admin.Api/API.Identity.Admin.Api.csproj"
+RUN dotnet restore "API.Identity.Admin.Api/API.Identity.Admin.Api.csproj"
 COPY . .
 WORKDIR "/src/API.Identity.Admin.Api"
 RUN dotnet build "API.Identity.Admin.Api.csproj" -c Release -o /app/build

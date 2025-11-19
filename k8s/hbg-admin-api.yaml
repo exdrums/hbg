@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hbg-admin
+  name: hbg-admin-api
   labels:
-    app: hbg-admin
+    app: hbg-admin-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hbg-admin
+      app: hbg-admin-api
   template:
     metadata:
       labels:
-        app: hbg-admin
+        app: hbg-admin-api
     spec:
       hostAliases:
       - ip: # ClusterIP of ingress-controller 10.0.166.57 
@@ -20,25 +20,16 @@ spec:
         - sts.hbg.lol
         - www.sts.hbg.lol
       containers:
-      - name: hbg-admin
-        # Updated for Docker Hub: pull from Docker Hub
-        # Replace DOCKER_HUB_USERNAME with your Docker Hub username (e.g., myname)
+      - name: hbg-admin-api
         imagePullPolicy: Always
-        image: exdrums/hbg-admin
+        image: exdrums/hbg-admin-api:latest
         ports:
         - containerPort: 80
-        # resources:
-        #   limits:
-        #     memory: "256Mi"
-        #     cpu: "500m"
-        #   requests:
-        #     memory: "128Mi"
-        #     cpu: "250m"
         env:
         - name: VIRTUAL_HOST
           # Updated for Azure: This value comes from configMap, but keeping for compatibility
           # Replace hbg.lol with your actual domain when deploying
-          value: admin.hbg.lol
+          value: adminapi.hbg.lol
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
         - name: ConnectionStrings__ConfigurationDbConnection
@@ -71,36 +62,46 @@ spec:
             secretKeyRef:
               name: hbg-secret
               key: hbgdb-identity_string
-        - name: AdminConfiguration__RequireHttpsMetadata
-          value: "false"
-        - name: AdminConfiguration__IdentityAdminBaseUrl
-          valueFrom:
-            configMapKeyRef:
-              name: hbg-configmap
-              key: hbg-admin-url
-        - name: AdminConfiguration__IdentityAdminRedirectUri
-          valueFrom:
-            configMapKeyRef:
-              name: hbg-configmap
-              key: hbg-admin-url-login
-        - name: AdminConfiguration__IdentityServerBaseUrl
+        - name: AdminApiConfiguration__IdentityServerBaseUrl
           valueFrom:
             configMapKeyRef:
               name: hbg-configmap
               key: hbg-sts-url
+        - name: AdminApiConfiguration__ApiBaseUrl
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-adminapi-url
+        - name: AdminApiConfiguration__RequireHttpsMetadata
+          value: "false"
+        - name: AdminApiConfiguration__AdministrationRole
+          value: "SysAdmin"
+        - name: AdminApiConfiguration__CorsAllowAnyOrigin
+          value: "false"
+        - name: AdminApiConfiguration__CorsAllowOrigins__0
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-admin-spa-url
+        - name: Serilog__WriteTo__1__Args__connectionString
+          valueFrom:
+            secretKeyRef:
+              name: hbg-secret
+              key: hbgdb-identity_string
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: hbg-admin-service
+  name: hbg-admin-api-service
   labels:
-    app: hbg-admin
+    app: hbg-admin-api
 spec:
   # type: NodePort    # shows that this service is externally
   selector:
-    app: hbg-admin
+    app: hbg-admin-api
   ports:
   - protocol: TCP
     port: 80
     targetPort: 80
     # nodePort: 30798
+

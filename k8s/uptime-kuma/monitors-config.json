@@ -3,9 +3,12 @@
   "description": "Uptime Kuma Monitor Configuration for HBG Services",
   "monitors": [
     {
+      "id": 1,
       "name": "API.Identity (STS)",
+      "pathName": "API.Identity (STS)",
+      "childrenIDs": [],
       "type": "http",
-      "url": "https://sts.hbg.local/health",
+      "url": "https://sts.hbg.lol/health",
       "method": "GET",
       "interval": 60,
       "maxretries": 3,
@@ -13,12 +16,16 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["api", "identity", "critical"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "Identity Server health check endpoint"
     },
     {
+      "id": 2,
       "name": "API.Identity (STS) - Readiness",
+      "pathName": "API.Identity (STS) - Readiness",
+      "childrenIDs": [],
       "type": "http",
-      "url": "https://sts.hbg.local/health/ready",
+      "url": "https://sts.hbg.lol/health/ready",
       "method": "GET",
       "interval": 60,
       "maxretries": 3,
@@ -26,12 +33,16 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["api", "identity", "readiness"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "Identity Server readiness probe"
     },
     {
+      "id": 3,
       "name": "Web.SPA",
+      "pathName": "Web.SPA",
+      "childrenIDs": [],
       "type": "http",
-      "url": "https://spa.hbg.local/health",
+      "url": "https://spa.hbg.lol/health",
       "method": "GET",
       "interval": 60,
       "maxretries": 3,
@@ -39,12 +50,16 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["frontend", "spa", "critical"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "SPA health check endpoint"
     },
     {
+      "id": 4,
       "name": "API.Identity.Admin.UI",
+      "pathName": "API.Identity.Admin.UI",
+      "childrenIDs": [],
       "type": "http",
-      "url": "https://admin.hbg.local/health",
+      "url": "https://admin.hbg.lol/health",
       "method": "GET",
       "interval": 60,
       "maxretries": 3,
@@ -52,12 +67,16 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["api", "admin", "identity"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "Identity Admin UI health check"
     },
     {
+      "id": 5,
       "name": "N8N Workflow Engine",
+      "pathName": "N8N Workflow Engine",
+      "childrenIDs": [],
       "type": "http",
-      "url": "https://n8n.hbg.local",
+      "url": "https://n8n.hbg.lol",
       "method": "GET",
       "interval": 60,
       "maxretries": 3,
@@ -65,10 +84,14 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["automation", "n8n"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "N8N workflow automation platform"
     },
     {
+      "id": 6,
       "name": "PostgreSQL Database",
+      "pathName": "PostgreSQL Database",
+      "childrenIDs": [],
       "type": "port",
       "hostname": "hbg-db.default.svc.cluster.local",
       "port": 5432,
@@ -78,10 +101,14 @@
       "resendInterval": 0,
       "timeout": 10,
       "tags": ["database", "postgresql", "critical"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "PostgreSQL database port check"
     },
     {
+      "id": 7,
       "name": "API.Files - Health",
+      "pathName": "API.Files - Health",
+      "childrenIDs": [],
       "type": "http",
       "url": "http://hbg-files-service.default.svc.cluster.local/health",
       "method": "GET",
@@ -91,11 +118,15 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["api", "files"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "Files microservice health check (internal)",
       "note": "Note: This service may not have external ingress yet"
     },
     {
+      "id": 8,
       "name": "API.Projects - Health",
+      "pathName": "API.Projects - Health",
+      "childrenIDs": [],
       "type": "http",
       "url": "http://hbg-projects-service.default.svc.cluster.local/health",
       "method": "GET",
@@ -105,11 +136,15 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["api", "projects"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "Projects microservice health check (internal)",
       "note": "Note: This service may not have external ingress yet"
     },
     {
+      "id": 9,
       "name": "API.Contacts - Health",
+      "pathName": "API.Contacts - Health",
+      "childrenIDs": [],
       "type": "http",
       "url": "http://hbg-contacts-service.default.svc.cluster.local/health",
       "method": "GET",
@@ -119,11 +154,15 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["api", "contacts", "chat"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "Contacts microservice health check (internal)",
       "note": "Note: This service may not have external ingress yet"
     },
     {
+      "id": 10,
       "name": "API.Emailer - Health",
+      "pathName": "API.Emailer - Health",
+      "childrenIDs": [],
       "type": "http",
       "url": "http://hbg-emailer-service.default.svc.cluster.local/health",
       "method": "GET",
@@ -133,13 +172,17 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["api", "emailer", "smtp"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "Emailer microservice health check (internal)",
       "note": "Note: This service may not have external ingress yet"
     },
     {
+      "id": 11,
       "name": "Web.SPA - Health Check UI",
+      "pathName": "Web.SPA - Health Check UI",
+      "childrenIDs": [],
       "type": "http",
-      "url": "https://spa.hbg.local/hc",
+      "url": "https://spa.hbg.lol/hc",
       "method": "GET",
       "interval": 120,
       "maxretries": 3,
@@ -147,10 +190,14 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["frontend", "health-ui"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "SPA Health Check UI Dashboard"
     },
     {
+      "id": 12,
       "name": "Uptime Kuma - Self Monitor",
+      "pathName": "Uptime Kuma - Self Monitor",
+      "childrenIDs": [],
       "type": "http",
       "url": "http://uptime-kuma-service.monitoring.svc.cluster.local:3001",
       "method": "GET",
@@ -160,51 +207,8 @@
       "resendInterval": 0,
       "timeout": 30,
       "tags": ["monitoring", "self"],
+      "accepted_statuscodes": [ "200-299" ],
       "description": "Uptime Kuma self-monitoring"
     }
-  ],
-  "notifications": {
-    "example_email": {
-      "type": "email",
-      "smtpHost": "smtp.example.com",
-      "smtpPort": 587,
-      "smtpSecure": true,
-      "smtpUsername": "alerts@example.com",
-      "smtpFrom": "uptime-kuma@hbg.local",
-      "smtpTo": "admin@example.com",
-      "description": "Example email notification - configure via UI"
-    },
-    "example_slack": {
-      "type": "slack",
-      "webhookUrl": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
-      "description": "Example Slack notification - configure via UI"
-    },
-    "example_discord": {
-      "type": "discord",
-      "webhookUrl": "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL",
-      "description": "Example Discord notification - configure via UI"
-    }
-  },
-  "status_pages": [
-    {
-      "name": "HBG Services Status",
-      "slug": "hbg-status",
-      "description": "Public status page for all HBG services",
-      "monitors": [
-        "API.Identity (STS)",
-        "Web.SPA",
-        "API.Identity.Admin.UI",
-        "N8N Workflow Engine",
-        "PostgreSQL Database"
-      ]
-    }
-  ],
-  "notes": [
-    "This is a reference configuration file for manual setup",
-    "Uptime Kuma does not currently support automated configuration via config files",
-    "Use this file as a guide for manually creating monitors in the Uptime Kuma UI",
-    "Alternatively, use the Uptime Kuma API to programmatically create monitors",
-    "Remember to configure TLS certificate verification for internal services",
-    "Services without external ingress can only be monitored internally via cluster DNS"
   ]
 }

@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace API.Files.Services
 {
     public interface IImageStorageService

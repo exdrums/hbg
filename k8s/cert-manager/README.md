@@ -1,4 +1,4 @@
-Local TLS Setup for hbg.local Domains with cert‑manager
+Local TLS Setup for hbg.lol Domains with cert‑manager
 Prerequisites
 Docker Desktop with Kubernetes enabled.
 kubectl installed and configured.
@@ -93,8 +93,8 @@ Apply it:
 bash
 Copy
 kubectl apply -f hbg-ca-issuer.yaml
-3. Issue a TLS Certificate for hbg.local Domains
-Create a certificate that covers sts.hbg.local, admin.hbg.local, and spa.hbg.local. Create a file named hbg-cert.yaml with the content below:
+3. Issue a TLS Certificate for hbg.lol Domains
+Create a certificate that covers sts.hbg.lol, admin.hbg.lol, and spa.hbg.lol. Create a file named hbg-cert.yaml with the content below:
 
 yaml
 Copy
@@ -108,11 +108,11 @@ spec:
   issuerRef:
     name: hbg-ca-issuer
     kind: ClusterIssuer
-  commonName: sts.hbg.local
+  commonName: sts.hbg.lol
   dnsNames:
-    - "sts.hbg.local"
-    - "admin.hbg.local"
-    - "spa.hbg.local"
+    - "sts.hbg.lol"
+    - "admin.hbg.lol"
+    - "spa.hbg.lol"
   duration: 2160h  # 90 days validity (adjust if needed)
 Apply it:
 
@@ -136,12 +136,12 @@ metadata:
 spec:
   tls:
     - hosts:
-        - sts.hbg.local
-        - admin.hbg.local
-        - spa.hbg.local
+        - sts.hbg.lol
+        - admin.hbg.lol
+        - spa.hbg.lol
       secretName: hbg-tls-secret
   rules:
-    - host: sts.hbg.local
+    - host: sts.hbg.lol
       http:
         paths:
           - path: /
@@ -151,7 +151,7 @@ spec:
                 name: sts-service
                 port:
                   number: 80
-    - host: admin.hbg.local
+    - host: admin.hbg.lol
       http:
         paths:
           - path: /
@@ -161,7 +161,7 @@ spec:
                 name: admin-service
                 port:
                   number: 80
-    - host: spa.hbg.local
+    - host: spa.hbg.lol
       http:
         paths:
           - path: /
@@ -184,7 +184,7 @@ For your local machine to resolve the domains, add the following entry to your /
 
 plaintext
 Copy
-127.0.0.1   sts.hbg.local admin.hbg.local spa.hbg.local
+127.0.0.1   sts.hbg.lol admin.hbg.lol spa.hbg.lol
 b. Extract and Trust the CA Certificate
 Extract the CA certificate from Kubernetes:
 
@@ -210,9 +210,9 @@ Test in Your Browser:
 
 Open your browser and navigate to:
 
-https://sts.hbg.local
-https://admin.hbg.local
-https://spa.hbg.local
+https://sts.hbg.lol
+https://admin.hbg.lol
+https://spa.hbg.lol
 Each domain should now load over HTTPS with a certificate issued by your trusted local CA.
 
 Troubleshooting

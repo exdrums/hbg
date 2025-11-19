@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hbg-files-api
+  labels:
+    app: hbg-files-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hbg-files-api
+  template:
+    metadata:
+      labels:
+        app: hbg-files-api
+      annotations:
+        # This annotation tells trust-manager to inject the CA from /etc/trusted-cas into the container's trust store.
+        trust-manager/inject: "true"
+    spec:
+      hostAliases:
+      - ip: # ClusterIP of ingress-controller 10.0.166.57 
+        hostnames:
+        - sts.hbg.lol
+        - www.sts.hbg.lol
+      containers:
+      - name: hbg-files-api
+        # Updated for Docker Hub: pull from Docker Hub
+        # Replace DOCKER_HUB_USERNAME with your Docker Hub username (e.g., myname)
+        imagePullPolicy: Always
+        image: exdrums/hbg-files-api:latest
+        ports:
+        - containerPort: 80
+        # resources:
+        #   limits:
+        #     memory: "512Mi"
+        #     cpu: "1000m"
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "500m"
+        env:
+        - name: VIRTUAL_HOST
+          # Updated for Azure: This value comes from configMap, but keeping for compatibility
+          # Replace hbg.lol with your actual domain when deploying
+          value: filesapi.hbg.lol
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: ASPNETCORE_URLS
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: asp_hosting_urls
+        - name: HBGIDENTITY
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-sts-url
+        - name: HBGFILES
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-files-api-url
+        - name: AUDIENCE
+          value: api_files
+        # File storage configuration - mount persistent volume
+        - name: ImageStorage__BasePath
+          value: "/app/storage/images"
+        # Optionally, if your trust-manager requires a volume mount:
+        volumeMounts:
+        - name: files-storage
+          mountPath: /app/storage
+        # Health checks
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: files-storage
+        persistentVolumeClaim:
+          claimName: hbg-files-storage-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hbg-files-api-service
+  labels:
+    app: hbg-files-api
+spec:
+  # type: NodePort    # shows that this service is externally
+  selector:
+    app: hbg-files-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    # nodePort: 30798
+
