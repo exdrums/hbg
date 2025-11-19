@@ -27,14 +27,14 @@ WORKDIR "/src/Services/API/Identity/API.Identity.Admin.Spa"
 RUN dotnet build "API.Identity.Admin.Spa.csproj" -c Release -o /app/build
 
 # Stage 3: Build Angular application
-FROM node:18-alpine AS angular-build
+FROM node:20-trixie AS angular-build
 WORKDIR /src
 
 # Copy package files
 COPY src/Services/API/Identity/API.Identity.Admin.Spa/Client/package*.json ./
 
 # Install dependencies
-RUN npm ci --production=false
+RUN npm ci
 
 # Copy Angular source
 COPY src/Services/API/Identity/API.Identity.Admin.Spa/Client/ ./

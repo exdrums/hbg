@@ -34,10 +34,12 @@ import {
   DxLookupModule,
   DxFileUploaderModule,
   DxProgressBarModule,
-  DxTemplateModule
+  DxTemplateModule,
+  DxBoxModule
 } from 'devextreme-angular';
 
 const DX_MODULES = [
+  DxBoxModule,
   DxButtonModule,
   DxDataGridModule,
   DxFormModule,
