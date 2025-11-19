@@ -1,23 +1,49 @@
-export const navigation = [
+/**
+ * Navigation item interface
+ */
+export interface NavigationItem {
+  text: string;
+  path?: string;
+  icon?: string;
+  items?: NavigationItem[];
+  expanded?: boolean;
+  requiredScopes?: string[]; // API scopes required to access this item
+}
+
+/**
+ * Application navigation configuration
+ * Each item can have requiredScopes to control visibility based on user permissions
+ */
+export const navigation: NavigationItem[] = [
   {
     text: 'Home',
     path: '/home',
-    icon: 'home'
+    icon: 'home',
+    // No required scopes - accessible to all authenticated users
   },
   {
     text: 'Projects',
     path: '/projects',
-    icon: 'product'
+    icon: 'product',
+    requiredScopes: ['api_projects']
   },
   {
     text: 'Emailer',
     path: '/emailer',
-    icon: 'email'
+    icon: 'email',
+    requiredScopes: ['api_emailer']
   },
   {
     text: 'Chat',
     path: '/chat',
-    icon: 'chat'
+    icon: 'chat',
+    // No required scopes - accessible to all authenticated users
+  },
+  {
+    text: 'Constructor',
+    path: '/constructor',
+    icon: 'toolbox',
+    requiredScopes: ['api_constructor']
   },
   // {
   //   text: 'Examples',
@@ -25,7 +51,8 @@ export const navigation = [
   //   items: [
   //     {
   //       text: 'Contacts',
-  //       path: '/contacts'
+  //       path: '/contacts',
+  //       requiredScopes: ['api_contacts']
   //     }
   //   ]
   // },

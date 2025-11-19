@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
+import { PermissionGuard } from './core/guards/permission.guard';
 import { HomeComponent } from './modules/home/home.component';
 import { NoAuthGuard } from './core/guards/no-auth.guard';
 import { AuthComponent } from './modules/auth/auth.component';
@@ -60,11 +61,15 @@ export const routes: Routes = [
       },
       {
         path: "projects",
-        component: ProjectsComponent
+        component: ProjectsComponent,
+        canActivate: [PermissionGuard],
+        data: { requiredScopes: ['api_projects'] }
       },
       {
         path: "emailer",
-        component: EmailerComponent
+        component: EmailerComponent,
+        canActivate: [PermissionGuard],
+        data: { requiredScopes: ['api_emailer'] }
       },
       {
         path: "chat",
