@@ -8,17 +8,20 @@ import {
   ElementRef,
   AfterViewInit,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
-import { navigation } from '@app/core/app-navigation';
+import { NavigationItem } from '@app/core/app-navigation';
+import { NavigationService } from '@app/core/services/navigation.service';
 import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import * as events from 'devextreme/events';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hbg-side-navigation-menu',
   templateUrl: './side-navigation-menu.component.html',
   styleUrls: ['./side-navigation-menu.component.scss'],
 })
-export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
+export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(DxTreeViewComponent, { static: true })
   menu!: DxTreeViewComponent;
 
@@ -59,24 +62,40 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
 
   private _selectedItem!: String;
 
-  private _items!: Record <string, unknown>[];
+  private _items!: Record<string, unknown>[];
+  private navigationSubscription?: Subscription;
 
   get items() {
-    if (!this._items) {
-      this._items = navigation.map((item) => {
-        if (item.path && !(/^\//.test(item.path))) {
-          item.path = `/${item.path}`;
-        }
-        return { ...item, expanded: !this._compactMode };
-      });
-    }
-
-    return this._items;
+    return this._items || [];
   }
 
   private _compactMode = false;
 
-  constructor(private elementRef: ElementRef) { }
+  constructor(
+    private elementRef: ElementRef,
+    private navigationService: NavigationService
+  ) { }
+
+  ngOnInit() {
+    // Subscribe to navigation items changes (filtered by permissions)
+    this.navigationSubscription = this.navigationService.getNavigationItems$().subscribe(
+      (navigationItems: NavigationItem[]) => {
+        this._items = navigationItems.map((item) => {
+          // Ensure path starts with /
+          if (item.path && !(/^\//.test(item.path))) {
+            item.path = `/${item.path}`;
+          }
+          return { ...item, expanded: !this._compactMode };
+        });
+
+        // Refresh the tree view if it's already initialized
+        if (this.menu && this.menu.instance) {
+          this.menu.instance.repaint();
+          this.setSelectedItem();
+        }
+      }
+    );
+  }
 
   setSelectedItem() {
     if (!this.menu.instance) {
@@ -99,5 +118,8 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     events.off(this.elementRef.nativeElement, 'dxclick');
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
+    }
   }
 }

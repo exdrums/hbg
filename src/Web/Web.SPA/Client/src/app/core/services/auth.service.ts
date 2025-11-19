@@ -36,17 +36,18 @@ export class AuthService {
       // such applications.
       dummyClientSecret: "js_secret",
 
-      scope: "openid profile email roles offline_access api_files api_projects api_emailer api_contacts",
+      scope: "openid profile email roles offline_access api_files api_projects api_emailer api_contacts api_constructor",
       showDebugInformation: true,
       oidc: false,
       useSilentRefresh: true,
-      
+
     };
 
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgidentity);
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgfiles);
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgprojects);
     this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgemailer);
+    this.moduleConfig.resourceServer.allowedUrls.push(this.configs.hbgconstructor);
 
     this.moduleConfig.resourceServer.sendAccessToken = true;
 
