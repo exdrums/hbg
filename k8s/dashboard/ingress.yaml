@@ -1,0 +1,64 @@
+# ingress.yaml
+# Ingress configuration for Kubernetes Dashboard with k8s.hbg.lol DNS
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubernetes-dashboard-ingress
+  namespace: kubernetes-dashboard
+  labels:
+    app: kubernetes-dashboard
+    component: ingress
+  annotations:
+    description: "Ingress for external Kubernetes Dashboard access via k8s.hbg.lol"
+
+    # Nginx ingress controller annotations
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+    # TLS certificate management with cert-manager
+    cert-manager.io/cluster-issuer: hbg-ca-issuer
+
+    # Additional security headers
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header X-Frame-Options "SAMEORIGIN" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header X-XSS-Protection "1; mode=block" always;
+      add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+      add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self';" always;
+
+    # Request size limit
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+
+    # Timeout settings
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+
+    # Rate limiting to prevent abuse
+    nginx.ingress.kubernetes.io/rate-limit: "50"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+
+    # Websocket support for real-time updates
+    nginx.ingress.kubernetes.io/websocket-services: "kubernetes-dashboard"
+spec:
+  # TLS configuration for HTTPS access
+  tls:
+  - hosts:
+    - k8s.hbg.lol
+    secretName: kubernetes-dashboard-tls-secret
+
+  # Ingress class for nginx controller
+  ingressClassName: nginx
+
+  # Routing rules for incoming requests
+  rules:
+  - host: k8s.hbg.lol
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kubernetes-dashboard
+            port:
+              number: 443
