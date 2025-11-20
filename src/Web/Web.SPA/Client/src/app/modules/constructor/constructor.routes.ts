@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from '@app/core/guards/auth.guard';
 import { PermissionGuard } from '@app/core/guards/permission.guard';
-import { ConstructorMainComponent } from './components/constructor-main/constructor-main.component';
+import { ConstructorWorkspaceComponent } from './components/constructor-workspace/constructor-workspace.component';
 import { ProjectListComponent } from './components/project-list/project-list.component';
 
 export const constructorRoutes: Routes = [
@@ -16,7 +16,7 @@ export const constructorRoutes: Routes = [
       },
       {
         path: ':id',
-        component: ConstructorMainComponent
+        component: ConstructorWorkspaceComponent
       }
     ]
   }

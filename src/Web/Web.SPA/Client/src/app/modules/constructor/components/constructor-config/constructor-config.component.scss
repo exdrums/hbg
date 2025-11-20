@@ -1,0 +1,25 @@
+.constructor-config {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  ::ng-deep .dx-tabpanel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .dx-tabpanel-tabs {
+      flex-shrink: 0;
+    }
+
+    .dx-tabpanel-container {
+      flex: 1;
+      overflow: auto;
+    }
+  }
+
+  .tab-content {
+    padding: 16px;
+    height: 100%;
+  }
+}

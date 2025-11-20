@@ -1,0 +1,53 @@
+.constructor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+
+  .form-header {
+    h3 {
+      margin: 0 0 8px 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+  }
+
+  .form-actions {
+    margin-top: 16px;
+  }
+
+  .form-info {
+    padding: 12px;
+    background: #f0f8ff;
+    border-left: 4px solid #337ab7;
+    border-radius: 4px;
+
+    .info-message {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #337ab7;
+      font-size: 14px;
+
+      .dx-icon {
+        font-size: 18px;
+      }
+    }
+  }
+
+  ::ng-deep .dx-form {
+    .dx-field-item {
+      margin-bottom: 16px;
+    }
+
+    .dx-field-item-label {
+      font-weight: 500;
+    }
+  }
+}

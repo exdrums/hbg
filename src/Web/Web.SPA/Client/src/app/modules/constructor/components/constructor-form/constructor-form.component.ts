@@ -2,13 +2,14 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormData } from '../../models';
 
 @Component({
-  selector: 'app-configuration-form',
-  templateUrl: './configuration-form.component.html',
-  styleUrls: ['./configuration-form.component.scss']
+  selector: 'app-constructor-form',
+  templateUrl: './constructor-form.component.html',
+  styleUrls: ['./constructor-form.component.scss']
 })
-export class ConfigurationFormComponent implements OnInit {
+export class ConstructorFormComponent implements OnInit {
   @Input() projectId: string | null = null;
   @Input() jewelryType: number | null = null;
+  @Input() loading: boolean = false;
   @Output() onConfigurationChanged = new EventEmitter<FormData>();
   @Output() onGenerateImage = new EventEmitter<FormData>();
 
@@ -49,7 +50,7 @@ export class ConfigurationFormComponent implements OnInit {
   ];
 
   ngOnInit() {
-    if (this.jewelryType) {
+    if (this.jewelryType !== null) {
       this.formData.jewelryType = this.jewelryType;
     }
   }

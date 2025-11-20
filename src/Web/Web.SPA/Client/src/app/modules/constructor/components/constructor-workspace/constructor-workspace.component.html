@@ -1,0 +1,85 @@
+<div class="constructor-workspace">
+  <!-- Desktop Layout with Splitter -->
+  <dx-splitter *ngIf="!isMobile"
+               class="desktop-layout"
+               orientation="horizontal">
+    <dxi-item [size]="'60%'"
+              [collapsible]="false"
+              [resizable]="true"
+              [minSize]="'400px'">
+      <div class="workspace-panel">
+        <app-constructor-view
+          [images]="generatedImages"
+          [loading]="isGenerating"
+          [projectId]="currentProject?.projectId || null">
+        </app-constructor-view>
+      </div>
+    </dxi-item>
+
+    <dxi-item [size]="'40%'"
+              [collapsible]="false"
+              [resizable]="true"
+              [minSize]="'350px'">
+      <div class="workspace-panel">
+        <app-constructor-config
+          [projectId]="currentProject?.projectId || null"
+          [jewelryType]="currentProject?.jewelryType || null"
+          [loading]="isGenerating"
+          (onConfigurationChanged)="handleConfigurationChange($event)"
+          (onGenerateImage)="generateImage($event)">
+        </app-constructor-config>
+      </div>
+    </dxi-item>
+  </dx-splitter>
+
+  <!-- Mobile Layout -->
+  <div *ngIf="isMobile" class="mobile-layout">
+    <!-- Main content: Configuration panel -->
+    <div class="mobile-config">
+      <app-constructor-config
+        [projectId]="currentProject?.projectId || null"
+        [jewelryType]="currentProject?.jewelryType || null"
+        [loading]="isGenerating"
+        (onConfigurationChanged)="handleConfigurationChange($event)"
+        (onGenerateImage)="generateImage($event)">
+      </app-constructor-config>
+    </div>
+
+    <!-- Speed dial action to open gallery -->
+    <dx-speed-dial-action
+      *ngIf="!isViewPopupVisible"
+      icon="image"
+      label="View Gallery"
+      (onClick)="openViewPopup()"
+      [index]="1">
+    </dx-speed-dial-action>
+
+    <!-- Speed dial action to close gallery -->
+    <dx-speed-dial-action
+      *ngIf="isViewPopupVisible"
+      icon="close"
+      label="Close Gallery"
+      (onClick)="closeViewPopup()"
+      [index]="2">
+    </dx-speed-dial-action>
+
+    <!-- Popup for gallery view -->
+    <dx-popup
+      [(visible)]="isViewPopupVisible"
+      [showTitle]="true"
+      title="Generated Images"
+      [dragEnabled]="false"
+      [closeOnOutsideClick]="true"
+      [showCloseButton]="true"
+      [width]="'95%'"
+      [height]="'90%'">
+      <div *dxTemplate="let data of 'content'">
+        <app-constructor-view
+          [images]="generatedImages"
+          [loading]="isGenerating"
+          [projectId]="currentProject?.projectId || null">
+        </app-constructor-view>
+      </div>
+    </dx-popup>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="constructor-chat">
+  <div class="chat-header">
+    <h3>AI Design Assistant</h3>
+    <p class="subtitle">Chat with AI to refine your jewelry design</p>
+  </div>
+
+  <div class="chat-container">
+    <dx-chat
+      [dataSource]="chatDataSource"
+      [user]="currentUser"
+      [height]="'100%'"
+      (onMessageEntered)="onMessageEntered($event)">
+    </dx-chat>
+  </div>
+
+  <div class="chat-info">
+    <div class="info-item">
+      <i class="dx-icon dx-icon-info"></i>
+      <span>Try commands like "make it more elegant" or "use a different gemstone"</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+.constructor-chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 12px;
+
+  .chat-header {
+    h3 {
+      margin: 0 0 8px 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+  }
+
+  .chat-container {
+    flex: 1;
+    min-height: 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+
+    ::ng-deep .dx-chat {
+      height: 100%;
+
+      .dx-chat-messagelist {
+        padding: 16px;
+      }
+
+      .dx-chat-messagebox {
+        padding: 12px;
+        border-top: 1px solid #ddd;
+      }
+    }
+  }
+
+  .chat-info {
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #666;
+      font-size: 13px;
+
+      .dx-icon {
+        font-size: 16px;
+        color: #999;
+      }
+    }
+  }
+}

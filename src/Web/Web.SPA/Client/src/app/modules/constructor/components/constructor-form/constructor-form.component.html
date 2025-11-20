@@ -1,11 +1,15 @@
-<div class="configuration-form">
+<div class="constructor-form">
+  <div class="form-header">
+    <h3>Jewelry Configuration</h3>
+    <p class="subtitle">Configure the parameters for your jewelry design</p>
+  </div>
+
   <dx-form
     [(formData)]="formData"
     [colCount]="1"
     labelLocation="top"
     (onFieldDataChanged)="onFieldChanged()">
 
-    <!-- Material -->
     <dxi-item
       dataField="material"
       editorType="dxSelectBox"
@@ -14,10 +18,10 @@
         searchEnabled: true,
         placeholder: 'Select material'
       }">
+      <dxi-validation-rule type="required" message="Material is required"></dxi-validation-rule>
       <dxo-label text="Material"></dxo-label>
     </dxi-item>
 
-    <!-- Gemstone -->
     <dxi-item
       dataField="gemstone"
       editorType="dxSelectBox"
@@ -29,29 +33,30 @@
       <dxo-label text="Gemstone"></dxo-label>
     </dxi-item>
 
-    <!-- Style -->
     <dxi-item
       dataField="style"
       editorType="dxSelectBox"
       [editorOptions]="{
         items: styles,
+        searchEnabled: true,
         placeholder: 'Select style'
       }">
+      <dxi-validation-rule type="required" message="Style is required"></dxi-validation-rule>
       <dxo-label text="Style"></dxo-label>
     </dxi-item>
 
-    <!-- Finish -->
     <dxi-item
       dataField="finish"
       editorType="dxSelectBox"
       [editorOptions]="{
         items: finishes,
+        searchEnabled: true,
         placeholder: 'Select finish'
       }">
+      <dxi-validation-rule type="required" message="Finish is required"></dxi-validation-rule>
       <dxo-label text="Finish"></dxo-label>
     </dxi-item>
 
-    <!-- Aspect Ratio -->
     <dxi-item
       dataField="aspectRatio"
       editorType="dxSelectBox"
@@ -61,31 +66,37 @@
         valueExpr: 'value',
         placeholder: 'Select aspect ratio'
       }">
-      <dxo-label text="Image Size"></dxo-label>
+      <dxi-validation-rule type="required" message="Aspect ratio is required"></dxi-validation-rule>
+      <dxo-label text="Image Aspect Ratio"></dxo-label>
     </dxi-item>
 
-    <!-- Additional Notes -->
     <dxi-item
       dataField="notes"
       editorType="dxTextArea"
       [editorOptions]="{
-        height: 80,
-        maxLength: 500,
-        placeholder: 'Add any additional details...'
+        height: 100,
+        placeholder: 'Add any additional notes or special requirements...'
       }">
-      <dxo-label text="Additional Details"></dxo-label>
-    </dxi-item>
-
-    <!-- Generate Button -->
-    <dxi-item
-      itemType="button"
-      [buttonOptions]="{
-        text: 'Generate Image',
-        type: 'default',
-        icon: 'image',
-        width: '100%',
-        onClick: onGenerateClick.bind(this)
-      }">
+      <dxo-label text="Additional Notes"></dxo-label>
     </dxi-item>
   </dx-form>
+
+  <div class="form-actions">
+    <dx-button
+      text="Generate Image"
+      type="success"
+      stylingMode="contained"
+      [width]="'100%'"
+      icon="plus"
+      [disabled]="loading"
+      (onClick)="onGenerateClick()">
+    </dx-button>
+  </div>
+
+  <div class="form-info" *ngIf="loading">
+    <div class="info-message">
+      <i class="dx-icon dx-icon-clock"></i>
+      <span>Generating your jewelry design... This may take a few moments.</span>
+    </div>
+  </div>
 </div>

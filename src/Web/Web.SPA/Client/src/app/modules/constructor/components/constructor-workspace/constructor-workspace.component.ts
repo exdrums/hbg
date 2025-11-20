@@ -1,26 +1,27 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import notify from 'devextreme/ui/notify';
+import { devices } from 'devextreme/core/devices';
 import { ConstructorService } from '../../services/constructor.service';
 import { ConstructorHubService } from '../../services/constructor-hub.service';
 import { Project, GeneratedImage, FormData } from '../../models';
-import { ChatAssistantComponent } from '../chat-assistant/chat-assistant.component';
 
 @Component({
-  selector: 'app-constructor-main',
-  templateUrl: './constructor-main.component.html',
-  styleUrls: ['./constructor-main.component.scss']
+  selector: 'app-constructor-workspace',
+  templateUrl: './constructor-workspace.component.html',
+  styleUrls: ['./constructor-workspace.component.scss']
 })
-export class ConstructorMainComponent implements OnInit, OnDestroy {
-  @ViewChild(ChatAssistantComponent) chatComponent!: ChatAssistantComponent;
-
+export class ConstructorWorkspaceComponent implements OnInit, OnDestroy {
   currentProject: Project | null = null;
   generatedImages: GeneratedImage[] = [];
-  selectedTabIndex = 0;
   isGenerating = false;
   currentConfiguration: FormData = {};
+
+  // Responsive layout
+  isMobile = false;
+  isViewPopupVisible = false;
 
   private destroy$ = new Subject<void>();
 
@@ -29,7 +30,9 @@ export class ConstructorMainComponent implements OnInit, OnDestroy {
     private router: Router,
     private constructorService: ConstructorService,
     private hubService: ConstructorHubService
-  ) {}
+  ) {
+    this.isMobile = devices.current().deviceType === 'phone' || devices.current().deviceType === 'tablet';
+  }
 
   async ngOnInit() {
     // Connect to SignalR hub
@@ -43,14 +46,6 @@ export class ConstructorMainComponent implements OnInit, OnDestroy {
           if (update && update.imageUrl) {
             notify('Image generated successfully!', 'success', 3000);
             this.loadProjectImages();
-          }
-        });
-
-      this.hubService.onChatResponse$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(response => {
-          if (response && this.chatComponent) {
-            this.chatComponent.addAiResponse(response.message);
           }
         });
 
@@ -143,21 +138,13 @@ export class ConstructorMainComponent implements OnInit, OnDestroy {
     }
   }
 
-  async handleChatMessage(message: string) {
-    if (!this.currentProject) {
-      notify('No project selected', 'error', 3000);
-      return;
-    }
+  // Mobile view popup controls
+  openViewPopup() {
+    this.isViewPopupVisible = true;
+  }
 
-    this.isGenerating = true;
-
-    try {
-      await this.hubService.sendChatMessage(this.currentProject.projectId, message);
-    } catch (error: any) {
-      console.error('Error sending chat message:', error);
-      notify('Failed to send message', 'error', 3000);
-      this.isGenerating = false;
-    }
+  closeViewPopup() {
+    this.isViewPopupVisible = false;
   }
 
   ngOnDestroy() {

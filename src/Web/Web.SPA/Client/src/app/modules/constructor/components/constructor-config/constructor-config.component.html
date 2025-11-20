@@ -1,0 +1,35 @@
+<div class="constructor-config">
+  <dx-tab-panel
+    [dataSource]="[
+      { title: 'Configuration', icon: 'preferences', template: 'form' },
+      { title: 'Chat Assistant', icon: 'comment', template: 'chat' }
+    ]"
+    [(selectedIndex)]="selectedTabIndex"
+    [loop]="false"
+    [animationEnabled]="true"
+    [swipeEnabled]="true">
+
+    <!-- Configuration Form Tab -->
+    <div *dxTemplate="let item of 'form'">
+      <div class="tab-content">
+        <app-constructor-form
+          [projectId]="projectId"
+          [jewelryType]="jewelryType"
+          [loading]="loading"
+          (onConfigurationChanged)="handleConfigurationChange($event)"
+          (onGenerateImage)="handleGenerateImage($event)">
+        </app-constructor-form>
+      </div>
+    </div>
+
+    <!-- Chat Assistant Tab -->
+    <div *dxTemplate="let item of 'chat'">
+      <div class="tab-content">
+        <app-constructor-chat
+          [projectId]="projectId"
+          [loading]="loading">
+        </app-constructor-chat>
+      </div>
+    </div>
+  </dx-tab-panel>
+</div>

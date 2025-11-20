@@ -1,0 +1,62 @@
+<div class="constructor-view">
+  <div class="view-header">
+    <h3>Generated Images</h3>
+    <span class="image-count">{{ images.length }} images</span>
+  </div>
+
+  <div class="gallery-container">
+    <dx-gallery
+      *ngIf="images.length > 0"
+      [dataSource]="images"
+      [height]="500"
+      [loop]="true"
+      [showNavButtons]="true"
+      [showIndicator]="true"
+      [(selectedIndex)]="selectedIndex"
+      [slideshowDelay]="0"
+      [stretchImages]="false">
+      <div *dxTemplate="let image of 'item'">
+        <div class="gallery-item">
+          <img [src]="getImageUrl(image)" [alt]="'Generated at ' + formatDate(image.generatedAt)" />
+          <div class="image-info">
+            <span class="image-date">{{ formatDate(image.generatedAt) }}</span>
+            <dx-button
+              icon="download"
+              text="Download"
+              type="normal"
+              stylingMode="contained"
+              (onClick)="downloadImage(image)">
+            </dx-button>
+          </div>
+        </div>
+      </div>
+    </dx-gallery>
+
+    <div *ngIf="images.length === 0 && !loading" class="empty-state">
+      <i class="dx-icon dx-icon-image"></i>
+      <p>No images generated yet</p>
+      <p class="hint">Use the configuration panel to generate your first jewelry design</p>
+    </div>
+
+    <div *ngIf="loading" class="loading-state">
+      <dx-load-panel
+        [visible]="loading"
+        [showIndicator]="true"
+        [showPane]="true"
+        [shading]="true"
+        message="Generating image...">
+      </dx-load-panel>
+    </div>
+  </div>
+
+  <!-- Thumbnail strip for quick navigation -->
+  <div class="thumbnail-strip" *ngIf="images.length > 1">
+    <div
+      *ngFor="let image of images; let i = index"
+      class="thumbnail"
+      [class.selected]="i === selectedIndex"
+      (click)="selectedIndex = i">
+      <img [src]="image.thumbnailUrl || getImageUrl(image)" [alt]="'Thumbnail ' + i" />
+    </div>
+  </div>
+</div>

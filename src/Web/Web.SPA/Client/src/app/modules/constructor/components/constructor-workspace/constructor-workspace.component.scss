@@ -1,0 +1,29 @@
+.constructor-workspace {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .desktop-layout {
+    height: 100%;
+    width: 100%;
+
+    .workspace-panel {
+      height: 100%;
+      padding: 16px;
+      overflow: auto;
+    }
+  }
+
+  .mobile-layout {
+    height: 100%;
+    width: 100%;
+    position: relative;
+
+    .mobile-config {
+      height: 100%;
+      overflow: auto;
+      padding: 16px;
+    }
+  }
+}

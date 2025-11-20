@@ -13,30 +13,39 @@ import {
   DxGalleryModule,
   DxLoadPanelModule,
   DxPopupModule,
-  DxChatModule
+  DxChatModule,
+  DxSplitterModule,
+  DxSpeedDialActionModule
 } from 'devextreme-angular';
 
 // Routes
 import { constructorRoutes } from './constructor.routes';
 
 // Components
-import { ConstructorMainComponent } from './components/constructor-main/constructor-main.component';
 import { ProjectListComponent } from './components/project-list/project-list.component';
-import { ConfigurationFormComponent } from './components/configuration-form/configuration-form.component';
-import { ImageGalleryComponent } from './components/image-gallery/image-gallery.component';
-import { ChatAssistantComponent } from './components/chat-assistant/chat-assistant.component';
+import { ConstructorWorkspaceComponent } from './components/constructor-workspace/constructor-workspace.component';
+import { ConstructorViewComponent } from './components/constructor-view/constructor-view.component';
+import { ConstructorConfigComponent } from './components/constructor-config/constructor-config.component';
+import { ConstructorFormComponent } from './components/constructor-form/constructor-form.component';
+import { ConstructorChatComponent } from './components/constructor-chat/constructor-chat.component';
 
 // Services
 import { ConstructorService } from './services/constructor.service';
 import { ConstructorHubService } from './services/constructor-hub.service';
 
+// Data Sources
+import { ProjectsDataSource } from './data/projects.data-source';
+import { ImagesDataSource } from './data/images.data-source';
+import { ChatDataSource } from './data/chat.data-source';
+
 @NgModule({
   declarations: [
-    ConstructorMainComponent,
     ProjectListComponent,
-    ConfigurationFormComponent,
-    ImageGalleryComponent,
-    ChatAssistantComponent
+    ConstructorWorkspaceComponent,
+    ConstructorViewComponent,
+    ConstructorConfigComponent,
+    ConstructorFormComponent,
+    ConstructorChatComponent
   ],
   imports: [
     CommonModule,
@@ -50,11 +59,16 @@ import { ConstructorHubService } from './services/constructor-hub.service';
     DxGalleryModule,
     DxLoadPanelModule,
     DxPopupModule,
-    DxChatModule
+    DxChatModule,
+    DxSplitterModule,
+    DxSpeedDialActionModule
   ],
   providers: [
     ConstructorService,
-    ConstructorHubService
+    ConstructorHubService,
+    ProjectsDataSource,
+    ImagesDataSource,
+    ChatDataSource
   ]
 })
 export class ConstructorModule { }
