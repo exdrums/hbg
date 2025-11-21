@@ -40,8 +40,8 @@ spec:
             memory: "256Mi"
             cpu: "100m"
           limits:
-            memory: "1Gi"
-            cpu: "1000m"
+            memory: "512Mi"
+            cpu: "200m"
         securityContext:
           runAsNonRoot: false # Uptime Kuma needs root for certain operations
           allowPrivilegeEscalation: false

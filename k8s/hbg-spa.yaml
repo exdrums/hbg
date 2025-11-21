@@ -55,6 +55,11 @@ spec:
             configMapKeyRef:
               name: hbg-configmap
               key: hbg-admin-url
+        - name: HBGCONSTRUCTOR
+          valueFrom:
+            configMapKeyRef:
+              name: hbg-configmap
+              key: hbg-constructor-url
         - name: 'HBGDB'
           valueFrom:
             secretKeyRef:

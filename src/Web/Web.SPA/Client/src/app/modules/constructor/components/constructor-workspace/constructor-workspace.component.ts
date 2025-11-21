@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import notify from 'devextreme/ui/notify';
-import { devices } from 'devextreme/core/devices';
+import devices from 'devextreme/core/devices';
 import { ConstructorService } from '../../services/constructor.service';
 import { ConstructorHubService } from '../../services/constructor-hub.service';
 import { Project, GeneratedImage, FormData } from '../../models';

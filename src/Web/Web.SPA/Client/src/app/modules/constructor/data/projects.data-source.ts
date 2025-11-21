@@ -6,7 +6,7 @@ import { RestDataStore } from "@app/core/data/rest-data-store";
 import { Project } from "../models";
 
 @Injectable()
-export class ProjectsDataSource extends CustomDataSource<Project> {
+export class ProjectsDataSource extends CustomDataSource<Project, string> {
     constructor(private readonly config: ConfigService, private readonly http: HttpClient) {
         super(new RestDataStore<Project, string>(http, {
             key: "projectId",

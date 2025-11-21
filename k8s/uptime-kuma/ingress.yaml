@@ -6,32 +6,44 @@ metadata:
   labels:
     app: uptime-kuma
   annotations:
-    # NGINX Ingress Controller annotations
+    nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 
-    # TLS configuration with cert-manager
-    # Updated for Azure: Use Let's Encrypt ClusterIssuer
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # ENHANCED BUFFER CONFIGURATION for OAuth/OIDC
+    # Large tokens and auth responses require bigger buffers
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "256k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "256k"
+    nginx.ingress.kubernetes.io/client-body-buffer-size: "256k"
+    nginx.ingress.kubernetes.io/client-header-buffer-size: "64k"
+
+    # ENHANCED TIMEOUT CONFIGURATION
+    # OAuth/OIDC flows may take longer, especially with database operations
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+
+    # Keep-alive configuration
+    nginx.ingress.kubernetes.io/upstream-keepalive-connections: "100"
+    nginx.ingress.kubernetes.io/upstream-keepalive-timeout: "60"
 
     # Security headers
     nginx.ingress.kubernetes.io/configuration-snippet: |
-      more_set_headers "X-Frame-Options: SAMEORIGIN";
-      more_set_headers "X-Content-Type-Options: nosniff";
-      more_set_headers "X-XSS-Protection: 1; mode=block";
-      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+      add_header X-Frame-Options "SAMEORIGIN" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header X-XSS-Protection "1; mode=block" always;
+      add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
-    # WebSocket support (critical for Uptime Kuma's real-time features)
-    nginx.ingress.kubernetes.io/websocket-services: "uptime-kuma-service"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    # Request size limit for file uploads
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
 
-    # Large body size for potential uploads
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    # Rate limiting (adjust as needed for your load)
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
 
-    # Rate limiting (adjust as needed)
-    nginx.ingress.kubernetes.io/limit-rps: "100"
+    # Backend protocol (explicitly specify HTTP for clarity)
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   ingressClassName: nginx
   tls:

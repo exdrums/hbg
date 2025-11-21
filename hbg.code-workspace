@@ -84,6 +84,7 @@
 					"exdrums/hbg-files-api",
 					"-f",
 					"src/Services/API/Files/Dockerfile",
+					"push",
 					"."
 				],
 				"group": "build",
@@ -135,7 +136,7 @@
 					"--platform",
 					"linux/amd64,linux/arm64",
 					"-t",
-					"exdrums/hbg-spa",
+					"exdrums/hbg-spa:latest",
 					"-f",
 					"src/Web/Web.SPA/Dockerfile",
 					"--push",
@@ -155,7 +156,7 @@
 					"--platform",
 					"linux/amd64,linux/arm64",
 					"-t",
-					"exdrums/hbg-sts",
+					"exdrums/hbg-sts:latest",
 					"-f",
 					"src/Services/API/Identity/API.Identity/Dockerfile",
 					"--push",
@@ -175,7 +176,7 @@
 					"--platform",
 					"linux/amd64,linux/arm64",
 					"-t",
-					"exdrums/hbg-admin",
+					"exdrums/hbg-admin:latest",
 					"-f",
 					"src/Services/API/Identity/API.Identity.Admin/Dockerfile",
 					"--push",
@@ -195,7 +196,7 @@
 					"--platform",
 					"linux/amd64,linux/arm64",
 					"-t",
-					"exdrums/hbg-admin-api",
+					"exdrums/hbg-admin-api:latest",
 					"-f",
 					"src/Services/API/Identity/API.Identity.Admin.Api/Dockerfile",
 					"--push",
@@ -206,7 +207,7 @@
 					"group": "docker"
 				}
 			},
-						{
+			{
 				"label": "DOCKER hbg-admin-spa",
 				"command": "docker",
 				"args": [
@@ -215,7 +216,7 @@
 					"--platform",
 					"linux/amd64,linux/arm64",
 					"-t",
-					"exdrums/hbg-admin-spa",
+					"exdrums/hbg-admin-spa:latest",
 					"-f",
 					"src/Services/API/Identity/API.Identity.Admin.Spa/Dockerfile",
 					"--push",
@@ -227,7 +228,6 @@
 				}
 			},
 			{
-				"path": "./src/",
 				"label": "DOCKER hbg-constructor",
 				"command": "docker",
 				"args": [
@@ -236,11 +236,11 @@
 					"--platform",
 					"linux/amd64,linux/arm64",
 					"-t",
-					"exdrums/hbg-constructor",
+					"exdrums/hbg-constructor:latest",
 					"-f",
 					"src/Services/API/Constructor/API.Constructor/Dockerfile",
-					".",
-					"--push"
+					"--push",
+					"."
 				],
 				"group": "build",
 				"presentation": {

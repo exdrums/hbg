@@ -17,14 +17,14 @@ import { DeepPartial } from "devextreme/core";
  * real-time SignalR communication system, providing a consistent interface
  * for all data-driven components in the chat application.
  */
-export class CustomDataSource<T = any> extends DataSource<T> {
+export class CustomDataSource<T = any, TKey = any> extends DataSource<T, TKey> {
     
     private _selectedItem$ = new BehaviorSubject<T | null>(null);
     private _isLoading$ = new BehaviorSubject<boolean>(false);
     private _error$ = new BehaviorSubject<string | null>(null);
     private _items$ = new BehaviorSubject<T[]>([]);
     
-    constructor(public customStore: CustomDataStore<T>) {
+    constructor(public customStore: CustomDataStore<T, TKey>) {
         super({
             store: customStore,
             paginate: false, // We handle our own pagination for real-time updates
