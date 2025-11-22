@@ -1,4 +1,4 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { AuthService } from "@app/core/services/auth.service";
 import { ConfigService } from "@app/core/services/config.service";
 import { SignalRAction, WsConnection } from "@app/core/services/websocket/ws-connection";
@@ -6,39 +6,82 @@ import { BehaviorSubject, Observable } from "rxjs";
 
 /**
  * Enhanced SignalR Hub connection for Chat functionality
- * 
+ *
  * This service manages the WebSocket connection to the chat microservice
- * and provides enhanced features for:
- * - Real-time messaging
- * - Alert handling
+ * following Angular and DevExtreme best practices for enterprise applications.
+ *
+ * Architecture:
+ * - Implements facade pattern for clean API surface
+ * - Uses dependency injection for ConfigService
+ * - Provides strongly-typed observables for real-time events
+ * - Implements proper resource cleanup
+ *
+ * Features:
+ * - Real-time messaging with automatic reconnection
+ * - Alert handling with typed event streams
  * - Multi-tab chat support (Contacts, Support, Agent)
- * - Typing indicators
- * - Presence management
- * 
- * The connection is shared across all chat-related data sources and components
- * to maintain a single persistent connection for optimal performance.
+ * - Typing indicators with auto-timeout
+ * - User presence management
+ * - Connection state monitoring
+ *
+ * Best Practices Applied:
+ * - Single persistent connection shared across components
+ * - Reactive state management with RxJS
+ * - Typed interfaces for all data structures
+ * - Comprehensive error handling and logging
+ * - Memory leak prevention with cleanup methods
+ *
+ * @example
+ * ```typescript
+ * constructor(private chatWs: ChatWebSocketConnection) {}
+ *
+ * // Send message
+ * await this.chatWs.sendMessage(conversationId, content);
+ *
+ * // Subscribe to typing indicators
+ * this.chatWs.typing$.subscribe(event => {
+ *   console.log(`${event.userId} is typing in ${event.conversationId}`);
+ * });
+ * ```
  */
 @Injectable()
 export class ChatWebSocketConnection extends WsConnection {
-  private config: ConfigService = inject(ConfigService);
-  
-  // Connection state observables
-  private _isTyping$ = new BehaviorSubject<{ conversationId: string; userId: string; isTyping: boolean } | null>(null);
-  private _userStatus$ = new BehaviorSubject<{ userId: string; status: string } | null>(null);
-  private _alerts$ = new BehaviorSubject<any>(null);
-  
-  // Typing indicator management
-  private typingTimeouts = new Map<string, any>();
-  private currentlyTyping = new Set<string>();
 
-  constructor(protected readonly auth: AuthService) {
+  // Connection state observables with typed interfaces
+  private readonly _isTyping$ = new BehaviorSubject<{ conversationId: string; userId: string; isTyping: boolean } | null>(null);
+  private readonly _userStatus$ = new BehaviorSubject<{ userId: string; status: string } | null>(null);
+  private readonly _alerts$ = new BehaviorSubject<any>(null);
+
+  // Typing indicator management
+  private readonly typingTimeouts = new Map<string, NodeJS.Timeout>();
+  private readonly currentlyTyping = new Set<string>();
+
+  // Auto-timeout duration for typing indicators (milliseconds)
+  private readonly TYPING_TIMEOUT_MS = 3000;
+
+  constructor(
+    protected readonly auth: AuthService,
+    private readonly config: ConfigService
+  ) {
     super(auth, auth.authStatus$);
-    console.log('this.config.hbgcontacts', this.config.hbgcontacts);
+
+    // Log connection configuration in development mode only
+    if (!this.config.production) {
+      console.debug('[ChatWS] Initializing connection to:', this.config.hbgcontacts);
+    }
   }
 
-
-
+  /**
+   * Hub URL constructed from configuration
+   * Uses the configured Contacts service endpoint
+   */
   protected hubUrl: string = `${this.config.hbgcontacts}/hubs/chat`;
+
+  /**
+   * Connection permission check
+   * Currently allows all authenticated users
+   * Override this for custom connection logic
+   */
   protected canConnect: () => boolean = () => true;
 
   //#region Public Observables
@@ -70,10 +113,21 @@ export class ChatWebSocketConnection extends WsConnection {
 
   /**
    * Loads conversations for a specific type (Contacts, Support, Agent)
+   *
+   * Note: Method name matches backend hub method exactly (LoadConversation)
+   * to ensure proper SignalR method resolution.
+   *
+   * @param loadOptions DevExtreme load options for pagination and filtering
+   * @param conversationType Type of conversations to load (Contacts, Support, Agent)
+   * @returns Promise with load result containing conversations
    */
   public async loadConversations(loadOptions: any, conversationType: string = 'Contacts'): Promise<any> {
-    console.log('loadOptions', loadOptions);
-    return await this.invoke('LoadConversations', loadOptions, conversationType);
+    if (!this.config.production) {
+      console.debug('[ChatWS] Loading conversations:', { conversationType, loadOptions });
+    }
+
+    // Backend method is 'LoadConversation' (singular) not 'LoadConversations'
+    return await this.invoke('LoadConversation', loadOptions, conversationType);
   }
 
   /**
@@ -194,124 +248,142 @@ export class ChatWebSocketConnection extends WsConnection {
 
   //#region Event Handlers
 
+  //#region SignalR Event Handlers
+
+  /**
+   * All event handlers use arrow functions to preserve 'this' context
+   * when registered with SignalR. Handlers emit events to observables
+   * which are consumed by data stores and components.
+   */
+
   private readonly onMessageReceived = (message: any) => {
-    console.log('Message received:', message);
-    // Handler will be picked up by SignalR data stores
+    this.logEvent('MessageReceived', message);
+    // Handler will be picked up by EnhancedSignalRDataStore
   };
 
   private readonly onMessageEdited = (message: any) => {
-    console.log('Message edited:', message);
+    this.logEvent('MessageEdited', message);
   };
 
   private readonly onMessageDeleted = (messageId: string) => {
-    console.log('Message deleted:', messageId);
+    this.logEvent('MessageDeleted', { messageId });
   };
 
   private readonly onMessageReadReceiptUpdated = (messageId: string, userId: string) => {
-    console.log('Message read receipt updated:', messageId, userId);
+    this.logEvent('MessageReadReceiptUpdated', { messageId, userId });
   };
 
   private readonly onConversationCreated = (conversation: any) => {
-    console.log('Conversation created:', conversation);
+    this.logEvent('ConversationCreated', conversation);
   };
 
   private readonly onConversationUpdated = (conversation: any) => {
-    console.log('Conversation updated:', conversation);
+    this.logEvent('ConversationUpdated', conversation);
   };
 
   private readonly onConversationArchived = (conversationId: string) => {
-    console.log('Conversation archived:', conversationId);
+    this.logEvent('ConversationArchived', { conversationId });
   };
 
   private readonly onConversationLeft = (conversationId: string) => {
-    console.log('Left conversation:', conversationId);
+    this.logEvent('ConversationLeft', { conversationId });
   };
 
   private readonly onConversationAccessChanged = (conversationId: string, isReadOnly: boolean, reason: string) => {
-    console.log('Conversation access changed:', conversationId, isReadOnly, reason);
+    this.logEvent('ConversationAccessChanged', { conversationId, isReadOnly, reason });
   };
 
   private readonly onUserStatusChanged = (userId: string, status: string) => {
-    console.log('User status changed:', userId, status);
+    this.logEvent('UserStatusChanged', { userId, status });
     this._userStatus$.next({ userId, status });
   };
 
   private readonly onUserStartedTyping = (conversationId: string, userId: string) => {
-    console.log('User started typing:', conversationId, userId);
+    this.logEvent('UserStartedTyping', { conversationId, userId });
     this._isTyping$.next({ conversationId, userId, isTyping: true });
   };
 
   private readonly onUserStoppedTyping = (conversationId: string, userId: string) => {
-    console.log('User stopped typing:', conversationId, userId);
+    this.logEvent('UserStoppedTyping', { conversationId, userId });
     this._isTyping$.next({ conversationId, userId, isTyping: false });
   };
 
   private readonly onReceiveAlert = (alert: any) => {
-    console.log('Alert received:', alert);
+    this.logEvent('ReceiveAlert', alert);
     this._alerts$.next({ type: 'alert', ...alert });
   };
 
   private readonly onReceiveSystemAlert = (alert: any) => {
-    console.log('System alert received:', alert);
+    this.logEvent('ReceiveSystemAlert', alert);
     this._alerts$.next({ type: 'system', ...alert });
   };
 
   private readonly onReceivePermissionAlert = (alert: any) => {
-    console.log('Permission alert received:', alert);
+    this.logEvent('ReceivePermissionAlert', alert);
     this._alerts$.next({ type: 'permission', ...alert });
   };
 
   private readonly onConnectionStateChanged = (isConnected: boolean, message?: string) => {
-    console.log('Connection state changed:', isConnected, message);
-    this._alerts$.next({ 
-      type: 'connection', 
-      isConnected, 
-      content: message || (isConnected ? 'Connected' : 'Disconnected') 
+    this.logEvent('ConnectionStateChanged', { isConnected, message });
+    this._alerts$.next({
+      type: 'connection',
+      isConnected,
+      content: message || (isConnected ? 'Connected' : 'Disconnected')
     });
   };
 
   private readonly onSupportTicketStatusChanged = (conversationId: string, status: string, assignedAgentId?: string) => {
-    console.log('Support ticket status changed:', conversationId, status, assignedAgentId);
+    this.logEvent('SupportTicketStatusChanged', { conversationId, status, assignedAgentId });
   };
 
   private readonly onSupportTicketPriorityChanged = (conversationId: string, priority: string) => {
-    console.log('Support ticket priority changed:', conversationId, priority);
+    this.logEvent('SupportTicketPriorityChanged', { conversationId, priority });
   };
 
+  /**
+   * Force refresh handler - reloads the application
+   * Typically triggered for critical updates or configuration changes
+   */
   private readonly onForceRefresh = (reason: string) => {
-    console.log('Force refresh requested:', reason);
-    window.location.reload();
+    this.logEvent('ForceRefresh', { reason }, 'warn');
+
+    // Show warning before refresh
+    if (confirm(`Application refresh required: ${reason}\n\nClick OK to refresh now.`)) {
+      window.location.reload();
+    }
   };
 
   private readonly onMaintenanceNotification = (message: string, startTime: Date, estimatedDuration: number) => {
-    console.log('Maintenance notification:', message, startTime, estimatedDuration);
-    this._alerts$.next({ 
-      type: 'maintenance', 
-      content: message, 
-      startTime, 
-      estimatedDuration 
+    this.logEvent('MaintenanceNotification', { message, startTime, estimatedDuration }, 'warn');
+    this._alerts$.next({
+      type: 'maintenance',
+      content: message,
+      startTime,
+      estimatedDuration
     });
   };
 
   private readonly onReloadDataSource = (dataSourceName: string, parameters?: any) => {
-    console.log('Reload data source:', dataSourceName, parameters);
+    this.logEvent('ReloadDataSource', { dataSourceName, parameters });
   };
 
   private readonly onPushDataSourceChanges = (dataSourceName: string, changes: any[]) => {
-    console.log('Push data source changes:', dataSourceName, changes);
+    this.logEvent('PushDataSourceChanges', { dataSourceName, changeCount: changes?.length });
   };
 
   private readonly onConversationDataSourceInsert = (conversation: any, conversationType: string) => {
-    console.log('Conversation data source insert:', conversation, conversationType);
+    this.logEvent('ConversationDataSourceInsert', { conversationId: conversation?.conversationId, conversationType });
   };
 
   private readonly onConversationDataSourceUpdate = (conversation: any, conversationType: string) => {
-    console.log('Conversation data source update:', conversation, conversationType);
+    this.logEvent('ConversationDataSourceUpdate', { conversationId: conversation?.conversationId, conversationType });
   };
 
   private readonly onConversationDataSourceRemove = (conversationId: string, conversationType: string) => {
-    console.log('Conversation data source remove:', conversationId, conversationType);
+    this.logEvent('ConversationDataSourceRemove', { conversationId, conversationType });
   };
+
+  //#endregion
 
   //#endregion
 
@@ -319,14 +391,15 @@ export class ChatWebSocketConnection extends WsConnection {
 
   /**
    * Resets the typing timeout for a conversation
+   * Auto-stops typing after configured timeout period
    */
   private resetTypingTimeout(conversationId: string): void {
     this.clearTypingTimeout(conversationId);
-    
+
     const timeout = setTimeout(async () => {
       await this.stopTyping(conversationId);
-    }, 3000); // Stop typing after 3 seconds of inactivity
-    
+    }, this.TYPING_TIMEOUT_MS);
+
     this.typingTimeouts.set(conversationId, timeout);
   }
 
@@ -338,6 +411,36 @@ export class ChatWebSocketConnection extends WsConnection {
     if (timeout) {
       clearTimeout(timeout);
       this.typingTimeouts.delete(conversationId);
+    }
+  }
+
+  /**
+   * Centralized logging for SignalR events
+   * Only logs in development mode to reduce console noise in production
+   *
+   * @param eventName Name of the SignalR event
+   * @param data Event data to log
+   * @param level Log level (log, debug, warn, error)
+   */
+  private logEvent(eventName: string, data?: any, level: 'log' | 'debug' | 'warn' | 'error' = 'debug'): void {
+    if (!this.config.production) {
+      const message = `[ChatWS] ${eventName}`;
+
+      switch (level) {
+        case 'error':
+          console.error(message, data);
+          break;
+        case 'warn':
+          console.warn(message, data);
+          break;
+        case 'log':
+          console.log(message, data);
+          break;
+        case 'debug':
+        default:
+          console.debug(message, data);
+          break;
+      }
     }
   }
 

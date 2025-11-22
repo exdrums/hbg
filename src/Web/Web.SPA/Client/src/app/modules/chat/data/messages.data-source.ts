@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CustomDataSource } from '@app/core/data/custom-data-source';
 import { EnhancedSignalRDataStore } from '@app/core/data/enhanced-signalr-data-store';
-import { BehaviorSubject, Observable, debounceTime, distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject, Observable, debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { ChatWebSocketConnection } from '../connections/chat-ws.connection.service';
 import { AlertService } from '../services/alert.service';
+import { AuthService } from '@app/core/services/auth.service';
 
 /**
  * Interface for message objects
@@ -24,37 +25,70 @@ export interface Message {
 
 /**
  * Enhanced data source service for managing messages within conversations
- * 
- * This service provides a DevExtreme-compatible data source for chat messages
- * with real-time updates through SignalR. It supports the DxChat component
- * and provides comprehensive message management functionality.
- * 
+ *
+ * This service implements Angular and DevExtreme best practices for enterprise
+ * chat applications, providing a complete abstraction layer for message management.
+ *
+ * Architecture & Design Patterns:
+ * - Facade Pattern: Simplifies complex SignalR/DevExtreme interactions
+ * - Repository Pattern: Encapsulates data access logic
+ * - Observer Pattern: Reactive state management with RxJS
+ * - Singleton per Conversation: Efficient data source caching
+ *
  * Features:
  * - Real-time message updates via SignalR
- * - Message sending, editing, and deletion
- * - Read receipt management
- * - Typing indicators
- * - Message pagination and loading
- * - Integration with DxChat component
- * - Alert handling for message operations
- * 
- * The service maintains a single data source per conversation and provides
- * methods for all message-related operations required by the chat interface.
+ * - Message CRUD operations (Create, Read, Update, Delete)
+ * - Read receipt management with batch operations
+ * - Typing indicators with debouncing
+ * - Message pagination and infinite scroll support
+ * - Integration with DevExtreme DxChat component
+ * - Comprehensive error handling and user feedback
+ * - Memory leak prevention with subscription management
+ *
+ * Performance Optimizations:
+ * - Data source caching per conversation
+ * - Debounced typing indicators
+ * - Batch read receipt updates
+ * - Efficient observable streams
+ *
+ * @example
+ * ```typescript
+ * constructor(private messagesService: MessagesDataSourceService) {}
+ *
+ * // Get data source for conversation
+ * const dataSource = this.messagesService.getDataSource(conversationId);
+ *
+ * // Send a message
+ * await this.messagesService.sendMessage(conversationId, 'Hello!');
+ *
+ * // Subscribe to typing indicators
+ * this.messagesService.typing$.subscribe(typingUsers => {
+ *   console.log('Users typing:', typingUsers);
+ * });
+ * ```
  */
 @Injectable()
 export class MessagesDataSourceService {
-  
-  private _dataSources = new Map<string, CustomDataSource<Message>>();
-  private _currentConversationId$ = new BehaviorSubject<string | null>(null);
-  private _isTyping$ = new BehaviorSubject<Map<string, string>>(new Map());
-  private _typingSubject$ = new BehaviorSubject<string>('');
 
-  // Typing indicator management
-  private typingDebounceTime = 1000; // 1 second debounce
+  // Data source cache - maintains one data source per conversation
+  private readonly _dataSources = new Map<string, CustomDataSource<Message>>();
+
+  // Observable state management
+  private readonly _currentConversationId$ = new BehaviorSubject<string | null>(null);
+  private readonly _isTyping$ = new BehaviorSubject<Map<string, string>>(new Map());
+  private readonly _typingSubject$ = new BehaviorSubject<string>('');
+
+  // Subscription management for cleanup
+  private readonly destroy$ = new Subject<void>();
+
+  // Configuration constants
+  private readonly TYPING_DEBOUNCE_MS = 1000; // 1 second debounce
+  private readonly AUTO_MARK_READ_LIMIT = 10; // Max messages to auto-mark as read
 
   constructor(
-    private chatConnection: ChatWebSocketConnection,
-    private alertService: AlertService
+    private readonly chatConnection: ChatWebSocketConnection,
+    private readonly alertService: AlertService,
+    private readonly authService: AuthService
   ) {
     this.setupTypingHandlers();
     this.setupSignalRHandlers();
@@ -359,26 +393,33 @@ export class MessagesDataSourceService {
   }
 
   /**
-   * Set up typing indicator handlers
+   * Set up typing indicator handlers with proper cleanup
+   *
+   * Implements debouncing to reduce network traffic and server load.
+   * Two subscriptions:
+   * 1. Debounced - stops typing when user pauses
+   * 2. Immediate - starts typing on first keystroke
+   *
+   * Both subscriptions are properly cleaned up on service destroy.
    */
   private setupTypingHandlers(): void {
     // Debounce typing input to avoid too frequent typing indicators
     this._typingSubject$.pipe(
-      debounceTime(this.typingDebounceTime),
-      distinctUntilChanged()
+      debounceTime(this.TYPING_DEBOUNCE_MS),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$) // Cleanup subscription
     ).subscribe(content => {
       const conversationId = this.currentConversationId;
-      if (conversationId) {
-        if (content.trim() === '') {
-          // Stop typing when input is empty
-          void this.stopTyping(conversationId);
-        }
+      if (conversationId && content.trim() === '') {
+        // Stop typing when input is empty
+        void this.stopTyping(conversationId);
       }
     });
 
     // Start typing indicator on first keystroke
     this._typingSubject$.pipe(
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      takeUntil(this.destroy$) // Cleanup subscription
     ).subscribe(content => {
       const conversationId = this.currentConversationId;
       if (conversationId && content.trim() !== '') {
@@ -388,21 +429,26 @@ export class MessagesDataSourceService {
   }
 
   /**
-   * Set up SignalR event handlers
+   * Set up SignalR event handlers with proper cleanup
+   *
+   * Subscribes to real-time typing indicators from the chat connection.
+   * Subscription is properly cleaned up when service is destroyed.
    */
   private setupSignalRHandlers(): void {
     // Handle typing indicators from other users
-    this.chatConnection.typing$.subscribe(typingEvent => {
+    this.chatConnection.typing$.pipe(
+      takeUntil(this.destroy$) // Cleanup subscription
+    ).subscribe(typingEvent => {
       if (typingEvent) {
         const { conversationId, userId, isTyping } = typingEvent;
         const currentTyping = new Map(this._isTyping$.value);
-        
+
         if (isTyping) {
           currentTyping.set(userId, conversationId);
         } else {
           currentTyping.delete(userId);
         }
-        
+
         this._isTyping$.next(currentTyping);
       }
     });
@@ -410,30 +456,48 @@ export class MessagesDataSourceService {
 
   /**
    * Auto-mark messages as read when they're loaded/visible
+   *
+   * Implements intelligent read receipt behavior:
+   * - Only marks messages from other users
+   * - Limits to most recent N messages to avoid performance issues
+   * - Skips if user ID is not available
+   *
+   * This is called after data source loads to provide automatic
+   * read receipt functionality similar to modern chat applications.
+   *
+   * @param conversationId ID of the conversation
    */
   private autoMarkMessagesAsRead(conversationId: string): void {
     const dataSource = this.getDataSource(conversationId);
     const messages = dataSource.items();
     const currentUserId = this.getCurrentUserId();
-    
+
+    // Skip if user ID is not available
+    if (!currentUserId) {
+      return;
+    }
+
     // Mark recent unread messages as read
     const recentUnreadMessages = messages
       .filter(m => !m.readByUserIds.includes(currentUserId))
       .filter(m => m.senderUserId !== currentUserId) // Don't mark own messages
-      .slice(-10); // Only mark the 10 most recent unread messages
-    
+      .slice(-this.AUTO_MARK_READ_LIMIT); // Limit for performance
+
     recentUnreadMessages.forEach(message => {
       void this.markMessageAsRead(message.messageId);
     });
   }
 
   /**
-   * Get the current user ID
+   * Get the current user ID from authentication service
+   *
+   * Uses the AuthService to retrieve the authenticated user's ID.
+   * Returns null if user is not authenticated.
+   *
+   * @returns Current user ID or null if not authenticated
    */
-  private getCurrentUserId(): string {
-    // This should be obtained from your auth service
-    // For now, return a placeholder
-    return 'current-user-id'; // TODO: Replace with actual auth service
+  private getCurrentUserId(): string | null {
+    return this.authService.currentUser?.id ?? this.authService.userId ?? null;
   }
 
   /**
@@ -472,13 +536,30 @@ export class MessagesDataSourceService {
 
   /**
    * Cleanup method to be called when the service is destroyed
+   *
+   * Implements proper resource cleanup to prevent memory leaks:
+   * - Disposes all data sources
+   * - Completes all observables
+   * - Clears all maps
+   * - Triggers destroy$ to unsubscribe all subscriptions
+   *
+   * IMPORTANT: This should be called in the ngOnDestroy lifecycle hook
+   * of the component or service that owns this service.
    */
   public destroy(): void {
+    // Signal all subscriptions to unsubscribe
+    this.destroy$.next();
+    this.destroy$.complete();
+
+    // Dispose all data sources
     this._dataSources.forEach(dataSource => {
       dataSource.dispose();
     });
-    
+
+    // Clear collections
     this._dataSources.clear();
+
+    // Complete all subjects
     this._currentConversationId$.complete();
     this._isTyping$.complete();
     this._typingSubject$.complete();
