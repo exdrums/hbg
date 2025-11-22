@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, filter } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, filter, Subject, takeUntil } from 'rxjs';
 import notify from 'devextreme/ui/notify';
 import { ChatWebSocketConnection } from '../connections/chat-ws.connection.service';
 
@@ -34,29 +34,61 @@ export interface Alert {
 
 /**
  * Client-side alert management service
- * 
- * This service provides a comprehensive alert system that integrates with:
+ *
+ * This service implements a comprehensive alert system following Angular and
+ * DevExtreme best practices for enterprise applications.
+ *
+ * Architecture & Design Patterns:
+ * - Facade Pattern: Simplifies alert management across the application
+ * - Observer Pattern: Reactive alert streams with RxJS
+ * - Factory Pattern: Type-safe alert creation methods
+ * - Singleton: Application-wide alert coordination
+ *
+ * Integration Points:
  * - DevExtreme notifications for UI display
  * - SignalR real-time alerts from the server
  * - Local client-side alerts and validations
- * 
+ * - Chat-specific alerts (permission, read-only, etc.)
+ *
  * Features:
- * - Different alert types with appropriate styling
+ * - Multiple alert types with appropriate styling
  * - Persistent alerts that stay until dismissed
  * - Auto-hiding alerts with configurable duration
- * - Alert queuing and management
- * - Integration with chat functionality
+ * - Alert queuing and deduplication
  * - Connection status monitoring
- * 
- * The service bridges server-side alert events with client-side UI notifications
- * providing a seamless user experience for all types of system feedback.
+ * - Filtered observable streams by type/conversation
+ * - Memory leak prevention with proper cleanup
+ *
+ * Best Practices Applied:
+ * - Type-safe interfaces for all alerts
+ * - Subscription management with takeUntil
+ * - Comprehensive JSDoc documentation
+ * - Clean separation of concerns
+ * - Testable architecture
+ *
+ * @example
+ * ```typescript
+ * constructor(private alertService: AlertService) {}
+ *
+ * // Show different alert types
+ * this.alertService.showSuccess('Saved!', 'Success');
+ * this.alertService.showError('Failed to save', 'Error');
+ *
+ * // Subscribe to alerts
+ * this.alertService.alerts$.subscribe(alerts => {
+ *   console.log('Active alerts:', alerts.length);
+ * });
+ * ```
  */
 @Injectable()
-export class AlertService {
-  
-  private _alerts$ = new BehaviorSubject<Alert[]>([]);
+export class AlertService implements OnDestroy {
+
+  private readonly _alerts$ = new BehaviorSubject<Alert[]>([]);
   private _currentAlerts: Alert[] = [];
   private _alertCounter = 0;
+
+  // Subscription management for cleanup
+  private readonly destroy$ = new Subject<void>();
 
   // Default display durations for different alert types (in milliseconds)
   private readonly defaultDurations: Record<AlertType, number> = {
@@ -70,8 +102,27 @@ export class AlertService {
     [AlertType.Maintenance]: 15000
   };
 
-  constructor(private chatConnection: ChatWebSocketConnection) {
+  // Active auto-dismiss timers
+  private readonly autoDismissTimers = new Map<string, NodeJS.Timeout>();
+
+  constructor(private readonly chatConnection: ChatWebSocketConnection) {
     this.initializeSignalRAlerts();
+  }
+
+  /**
+   * Cleanup on service destroy
+   * Implements OnDestroy to properly clean up subscriptions and timers
+   */
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+
+    // Clear all auto-dismiss timers
+    this.autoDismissTimers.forEach(timer => clearTimeout(timer));
+    this.autoDismissTimers.clear();
+
+    // Complete observables
+    this._alerts$.complete();
   }
 
   /**
@@ -240,12 +291,24 @@ export class AlertService {
 
   /**
    * Dismisses a specific alert
+   *
+   * Removes the alert from the active alerts array and cancels
+   * any auto-dismiss timer if present.
+   *
+   * @param alertId Unique ID of the alert to dismiss
    */
   public dismissAlert(alertId: string): void {
     const index = this._currentAlerts.findIndex(alert => alert.id === alertId);
     if (index !== -1) {
       this._currentAlerts.splice(index, 1);
       this._alerts$.next([...this._currentAlerts]);
+
+      // Cancel auto-dismiss timer if exists
+      const timer = this.autoDismissTimers.get(alertId);
+      if (timer) {
+        clearTimeout(timer);
+        this.autoDismissTimers.delete(alertId);
+      }
     }
   }
 
@@ -286,11 +349,18 @@ export class AlertService {
   //#region SignalR Integration
 
   /**
-   * Initialize SignalR alert handlers
+   * Initialize SignalR alert handlers with proper cleanup
+   *
+   * Subscribes to the chat connection's alert stream and routes
+   * incoming alerts to appropriate handlers based on type.
+   *
+   * Subscription is properly cleaned up when service is destroyed.
    */
   private initializeSignalRAlerts(): void {
-    // Subscribe to SignalR alerts
-    this.chatConnection.alerts$.subscribe(alert => {
+    // Subscribe to SignalR alerts with cleanup
+    this.chatConnection.alerts$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(alert => {
       if (alert) {
         this.handleSignalRAlert(alert);
       }
@@ -458,13 +528,23 @@ export class AlertService {
 
   /**
    * Schedule automatic alert removal
+   *
+   * Creates a timer to automatically dismiss the alert after the
+   * configured duration. Timer is tracked for cleanup.
+   *
+   * @param alertId Unique ID of the alert
+   * @param alertType Type of alert (determines duration)
    */
   private scheduleAlertRemoval(alertId: string, alertType: AlertType): void {
     const duration = this.defaultDurations[alertType];
-    
-    setTimeout(() => {
+
+    const timer = setTimeout(() => {
       this.dismissAlert(alertId);
+      this.autoDismissTimers.delete(alertId);
     }, duration);
+
+    // Track timer for cleanup
+    this.autoDismissTimers.set(alertId, timer);
   }
 
   //#endregion
